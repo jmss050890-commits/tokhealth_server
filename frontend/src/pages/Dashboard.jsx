@@ -13,10 +13,10 @@ const Dashboard = () => {
         <div className=\"p-4\">
           <Button 
             onClick={() => setCurrentView('dashboard')}
-            variant=\"outline\"
-            className=\"mb-4 border-green-500/50 text-green-500\"
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
           >
-            ← Back to Dashboard
+            &larr; Back to Dashboard
           </Button>
         </div>
         <BiometricsTracker />
