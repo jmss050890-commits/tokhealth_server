@@ -5,9 +5,27 @@ import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText } from
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
+import WisdomVault from '@/pages/WisdomVault';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'wisdom') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <WisdomVault />
+      </div>
+    );
+  }
 
   if (currentView === 'loop') {
     return (
@@ -173,7 +191,11 @@ const Dashboard = () => {
           </Card>
 
           {/* Wisdom Vault */}
-          <Card className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer" data-testid="wisdom-card">
+          <Card 
+            className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer" 
+            data-testid="wisdom-card"
+            onClick={() => setCurrentView('wisdom')}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <BookOpen className="w-5 h-5 text-purple-500" />
