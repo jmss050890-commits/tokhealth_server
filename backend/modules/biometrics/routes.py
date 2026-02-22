@@ -36,9 +36,10 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
         if not metrics:
             # Create new metrics entry
             from models.health_metrics import HealthMetrics
+            from datetime import date as date_class
             metrics = HealthMetrics(
                 user_id=TEMP_USER_ID,
-                date=date.today(),
+                date=date_class.today(),
                 **reading.model_dump(exclude_none=True)
             )
             await db.health_metrics.insert_one(metrics.to_dict())
