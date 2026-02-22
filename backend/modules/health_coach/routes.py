@@ -163,6 +163,11 @@ async def get_coach_messages(
             {"_id": 0}
         ).sort("created_at", -1).limit(days).to_list(days)
         
+        # Serialize datetime objects to ISO strings
+        for msg in messages:
+            if "created_at" in msg and hasattr(msg["created_at"], "isoformat"):
+                msg["created_at"] = msg["created_at"].isoformat()
+        
         return success_response(
             data=messages,
             message=f"Retrieved {len(messages)} coaching messages"
