@@ -68,7 +68,8 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 ### 6. AI Health Coach
 - GPT-5.2 integration via emergentintegrations library
 - Multi-turn conversation support
-- Voice output (browser TTS)
+- **Voice INPUT** - Speak to the coach using microphone (Speech-to-Text)
+- **Voice OUTPUT** - Coach speaks responses (Text-to-Speech)
 - Customizable coach name
 - Context-aware responses based on user's health data
 - Quick topic buttons (Nutrition, Exercise, Stress, Sleep)
