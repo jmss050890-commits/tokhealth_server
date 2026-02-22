@@ -5,20 +5,47 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { BookOpen, Heart, Brain, Lightbulb, Lock, Plus } from 'lucide-react';
+import { BookOpen, Heart, Brain, Lightbulb, Lock, Plus, Calendar, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 
 const WisdomVault = () => {
-  const [entryType, setEntryType] = useState('journal');
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [tags, setTags] = useState('');
-  const [moodBefore, setMoodBefore] = useState('');
+  const [showNewEntry, setShowNewEntry] = useState(false);
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showNewEntry, setShowNewEntry] = useState(false);
+  const [expandedEntry, setExpandedEntry] = useState(null);
+  const [aiSuggestion, setAiSuggestion] = useState(null);
+  const [loadingSuggestion, setLoadingSuggestion] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    entry_type: 'journal',
+    title: '',
+    body: '',
+    mood_before: 'neutral',
+    mood_after: '',
+    tags: ''
+  });
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  const moods = [
+    { value: 'great', emoji: '😊', label: 'Great' },
+    { value: 'good', emoji: '🙂', label: 'Good' },
+    { value: 'neutral', emoji: '😐', label: 'Neutral' },
+    { value: 'low', emoji: '😔', label: 'Low' },
+    { value: 'stressed', emoji: '😰', label: 'Stressed' },
+    { value: 'anxious', emoji: '😟', label: 'Anxious' }
+  ];
+
+  const journalPrompts = [
+    "What are you grateful for today?",
+    "What's one thing you accomplished recently?",
+    "How are you feeling right now, and why?",
+    "What's something that made you smile today?",
+    "What challenge are you facing, and how might you overcome it?",
+    "Describe a moment of peace you experienced recently.",
+    "What would make tomorrow a great day?",
+    "Write a letter to your future self."
+  ];
 
   useEffect(() => {
     fetchEntries();
@@ -36,21 +63,57 @@ const WisdomVault = () => {
     }
   };
 
+  const getRandomPrompt = () => {
+    const randomPrompt = journalPrompts[Math.floor(Math.random() * journalPrompts.length)];
+    setFormData({ ...formData, title: randomPrompt });
+    toast.success('Prompt added! Start writing your thoughts.');
+  };
+
+  const getAiSuggestion = async () => {
+    if (!formData.body || formData.body.length < 20) {
+      toast.error('Write a bit more first so I can give helpful suggestions');
+      return;
+    }
+
+    setLoadingSuggestion(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/health-coach/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `Based on this journal entry, provide one brief, compassionate wellness suggestion (2-3 sentences max): "${formData.body.substring(0, 500)}"`,
+          session_id: 'wisdom_vault'
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setAiSuggestion(data.data.response);
+      }
+    } catch (error) {
+      console.error('Error getting AI suggestion:', error);
+      toast.error('Could not get AI suggestion');
+    } finally {
+      setLoadingSuggestion(false);
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!title.trim() || !body.trim()) {
-      toast.error('Please provide a title and write your thoughts');
+    if (!formData.title.trim() || !formData.body.trim()) {
+      toast.error('Please add a title and write your thoughts');
       return;
     }
 
     setLoading(true);
     try {
       const entryData = {
-        entry_type: entryType,
-        title: title.trim(),
-        body: body.trim(),
-        tags: tags.split(',').map(t => t.trim()).filter(t => t),
-        mood_before: moodBefore || null,
-        ai_analysis_enabled: true
+        entry_type: formData.entry_type,
+        title: formData.title.trim(),
+        body: formData.body.trim(),
+        mood_before: formData.mood_before,
+        mood_after: formData.mood_after || null,
+        tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : [],
+        ai_suggestion: aiSuggestion
       };
 
       const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/entries`, {
@@ -60,311 +123,300 @@ const WisdomVault = () => {
       });
 
       const data = await response.json();
-      
       if (data.success) {
-        toast.success('Your thoughts are safely stored 💚');
-        
-        // Reset form
-        setTitle('');
-        setBody('');
-        setTags('');
-        setMoodBefore('');
+        toast.success('Entry saved to your Wisdom Vault! 🔒');
+        setFormData({
+          entry_type: 'journal',
+          title: '',
+          body: '',
+          mood_before: 'neutral',
+          mood_after: '',
+          tags: ''
+        });
+        setAiSuggestion(null);
         setShowNewEntry(false);
-        
-        // Refresh entries
         fetchEntries();
-      } else {
-        toast.error('Failed to save entry');
       }
     } catch (error) {
       console.error('Error saving entry:', error);
-      toast.error('Error saving entry');
+      toast.error('Failed to save entry');
     } finally {
       setLoading(false);
     }
   };
 
-  const getEntryIcon = (type) => {
-    switch(type) {
-      case 'journal': return '📔';
-      case 'thought_dump': return '💭';
-      case 'gratitude': return '🙏';
-      case 'worry': return '😟';
-      case 'reflection': return '🤔';
-      default: return '📝';
-    }
+  const getMoodEmoji = (mood) => {
+    const found = moods.find(m => m.value === mood);
+    return found ? found.emoji : '😐';
   };
 
-  const getMoodColor = (mood) => {
-    if (!mood) return 'text-gray-500';
-    const lowerMood = mood.toLowerCase();
-    if (lowerMood.includes('happy') || lowerMood.includes('good') || lowerMood.includes('great')) return 'text-green-500';
-    if (lowerMood.includes('calm') || lowerMood.includes('peaceful')) return 'text-blue-500';
-    if (lowerMood.includes('anxious') || lowerMood.includes('stressed') || lowerMood.includes('worried')) return 'text-yellow-500';
-    if (lowerMood.includes('sad') || lowerMood.includes('down') || lowerMood.includes('depressed')) return 'text-red-500';
-    return 'text-gray-500';
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-4" data-testid="wisdom-vault">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="p-4" data-testid="wisdom-vault">
+      <div className="max-w-2xl mx-auto space-y-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <BookOpen className="w-10 h-10 text-purple-500" />
-            <h1 className="text-4xl font-bold">
-              <span className="text-purple-500">WISDOM</span>{' '}
-              <span className="text-white">VAULT</span>
-            </h1>
-            <Lock className="w-6 h-6 text-purple-500" />
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-violet-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">Wisdom Vault</h1>
+            <Lock className="w-4 h-4 text-violet-500" />
           </div>
-          <p className="text-gray-400 mb-2">Your safe space for thoughts, feelings, and reflections</p>
-          <p className="text-gray-600 text-sm">🔒 100% Private & Encrypted - Your mental wellness matters</p>
-          <p className="text-purple-500 text-xs italic mt-2">Part of the KPA System - Keep People Alive 💜</p>
+          <p className="text-slate-500 text-sm">Your private space for reflection & growth</p>
         </div>
 
-        {/* Quick Access Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-purple-900/20 border-purple-500/30 hover:border-purple-500/60 transition-all cursor-pointer"
-                onClick={() => setShowNewEntry(true)}>
-            <CardContent className="p-6 text-center">
-              <Brain className="w-12 h-12 text-purple-500 mx-auto mb-3" />
-              <h3 className="text-white font-semibold mb-2">New Entry</h3>
-              <p className="text-gray-400 text-sm">Journal your thoughts</p>
-            </CardContent>
-          </Card>
+        {/* Mood Check-In */}
+        <Card className="bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+          <CardContent className="p-4">
+            <p className="text-violet-800 font-medium mb-3 text-center">How are you feeling?</p>
+            <div className="flex justify-center gap-2 flex-wrap">
+              {moods.map((mood) => (
+                <Button
+                  key={mood.value}
+                  onClick={() => {
+                    setFormData({ ...formData, mood_before: mood.value });
+                    setShowNewEntry(true);
+                  }}
+                  variant="outline"
+                  className={`border-violet-200 hover:bg-violet-100 ${
+                    formData.mood_before === mood.value && showNewEntry ? 'bg-violet-100 border-violet-400' : ''
+                  }`}
+                >
+                  <span className="text-xl mr-1">{mood.emoji}</span>
+                  <span className="text-xs text-slate-600">{mood.label}</span>
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="bg-blue-900/20 border-blue-500/30 hover:border-blue-500/60 transition-all cursor-pointer"
-                onClick={() => { setEntryType('thought_dump'); setShowNewEntry(true); }}>
-            <CardContent className="p-6 text-center">
-              <Heart className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-              <h3 className="text-white font-semibold mb-2">Quick Dump</h3>
-              <p className="text-gray-400 text-sm">Get it off your mind</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-green-900/20 border-green-500/30 hover:border-green-500/60 transition-all cursor-pointer"
-                onClick={() => { setEntryType('gratitude'); setShowNewEntry(true); }}>
-            <CardContent className="p-6 text-center">
-              <Lightbulb className="w-12 h-12 text-green-500 mx-auto mb-3" />
-              <h3 className="text-white font-semibold mb-2">Gratitude</h3>
-              <p className="text-gray-400 text-sm">What went well today</p>
-            </CardContent>
-          </Card>
-        </div>
+        {/* New Entry Button */}
+        {!showNewEntry && (
+          <Button
+            onClick={() => setShowNewEntry(true)}
+            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-5"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            New Journal Entry
+          </Button>
+        )}
 
         {/* New Entry Form */}
         {showNewEntry && (
-          <Card className="bg-gray-900/50 border-purple-500/50 shadow-xl shadow-purple-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <span>New Wisdom Vault Entry</span>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
+          <Card className="bg-white/90 border-violet-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 text-sm flex items-center justify-between">
+                <span className="flex items-center">
+                  <Brain className="w-4 h-4 mr-2 text-violet-600" />
+                  Write Your Thoughts
+                </span>
+                <Button
                   onClick={() => setShowNewEntry(false)}
-                  className="text-gray-400 hover:text-white"
+                  variant="ghost"
+                  size="sm"
+                  className="text-slate-400"
                 >
-                  ✕
+                  Cancel
                 </Button>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {/* Entry Type */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">What would you like to write about?</Label>
-                <Select value={entryType} onValueChange={setEntryType}>
-                  <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="journal">📔 Journal Entry</SelectItem>
-                    <SelectItem value="thought_dump">💭 Thought Dump (Quick)</SelectItem>
-                    <SelectItem value="gratitude">🙏 Gratitude</SelectItem>
-                    <SelectItem value="worry">😟 Worry / Concern</SelectItem>
-                    <SelectItem value="reflection">🤔 Reflection</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex gap-2">
+                {['journal', 'gratitude', 'reflection'].map((type) => (
+                  <Button
+                    key={type}
+                    onClick={() => setFormData({ ...formData, entry_type: type })}
+                    variant={formData.entry_type === type ? 'default' : 'outline'}
+                    size="sm"
+                    className={formData.entry_type === type 
+                      ? 'bg-violet-600 text-white' 
+                      : 'border-violet-300 text-violet-600'
+                    }
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </Button>
+                ))}
               </div>
 
-              {/* Mood Before */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">How are you feeling right now?</Label>
-                <Select value={moodBefore} onValueChange={setMoodBefore}>
-                  <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
-                    <SelectValue placeholder="Select your mood (optional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="great">😊 Great</SelectItem>
-                    <SelectItem value="good">🙂 Good</SelectItem>
-                    <SelectItem value="calm">😌 Calm</SelectItem>
-                    <SelectItem value="neutral">😐 Neutral</SelectItem>
-                    <SelectItem value="anxious">😰 Anxious</SelectItem>
-                    <SelectItem value="stressed">😣 Stressed</SelectItem>
-                    <SelectItem value="sad">😢 Sad</SelectItem>
-                    <SelectItem value="overwhelmed">😵 Overwhelmed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Title */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">Title *</Label>
+              {/* Title with Prompt Generator */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <Label className="text-slate-600 text-sm">Title / Prompt</Label>
+                  <Button
+                    onClick={getRandomPrompt}
+                    variant="ghost"
+                    size="sm"
+                    className="text-violet-600 text-xs"
+                  >
+                    <Lightbulb className="w-3 h-3 mr-1" />
+                    Get Prompt
+                  </Button>
+                </div>
                 <Input
-                  placeholder="Give your entry a title..."
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white"
+                  placeholder="What's on your mind?"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="bg-white border-slate-200 text-slate-800"
                 />
               </div>
 
               {/* Body */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">Your Thoughts *</Label>
+              <div className="space-y-1">
+                <Label className="text-slate-600 text-sm">Your Thoughts</Label>
                 <Textarea
-                  placeholder="Write freely... This is your safe space. No judgment, just support."
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white min-h-[200px]"
+                  placeholder="Write freely... this is your safe space."
+                  value={formData.body}
+                  onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                  className="bg-white border-slate-200 text-slate-800 min-h-[150px]"
                 />
-                <p className="text-gray-500 text-xs">
-                  🔒 This is encrypted and private. Only you can see this.
-                </p>
+              </div>
+
+              {/* AI Wellness Suggestion */}
+              <Button
+                onClick={getAiSuggestion}
+                disabled={loadingSuggestion}
+                variant="outline"
+                className="w-full border-violet-300 text-violet-600 hover:bg-violet-50"
+              >
+                {loadingSuggestion ? (
+                  'Getting suggestion...'
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Get AI Wellness Suggestion
+                  </>
+                )}
+              </Button>
+
+              {aiSuggestion && (
+                <div className="bg-violet-50 border border-violet-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <Sparkles className="w-4 h-4 text-violet-600" />
+                    <span className="text-violet-800 font-medium text-sm">AI Suggestion</span>
+                  </div>
+                  <p className="text-slate-700 text-sm">{aiSuggestion}</p>
+                </div>
+              )}
+
+              {/* Mood After */}
+              <div className="space-y-1">
+                <Label className="text-slate-600 text-sm">How do you feel after writing?</Label>
+                <Select 
+                  value={formData.mood_after} 
+                  onValueChange={(v) => setFormData({ ...formData, mood_after: v })}
+                >
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-800">
+                    <SelectValue placeholder="Select mood after" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {moods.map((mood) => (
+                      <SelectItem key={mood.value} value={mood.value}>
+                        {mood.emoji} {mood.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Tags */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">Tags (Optional)</Label>
+              <div className="space-y-1">
+                <Label className="text-slate-600 text-sm">Tags (optional, comma-separated)</Label>
                 <Input
-                  placeholder="work, family, health (comma separated)"
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white"
+                  placeholder="e.g., work, family, health"
+                  value={formData.tags}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  className="bg-white border-slate-200 text-slate-800"
                 />
               </div>
 
-              {/* AI Support Notice */}
-              <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <Brain className="w-5 h-5 text-purple-400 mt-1" />
-                  <div>
-                    <p className="text-purple-300 text-sm font-semibold mb-1">AI Wellness Support</p>
-                    <p className="text-gray-400 text-xs">
-                      Our AI will read your entry and provide gentle, supportive wellness suggestions.
-                      This helps you process thoughts and find healthy coping strategies.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Button */}
+              {/* Save Button */}
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-6 text-lg"
+                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-5"
               >
-                {loading ? 'Saving Safely...' : '🔒 Save to Wisdom Vault'}
+                {loading ? 'Saving...' : 'Save to Vault'}
+                <Lock className="w-4 h-4 ml-2" />
               </Button>
             </CardContent>
           </Card>
         )}
 
-        {/* New Entry Button (when form hidden) */}
-        {!showNewEntry && (
-          <Button
-            onClick={() => setShowNewEntry(true)}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-6 text-lg"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            New Wisdom Vault Entry
-          </Button>
-        )}
-
-        {/* Entries List */}
+        {/* Past Entries */}
         {entries.length > 0 && (
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">Your Recent Entries</CardTitle>
+          <Card className="bg-white/90 border-sky-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 text-sm flex items-center">
+                <Calendar className="w-4 h-4 mr-2 text-sky-600" />
+                Your Entries ({entries.length})
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {entries.map((entry, index) => (
-                  <Card key={index} className="bg-gray-800/50 border-gray-700">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">{getEntryIcon(entry.entry_type)}</span>
-                          <div>
-                            <h4 className="text-white font-semibold">{entry.content?.title}</h4>
-                            <p className="text-gray-500 text-xs">
-                              {new Date(entry.created_at).toLocaleDateString()} at{' '}
-                              {new Date(entry.created_at).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})}
-                            </p>
-                          </div>
-                        </div>
-                        {entry.mood?.before && (
-                          <span className={`text-sm ${getMoodColor(entry.mood.before)}`}>
-                            Mood: {entry.mood.before}
-                          </span>
-                        )}
+            <CardContent className="space-y-2">
+              {entries.slice(0, 10).map((entry, index) => (
+                <div
+                  key={index}
+                  className="bg-slate-50 rounded-lg p-3 border border-slate-200"
+                >
+                  <div
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => setExpandedEntry(expandedEntry === index ? null : index)}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xl">{getMoodEmoji(entry.mood_before)}</span>
+                      <div>
+                        <h3 className="font-medium text-slate-800 text-sm">{entry.title}</h3>
+                        <p className="text-slate-400 text-xs">{formatDate(entry.created_at)}</p>
                       </div>
-                      
-                      <p className="text-gray-400 text-sm line-clamp-2 mb-2">
-                        {entry.content?.body}
-                      </p>
-                      
-                      {entry.content?.tags && entry.content.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {entry.content.tags.map((tag, i) => (
-                            <span key={i} className="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                    </div>
+                    {expandedEntry === index ? (
+                      <ChevronUp className="w-4 h-4 text-slate-400" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 text-slate-400" />
+                    )}
+                  </div>
 
-                      {entry.ai_response?.message && (
-                        <div className="mt-3 p-3 bg-purple-900/20 border border-purple-500/30 rounded">
-                          <p className="text-purple-300 text-xs font-semibold mb-1">💜 AI Support:</p>
-                          <p className="text-gray-300 text-sm">{entry.ai_response.message}</p>
+                  {expandedEntry === index && (
+                    <div className="mt-3 pt-3 border-t border-slate-200">
+                      <p className="text-slate-600 text-sm whitespace-pre-wrap">{entry.body}</p>
+                      {entry.ai_suggestion && (
+                        <div className="mt-2 bg-violet-50 rounded p-2">
+                          <p className="text-violet-700 text-xs">
+                            <Sparkles className="w-3 h-3 inline mr-1" />
+                            {entry.ai_suggestion}
+                          </p>
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      {entry.mood_after && (
+                        <p className="text-slate-400 text-xs mt-2">
+                          Mood after: {getMoodEmoji(entry.mood_after)} {entry.mood_after}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}
 
-        {/* Empty State */}
-        {entries.length === 0 && !showNewEntry && (
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardContent className="p-12 text-center">
-              <BookOpen className="w-16 h-16 text-purple-500 mx-auto mb-4 opacity-50" />
-              <h3 className="text-white text-xl mb-2">Your Wisdom Vault is Empty</h3>
-              <p className="text-gray-400 mb-6">
-                Start journaling your thoughts, feelings, and reflections.
-                <br />
-                This is your safe space for mental wellness.
-              </p>
-              <Button
-                onClick={() => setShowNewEntry(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                Create Your First Entry
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* KPA System Message */}
-        <div className="text-center mt-8">
-          <p className="text-purple-500 text-sm italic">
-            "Your mental health matters. You matter. This vault keeps your thoughts safe." 💜
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-slate-500 text-xs flex items-center justify-center">
+            <Lock className="w-3 h-3 mr-1" />
+            Your entries are private and encrypted
           </p>
-          <p className="text-gray-600 text-xs mt-1">
-            Part of the KPA System - Keep People Alive
+          <p className="text-slate-400 text-xs mt-1">
+            Keep People Alive - Mind Matters
           </p>
         </div>
       </div>
