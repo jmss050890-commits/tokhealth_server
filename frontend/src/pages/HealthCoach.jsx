@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2 } from 'lucide-react';
+import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2, Mic, MicOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 const HealthCoach = () => {
@@ -18,6 +18,11 @@ const HealthCoach = () => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
   const [sessionId] = useState(() => `session_${Date.now()}`);
+  
+  // Voice input states
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const recognitionRef = useRef(null);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -36,7 +41,73 @@ const HealthCoach = () => {
     if (!('speechSynthesis' in window)) {
       setVoiceEnabled(false);
     }
+    
+    // Check if speech recognition is supported
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      setSpeechSupported(true);
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
+      
+      recognitionRef.current.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        setInputMessage(transcript);
+      };
+      
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+      
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+        if (event.error === 'not-allowed') {
+          toast.error('Microphone access denied. Please enable it in browser settings.');
+        }
+      };
+    }
+    
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+    };
   }, []);
+
+  const startListening = () => {
+    if (!speechSupported) {
+      toast.error('Voice input not supported in this browser');
+      return;
+    }
+    
+    try {
+      recognitionRef.current.start();
+      setIsListening(true);
+      toast.success('Listening... speak now');
+    } catch (error) {
+      console.error('Error starting speech recognition:', error);
+      setIsListening(false);
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  };
+
+  const toggleListening = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
 
   const saveCoachName = () => {
     const newName = tempName.trim() || 'Health Coach';
