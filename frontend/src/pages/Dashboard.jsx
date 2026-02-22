@@ -338,6 +338,29 @@ const Dashboard = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Medical Export */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer col-span-2"
+            onClick={() => setCurrentView('export')}
+            data-testid="export-card"
+          >
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-teal-600" />
+                </div>
+                <div>
+                  <span className="text-slate-800 text-sm font-semibold">Medical Export</span>
+                  <p className="text-slate-500 text-xs">Print report for doctor visits</p>
+                </div>
+              </div>
+              <Button variant="outline" className="border-teal-300 text-teal-600 hover:bg-teal-50 text-xs">
+                Generate
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
         </div>
 
         {/* Quick Stats */}
