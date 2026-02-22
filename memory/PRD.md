@@ -95,10 +95,13 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - Status: COMPLETE
 
 ### 10. Wisdom Vault
-- Private journal entries
-- Mood tracking
-- AI wellness suggestions
-- Status: PARTIAL - Basic UI exists
+- Private journal entries with mood tracking (before/after)
+- Entry types: Journal, Gratitude, Reflection
+- **AI Wellness Suggestions** - Get personalized advice from AI
+- **Journal Prompts** - Random prompts to inspire writing
+- Tag support for organization
+- Expandable past entries
+- Status: COMPLETE
 
 ### 11. Prescription Tracker
 - Medication management with dosage
