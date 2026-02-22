@@ -7,9 +7,27 @@ import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
 import WisdomVault from '@/pages/WisdomVault';
 import EmergencyContacts from '@/pages/EmergencyContacts';
+import PrescriptionTracker from '@/pages/PrescriptionTracker';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'prescriptions') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <PrescriptionTracker />
+      </div>
+    );
+  }
 
   if (currentView === 'emergency') {
     return (
@@ -277,7 +295,11 @@ const Dashboard = () => {
           </Card>
 
           {/* Prescriptions */}
-          <Card className="bg-gray-900/50 border-gray-700">
+          <Card 
+            className="bg-gray-900/50 border-gray-700"
+            onClick={() => setCurrentView('prescriptions')}
+            style={{cursor: 'pointer'}}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Pill className="w-5 h-5 text-pink-500" />
