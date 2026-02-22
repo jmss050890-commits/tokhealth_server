@@ -72,6 +72,8 @@ api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["
 api_router.include_router(hydration_router, prefix="/hydration", tags=["Hydration"])
 api_router.include_router(biometrics_router, prefix="/biometrics", tags=["Biometrics"])
 api_router.include_router(profile_router, prefix="/profile", tags=["User Profile"])
+api_router.include_router(family_router, prefix="/family", tags=["Family"])
+api_router.include_router(trends_router, prefix="/trends", tags=["Health Trends"])
 
 # Mount the API router
 app.include_router(api_router)
