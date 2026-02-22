@@ -381,8 +381,24 @@ const HealthCoach = () => {
 
             {/* Input */}
             <div className="flex space-x-2">
+              {/* Microphone Button */}
+              {speechSupported && (
+                <Button
+                  onClick={toggleListening}
+                  variant={isListening ? 'default' : 'outline'}
+                  className={isListening 
+                    ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                    : 'border-sky-300 text-sky-600 hover:bg-sky-50'
+                  }
+                  disabled={loading}
+                  data-testid="voice-input-btn"
+                >
+                  {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                </Button>
+              )}
+              
               <Textarea
-                placeholder={`Ask ${coachName} anything...`}
+                placeholder={isListening ? 'Listening...' : `Ask ${coachName} anything...`}
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => {
@@ -393,7 +409,7 @@ const HealthCoach = () => {
                 }}
                 className="bg-white border-slate-200 text-slate-800 flex-1 text-sm"
                 rows={2}
-                disabled={loading}
+                disabled={loading || isListening}
               />
               <Button
                 onClick={handleSendMessage}
