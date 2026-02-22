@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText } from 'lucide-react';
+import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
@@ -9,6 +9,7 @@ import WisdomVault from '@/pages/WisdomVault';
 import EmergencyContacts from '@/pages/EmergencyContacts';
 import PrescriptionTracker from '@/pages/PrescriptionTracker';
 import HealthCoach from '@/pages/HealthCoach';
+import UserProfile from '@/pages/UserProfile';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
