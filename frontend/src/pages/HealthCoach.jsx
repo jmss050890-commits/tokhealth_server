@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Brain, MessageCircle, TrendingUp, Heart, Send, Volume2, VolumeX } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const HealthCoach = () => {
@@ -15,34 +17,33 @@ const HealthCoach = () => {
   const [coachName, setCoachName] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [sessionId] = useState(() => `session_${Date.now()}`);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     fetchCoachStatus();
-    fetchRecentMessages();
     
     // Load saved coach name
     const savedName = localStorage.getItem('tokhealth_coach_name');
     if (savedName) {
       setCoachName(savedName);
     } else {
-      setCoachName('AI Health Coach');
+      setCoachName('Health Coach');
     }
     
     // Check if speech synthesis is supported
     if (!('speechSynthesis' in window)) {
       setVoiceEnabled(false);
-      toast.error('Voice not supported in this browser - text fallback active');
     }
   }, []);
 
   const saveCoachName = () => {
-    const newName = tempName.trim() || 'AI Health Coach';
+    const newName = tempName.trim() || 'Health Coach';
     setCoachName(newName);
     localStorage.setItem('tokhealth_coach_name', newName);
     setIsEditingName(false);
-    toast.success(`Your coach is now named "${newName}"! 💙`);
+    toast.success(`Your coach is now named "${newName}"!`);
   };
 
   const fetchCoachStatus = async () => {
@@ -57,52 +58,24 @@ const HealthCoach = () => {
     }
   };
 
-  const fetchRecentMessages = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/health-coach/messages`);
-      const data = await response.json();
-      if (data.success) {
-        setMessages(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
-
   const speakText = (text) => {
-    if (!voiceEnabled || !('speechSynthesis' in window)) {
-      toast.info('Voice unavailable - reading text instead');
-      return;
-    }
+    if (!voiceEnabled || !('speechSynthesis' in window)) return;
 
     try {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9; // Slightly slower for clarity
+      utterance.rate = 0.9;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
       
-      utterance.onstart = () => {
-        setIsSpeaking(true);
-        toast.success('🔊 Coach speaking...');
-      };
-      
-      utterance.onend = () => {
-        setIsSpeaking(false);
-      };
-      
-      utterance.onerror = (event) => {
-        setIsSpeaking(false);
-        toast.error('Voice failed - text fallback active ✓');
-        console.error('Speech error:', event);
-      };
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
       
       window.speechSynthesis.speak(utterance);
     } catch (error) {
       console.error('Speech synthesis error:', error);
-      toast.error('Voice failed - text fallback active ✓');
       setIsSpeaking(false);
     }
   };
@@ -111,138 +84,120 @@ const HealthCoach = () => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
-      toast.info('Voice stopped');
     }
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || loading) return;
 
+    const userMsg = {
+      sender: 'user',
+      text: inputMessage,
+      timestamp: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setInputMessage('');
     setLoading(true);
+
     try {
-      const userMsg = {
-        sender: 'user',
-        text: inputMessage,
-        timestamp: new Date().toISOString()
-      };
+      const response = await fetch(`${BACKEND_URL}/api/health-coach/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: inputMessage,
+          session_id: sessionId
+        })
+      });
 
-      const aiResponse = {
-        sender: 'coach',
-        text: generateCoachResponse(inputMessage),
-        timestamp: new Date().toISOString()
-      };
-
-      setMessages([...messages, userMsg, aiResponse]);
-      setInputMessage('');
+      const data = await response.json();
       
-      // Auto-speak coach response if voice enabled
-      if (voiceEnabled) {
-        setTimeout(() => speakText(aiResponse.text), 500);
+      if (data.success) {
+        const coachMsg = {
+          sender: 'coach',
+          text: data.data.response,
+          timestamp: new Date().toISOString()
+        };
+        
+        setMessages(prev => [...prev, coachMsg]);
+        
+        // Auto-speak coach response if voice enabled
+        if (voiceEnabled) {
+          setTimeout(() => speakText(data.data.response), 300);
+        }
+      } else {
+        toast.error('Coach is unavailable right now');
       }
-      
-      toast.success('Coach responded!');
     } catch (error) {
       console.error('Error sending message:', error);
-      toast.error('Failed to get response - text fallback active');
+      toast.error('Could not reach the coach');
+      
+      // Add a fallback response
+      setMessages(prev => [...prev, {
+        sender: 'coach',
+        text: "I'm having trouble connecting right now. Please try again in a moment.",
+        timestamp: new Date().toISOString()
+      }]);
     } finally {
       setLoading(false);
     }
   };
 
-  const generateCoachResponse = (userInput) => {
-    const input = userInput.toLowerCase();
-    
-    if (input.includes('protein') || input.includes('eat')) {
-      return "Great question about nutrition! Based on your goals, aim for lean proteins like chicken, fish, eggs, and Greek yogurt. Try to spread your protein intake throughout the day. Your body can only absorb so much at once. Need specific meal ideas?";
-    } else if (input.includes('exercise') || input.includes('workout')) {
-      return "Exercise is key to wellness! I see you're tracking steps, that's a great start. Consider adding strength training 2 to 3 times per week. Even 20 minutes makes a difference. What activities do you enjoy?";
-    } else if (input.includes('sleep') || input.includes('tired')) {
-      return "Sleep is crucial for health! Aim for 7 to 9 hours. Try consistent bedtime, no screens 1 hour before bed, and a cool dark room. Your body repairs itself during sleep, it's not optional for wellness!";
-    } else if (input.includes('stress') || input.includes('anxious')) {
-      return "I hear you. Stress management is vital. Try the Wisdom Vault for journaling, it really helps. Also, deep breathing, 10 minute walks, and talking to someone you trust. You're not alone in this.";
-    } else if (input.includes('water') || input.includes('hydration')) {
-      return "Hydration is so important! Aim for 2 to 2.5 liters daily. Set reminders if needed. Signs you need more are dark urine, fatigue, and headaches. Keep a water bottle with you, you've got this!";
-    } else if (input.includes('medication') || input.includes('prescription')) {
-      return "Medication adherence is critical for health! Use the Prescription Tracker to set reminders. Never skip doses, especially for diabetes or heart conditions. If you're having side effects, contact your doctor immediately. Don't stop medications without medical guidance.";
-    } else if (input.includes('diabetes') || input.includes('blood sugar')) {
-      return "Managing diabetes requires consistency. Track your meals, take medications on schedule, monitor blood sugar regularly, and stay active. The Nutrition Logger and Prescription Tracker are your best tools. You're doing great by staying on top of it!";
-    } else {
-      return "Thanks for reaching out! I'm here to help with nutrition, fitness, medications, mental wellness, anything health related. Based on your TokHealth data, I can give personalized guidance. What specific area would you like to focus on today?";
-    }
-  };
-
-  const getStatusColor = (zone) => {
-    if (zone === 'green') return 'text-green-500 bg-green-500/20 border-green-500';
-    if (zone === 'yellow') return 'text-yellow-500 bg-yellow-500/20 border-yellow-500';
-    if (zone === 'red') return 'text-red-500 bg-red-500/20 border-red-500';
-    return 'text-gray-500';
+  const getStatusBorder = (zone) => {
+    if (zone === 'green') return 'border-green-400';
+    if (zone === 'yellow') return 'border-yellow-400';
+    if (zone === 'red') return 'border-red-400';
+    return 'border-slate-300';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900/20 via-black to-purple-900/20 p-4" data-testid="health-coach">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="p-4" data-testid="health-coach">
+      <div className="max-w-2xl mx-auto space-y-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <Brain className="w-10 h-10 text-blue-500" />
-            <h1 className="text-4xl font-bold">
-              <span className="text-blue-500">{coachName.toUpperCase()}</span>
-            </h1>
-            {voiceEnabled && <Volume2 className="w-6 h-6 text-green-500" />}
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center">
+              <Brain className="w-5 h-5 text-sky-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">{coachName}</h1>
+            {voiceEnabled && <Volume2 className="w-4 h-4 text-emerald-500" />}
           </div>
           <Button
             onClick={() => {
               setIsEditingName(true);
-              setTempName(coachName === 'AI Health Coach' ? '' : coachName);
+              setTempName(coachName === 'Health Coach' ? '' : coachName);
             }}
             variant="ghost"
             size="sm"
-            className="text-gray-400 hover:text-white text-xs"
+            className="text-slate-500 text-xs"
           >
-            ✏️ {coachName === 'AI Health Coach' ? 'Name Your Coach' : 'Rename Coach'}
+            Rename Coach
           </Button>
-          <p className="text-gray-400 mb-2 mt-2">Voice + Text • Smart health guidance</p>
-          <p className="text-blue-500 text-xs italic">Gemini for guidance • GPT-5.2 for celebrations</p>
+          <p className="text-slate-500 text-sm">AI-Powered • Voice + Text</p>
         </div>
 
         {/* Name Your Coach Dialog */}
         {isEditingName && (
-          <Card className="bg-gray-900 border-2 border-blue-500 shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-white">Name Your Health Coach 💙</CardTitle>
+          <Card className="bg-white border-2 border-sky-400 shadow-lg">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 text-sm">Name Your Coach</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Give your coach a personal name</Label>
-                <Input
-                  placeholder="e.g., Hope, Dr. Sarah, Coach Mike, Angel..."
-                  value={tempName}
-                  onChange={(e) => setTempName(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white text-lg"
-                  autoFocus
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      saveCoachName();
-                    }
-                  }}
-                />
-                <p className="text-gray-500 text-xs">
-                  💡 Examples: "Hope" • "Dr. Sarah" • "Coach Mike" • "Guardian Angel"
-                </p>
-              </div>
-              
+            <CardContent className="space-y-3">
+              <Input
+                placeholder="e.g., Hope, Dr. Sarah, Coach Mike..."
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                className="bg-white border-slate-200 text-slate-800"
+                autoFocus
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') saveCoachName();
+                }}
+              />
               <div className="flex space-x-2">
-                <Button
-                  onClick={saveCoachName}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
-                >
-                  Save Name
+                <Button onClick={saveCoachName} className="flex-1 bg-sky-600 hover:bg-sky-700 text-sm">
+                  Save
                 </Button>
-                <Button
-                  onClick={() => setIsEditingName(false)}
-                  variant="outline"
-                  className="border-gray-600 text-gray-400"
-                >
+                <Button onClick={() => setIsEditingName(false)} variant="outline" className="border-slate-300 text-sm">
                   Cancel
                 </Button>
               </div>
@@ -251,84 +206,66 @@ const HealthCoach = () => {
         )}
 
         {/* Voice Control */}
-        <Card className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border-green-500/30">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                {voiceEnabled ? (
-                  <Volume2 className="w-6 h-6 text-green-500" />
-                ) : (
-                  <VolumeX className="w-6 h-6 text-gray-500" />
-                )}
-                <div>
-                  <p className="text-white font-semibold">
-                    Voice: {voiceEnabled ? 'ON' : 'OFF'}
-                  </p>
-                  <p className="text-gray-400 text-xs">
-                    {voiceEnabled ? 'Coach will speak responses • Text always available' : 'Text fallback active'}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                {isSpeaking && (
-                  <Button
-                    onClick={stopSpeaking}
-                    variant="outline"
-                    size="sm"
-                    className="border-red-500 text-red-500"
-                  >
-                    Stop Speaking
-                  </Button>
-                )}
-                <Button
-                  onClick={() => setVoiceEnabled(!voiceEnabled)}
-                  variant="outline"
-                  size="sm"
-                  className={voiceEnabled ? 'border-green-500 text-green-500' : 'border-gray-500 text-gray-500'}
-                >
-                  {voiceEnabled ? 'Disable Voice' : 'Enable Voice'}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex items-center justify-between bg-white/80 rounded-lg p-3 border border-sky-200">
+          <div className="flex items-center space-x-2">
+            {voiceEnabled ? (
+              <Volume2 className="w-5 h-5 text-emerald-500" />
+            ) : (
+              <VolumeX className="w-5 h-5 text-slate-400" />
+            )}
+            <span className="text-slate-700 text-sm">Voice: {voiceEnabled ? 'ON' : 'OFF'}</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            {isSpeaking && (
+              <Button onClick={stopSpeaking} variant="outline" size="sm" className="border-rose-300 text-rose-600 text-xs">
+                Stop
+              </Button>
+            )}
+            <Button
+              onClick={() => setVoiceEnabled(!voiceEnabled)}
+              variant="outline"
+              size="sm"
+              className={voiceEnabled ? 'border-emerald-300 text-emerald-600 text-xs' : 'border-slate-300 text-slate-500 text-xs'}
+            >
+              {voiceEnabled ? 'Disable' : 'Enable'}
+            </Button>
+          </div>
+        </div>
 
         {/* Current Status */}
         {currentStatus && (
-          <Card className={`border-2 ${getStatusColor(currentStatus.overall_zone)}`}>
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <span>Your Current Health Status</span>
-                <span className="text-3xl">
-                  {currentStatus.overall_zone === 'green' && '🟢'}
-                  {currentStatus.overall_zone === 'yellow' && '🟡'}
-                  {currentStatus.overall_zone === 'red' && '🔴'}
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-white text-lg mb-2">{currentStatus.message}</p>
+          <Card className={`bg-white/90 border-2 ${getStatusBorder(currentStatus.overall_zone)}`}>
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-slate-700 font-medium">{currentStatus.message}</p>
+              </div>
+              <span className="text-2xl">
+                {currentStatus.overall_zone === 'green' && '🟢'}
+                {currentStatus.overall_zone === 'yellow' && '🟡'}
+                {currentStatus.overall_zone === 'red' && '🔴'}
+                {currentStatus.overall_zone === 'gray' && '⚪'}
+              </span>
             </CardContent>
           </Card>
         )}
 
         {/* Chat Interface */}
-        <Card className="bg-gray-900/50 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <MessageCircle className="w-5 h-5 mr-2 text-blue-500" />
+        <Card className="bg-white/90 border-sky-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 flex items-center text-sm">
+              <MessageCircle className="w-4 h-4 mr-2 text-sky-600" />
               Chat with {coachName}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             {/* Messages */}
-            <div className="space-y-3 max-h-96 overflow-y-auto p-4 bg-gray-800/30 rounded-lg">
+            <div className="space-y-2 max-h-64 overflow-y-auto p-3 bg-slate-50 rounded-lg">
               {messages.length === 0 ? (
-                <div className="text-center py-8">
-                  <Brain className="w-12 h-12 text-blue-500 mx-auto mb-3 opacity-50" />
-                  <p className="text-gray-400 mb-2">Start a conversation with {coachName}</p>
-                  <p className="text-gray-500 text-sm">Voice + Text • Ask anything about health</p>
+                <div className="text-center py-6">
+                  <Brain className="w-10 h-10 text-sky-300 mx-auto mb-2" />
+                  <p className="text-slate-500 text-sm">Start a conversation</p>
+                  <p className="text-slate-400 text-xs">Ask anything about health!</p>
                 </div>
               ) : (
                 messages.map((msg, index) => (
@@ -336,40 +273,45 @@ const HealthCoach = () => {
                     key={index}
                     className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className="flex flex-col max-w-[80%]">
+                    <div className="flex flex-col max-w-[85%]">
                       <div
                         className={`p-3 rounded-lg ${
                           msg.sender === 'user'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-700 text-gray-100'
+                            ? 'bg-sky-600 text-white'
+                            : 'bg-white text-slate-700 border border-slate-200'
                         }`}
                       >
                         <p className="text-sm">{msg.text}</p>
-                        <p className="text-xs opacity-70 mt-1">
-                          {new Date(msg.timestamp).toLocaleTimeString()}
-                        </p>
                       </div>
                       {msg.sender === 'coach' && voiceEnabled && (
                         <Button
                           onClick={() => speakText(msg.text)}
                           variant="ghost"
                           size="sm"
-                          className="text-green-500 text-xs mt-1 self-start"
+                          className="text-sky-600 text-xs mt-1 self-start p-1 h-auto"
                         >
                           <Volume2 className="w-3 h-3 mr-1" />
-                          Speak Again
+                          Speak
                         </Button>
                       )}
                     </div>
                   </div>
                 ))
               )}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="bg-white text-slate-500 p-3 rounded-lg border border-slate-200 flex items-center">
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    <span className="text-sm">Thinking...</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Input */}
             <div className="flex space-x-2">
               <Textarea
-                placeholder="Ask your health coach anything..."
+                placeholder={`Ask ${coachName} anything...`}
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => {
@@ -378,70 +320,68 @@ const HealthCoach = () => {
                     handleSendMessage();
                   }
                 }}
-                className="bg-gray-800 border-gray-700 text-white flex-1"
+                className="bg-white border-slate-200 text-slate-800 flex-1 text-sm"
                 rows={2}
+                disabled={loading}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={loading || !inputMessage.trim()}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-sky-600 hover:bg-sky-700"
               >
-                <Send className="w-5 h-5" />
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
               </Button>
             </div>
-
-            <p className="text-gray-500 text-xs">
-              💡 Try: "Hey {coachName}, how can I manage my diabetes?" or "{coachName}, tips for better sleep?"
-            </p>
           </CardContent>
         </Card>
 
         {/* Quick Topics */}
-        <Card className="bg-gray-900/50 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white">Quick Health Topics</CardTitle>
+        <Card className="bg-white/90 border-sky-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 text-sm">Quick Topics</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Button
-                onClick={() => setInputMessage('How can I manage my diabetes?')}
-                variant="outline"
-                className="border-red-500/50 text-red-500 hover:bg-red-500/10"
-              >
-                💉 Diabetes
-              </Button>
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => setInputMessage('How can I improve my nutrition?')}
                 variant="outline"
-                className="border-green-500/50 text-green-500 hover:bg-green-500/10"
+                className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-xs py-2"
+                disabled={loading}
               >
-                🥗 Nutrition
+                Nutrition
               </Button>
               <Button
                 onClick={() => setInputMessage('What exercise should I do?')}
                 variant="outline"
-                className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
+                className="border-sky-300 text-sky-700 hover:bg-sky-50 text-xs py-2"
+                disabled={loading}
               >
-                💪 Exercise
+                Exercise
               </Button>
               <Button
                 onClick={() => setInputMessage('Help me manage stress')}
                 variant="outline"
-                className="border-pink-500/50 text-pink-500 hover:bg-pink-500/10"
+                className="border-violet-300 text-violet-700 hover:bg-violet-50 text-xs py-2"
+                disabled={loading}
               >
-                🧘 Stress
+                Stress
+              </Button>
+              <Button
+                onClick={() => setInputMessage('Tips for better sleep')}
+                variant="outline"
+                className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 text-xs py-2"
+                disabled={loading}
+              >
+                Sleep
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* KPA Message */}
+        {/* Footer */}
         <div className="text-center">
-          <p className="text-blue-500 text-sm italic">
-            "Voice + Text = Everyone can access health guidance" 🔊💙
-          </p>
-          <p className="text-gray-600 text-xs mt-1">
-            KPA System - Keep People Alive
+          <p className="text-slate-500 text-xs">
+            Keep People Alive - AI Health Guidance
           </p>
         </div>
       </div>
