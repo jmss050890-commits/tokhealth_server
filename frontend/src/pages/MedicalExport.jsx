@@ -1,380 +1,325 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Download, Copy, Share2, Heart } from 'lucide-react';
+import { FileText, Download, Activity, Heart, Pill, AlertTriangle, User, Calendar, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 
 const MedicalExport = () => {
-  const [loading, setLoading] = useState(false);
-  const [reportGenerated, setReportGenerated] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [biometrics, setBiometrics] = useState(null);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [emergencyContacts, setEmergencyContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  const generateFullReport = async () => {
-    setLoading(true);
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  const fetchAllData = async () => {
     try {
-      // Fetch all health data
-      const [biometricsRes, nutritionRes, contactsRes] = await Promise.all([
+      const [profileRes, biometricsRes, prescriptionsRes, emergencyRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/profile/`),
         fetch(`${BACKEND_URL}/api/biometrics/today`),
-        fetch(`${BACKEND_URL}/api/nutrition/today`),
+        fetch(`${BACKEND_URL}/api/prescriptions/`),
         fetch(`${BACKEND_URL}/api/emergency-contacts/`)
       ]);
 
-      const biometrics = await biometricsRes.json();
-      const nutrition = await nutritionRes.json();
-      const contacts = await contactsRes.json();
+      const profileData = await profileRes.json();
+      const biometricsData = await biometricsRes.json();
+      const prescriptionsData = await prescriptionsRes.json();
+      const emergencyData = await emergencyRes.json();
 
-      const today = new Date().toLocaleDateString();
-      const time = new Date().toLocaleTimeString();
-
-      const report = `
-═══════════════════════════════════════════════════════
-                 TOKHEALTH MEDICAL REPORT
-                Keep People Alive (KPA System)
-═══════════════════════════════════════════════════════
-
-Generated: ${today} at ${time}
-Report ID: ${Date.now()}
-
-═══════════════════════════════════════════════════════
-                    PATIENT INFORMATION
-═══════════════════════════════════════════════════════
-
-Name: [Patient Name - Update with your info]
-Date of Birth: [DOB]
-Age: [Age]
-Gender: [Gender]
-Blood Type: [If known]
-
-═══════════════════════════════════════════════════════
-                 CURRENT VITAL SIGNS (Today)
-═══════════════════════════════════════════════════════
-
-Heart Rate: ${biometrics.data?.heart_rate_bpm || 'Not recorded'} BPM
-Blood Pressure: ${biometrics.data?.blood_pressure_systolic || 'N/A'}/${biometrics.data?.blood_pressure_diastolic || 'N/A'} mmHg
-Blood Oxygen: ${biometrics.data?.blood_oxygen_spo2 || 'Not recorded'}% SpO2
-Body Temperature: ${biometrics.data?.body_temp_celsius || 'Not recorded'}°C
-
-Activity Level: ${biometrics.data?.steps || 0} steps today
-
-Vital Signs Status: ${
-  biometrics.data?.heart_rate_bpm && 
-  biometrics.data.heart_rate_bpm >= 60 && 
-  biometrics.data.heart_rate_bpm <= 100 
-    ? '✓ NORMAL RANGE' 
-    : '⚠ NEEDS REVIEW'
-}
-
-═══════════════════════════════════════════════════════
-              NUTRITION & DIETARY INTAKE (Today)
-═══════════════════════════════════════════════════════
-
-Total Calories: ${Math.round(nutrition.data?.totals?.calories || 0)} kcal
-Protein: ${Math.round(nutrition.data?.totals?.protein_g || 0)}g
-Carbohydrates: ${Math.round(nutrition.data?.totals?.carbs_g || 0)}g
-Fat: ${Math.round(nutrition.data?.totals?.fat_g || 0)}g
-
-Meals Logged: ${nutrition.data?.meals?.length || 0}
-${nutrition.data?.meals?.map((meal, i) => 
-  `  ${i + 1}. ${meal.meal_type} - ${Math.round(meal.total_calories)} cal`
-).join('\n') || '  No meals logged today'}
-
-═══════════════════════════════════════════════════════
-                CURRENT MEDICATIONS
-═══════════════════════════════════════════════════════
-
-[This section will auto-populate from Prescription Tracker]
-• Medication tracking active in TokHealth app
-• See Prescription Tracker for complete medication schedule
-• Adherence monitoring enabled
-
-IMPORTANT: Inform healthcare providers of ALL medications,
-including over-the-counter drugs and supplements.
-
-═══════════════════════════════════════════════════════
-              ALLERGIES & MEDICAL CONDITIONS
-═══════════════════════════════════════════════════════
-
-Known Allergies: [Update with your allergies]
-Medical Conditions: [Update with your conditions]
-Previous Surgeries: [Update with surgical history]
-
-═══════════════════════════════════════════════════════
-                 EMERGENCY CONTACTS
-═══════════════════════════════════════════════════════
-
-${contacts.data?.length > 0 
-  ? contacts.data.map((contact, i) => 
-    `${i + 1}. ${contact.name} (${contact.relationship})
-   Phone: ${contact.phone_primary}
-   ${contact.medical_info ? `Medical Info: ${contact.medical_info}` : ''}`
-  ).join('\n\n')
-  : 'No emergency contacts registered'}
-
-═══════════════════════════════════════════════════════
-              RECENT HEALTH SUMMARY (7 Days)
-═══════════════════════════════════════════════════════
-
-• Biometric tracking: Active
-• Nutrition logging: Active
-• Medication adherence: Being monitored
-• Mental wellness: Wisdom Vault entries tracked
-• Emergency preparedness: Contacts registered
-
-Overall Health Status: [Determined by The Loop visualization]
-
-═══════════════════════════════════════════════════════
-           NOTES FOR HEALTHCARE PROVIDERS
-═══════════════════════════════════════════════════════
-
-This report is generated from TokHealth, a comprehensive health
-tracking system. All data is patient-reported and tracked daily.
-
-For detailed history, trends, and complete medication schedules,
-please request additional TokHealth reports or access patient's
-app data with permission.
-
-═══════════════════════════════════════════════════════
-                        DISCLAIMER
-═══════════════════════════════════════════════════════
-
-This report is for informational purposes and healthcare
-communication. It is not a substitute for professional medical
-examination or diagnosis. All data is self-reported and should
-be verified by healthcare professionals.
-
-═══════════════════════════════════════════════════════
-            Generated by TokHealth KPA System
-              Keep People Alive • Sanders Family
-                Built with purpose for families
-═══════════════════════════════════════════════════════
-      `.trim();
-
-      // Copy to clipboard
-      await navigator.clipboard.writeText(report);
-      toast.success('Medical report copied to clipboard! 📋');
-
-      // Download as text file
-      const blob = new Blob([report], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `TokHealth_Medical_Report_${today.replace(/\//g, '-')}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      toast.success('Medical report downloaded! Share with doctors. 💚');
-      setReportGenerated(true);
-
+      if (profileData.success) setProfile(profileData.data);
+      if (biometricsData.success) setBiometrics(biometricsData.data);
+      if (prescriptionsData.success) setPrescriptions(prescriptionsData.data || []);
+      if (emergencyData.success) setEmergencyContacts(emergencyData.data || []);
     } catch (error) {
-      console.error('Error generating report:', error);
-      toast.error('Failed to generate report');
+      console.error('Error fetching data:', error);
+      toast.error('Failed to load health data');
     } finally {
       setLoading(false);
     }
   };
 
+  const generateReport = () => {
+    setGenerating(true);
+    
+    const now = new Date();
+    const reportDate = now.toLocaleDateString('en-US', { 
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+
+    const reportContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TokHealth Medical Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .header { text-align: center; border-bottom: 2px solid #0ea5e9; padding-bottom: 20px; margin-bottom: 20px; }
+    .header h1 { color: #0ea5e9; margin: 0; }
+    .section { margin-bottom: 25px; page-break-inside: avoid; }
+    .section-title { background: #f0f9ff; padding: 10px; border-left: 4px solid #0ea5e9; font-weight: bold; margin-bottom: 10px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .item { padding: 8px; background: #f8fafc; border-radius: 4px; }
+    .label { color: #64748b; font-size: 12px; }
+    .value { color: #1e293b; font-weight: 500; }
+    .alert { background: #fef2f2; border: 1px solid #fca5a5; padding: 10px; border-radius: 4px; }
+    .alert-title { color: #dc2626; font-weight: bold; }
+    .medication { background: #fdf4ff; padding: 10px; border-radius: 4px; margin-bottom: 8px; }
+    .contact { background: #f0fdf4; padding: 10px; border-radius: 4px; margin-bottom: 8px; }
+    .footer { text-align: center; color: #64748b; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+    @media print { body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>TokHealth Medical Report</h1>
+    <p>Generated: ${reportDate}</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Patient Information</div>
+    <div class="grid">
+      <div class="item">
+        <div class="label">Name</div>
+        <div class="value">${profile?.name || 'Not provided'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Age</div>
+        <div class="value">${profile?.age || 'Not provided'} years</div>
+      </div>
+      <div class="item">
+        <div class="label">Gender</div>
+        <div class="value">${profile?.gender || 'Not provided'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Blood Type</div>
+        <div class="value">${profile?.blood_type || 'Not provided'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Height</div>
+        <div class="value">${profile?.height_cm ? profile.height_cm + ' cm' : 'Not provided'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Weight</div>
+        <div class="value">${profile?.weight_kg ? profile.weight_kg + ' kg' : 'Not provided'}</div>
+      </div>
+      <div class="item">
+        <div class="label">BMI</div>
+        <div class="value">${profile?.targets?.bmi || 'Not calculated'} ${profile?.targets?.bmi_category ? '(' + profile.targets.bmi_category + ')' : ''}</div>
+      </div>
+      <div class="item">
+        <div class="label">Activity Level</div>
+        <div class="value">${profile?.activity_level || 'Not provided'}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Current Vital Signs (Latest Reading)</div>
+    <div class="grid">
+      <div class="item">
+        <div class="label">Heart Rate</div>
+        <div class="value">${biometrics?.heart_rate_bpm ? biometrics.heart_rate_bpm + ' BPM' : 'No data'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Blood Pressure</div>
+        <div class="value">${biometrics?.blood_pressure_systolic ? biometrics.blood_pressure_systolic + '/' + biometrics.blood_pressure_diastolic + ' mmHg' : 'No data'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Blood Oxygen (SpO2)</div>
+        <div class="value">${biometrics?.blood_oxygen_spo2 ? biometrics.blood_oxygen_spo2 + '%' : 'No data'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Temperature</div>
+        <div class="value">${biometrics?.body_temp_celsius ? biometrics.body_temp_celsius + ' C' : 'No data'}</div>
+      </div>
+      <div class="item">
+        <div class="label">Steps Today</div>
+        <div class="value">${biometrics?.steps ? biometrics.steps.toLocaleString() : 'No data'}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Current Medications</div>
+    ${prescriptions.length > 0 ? prescriptions.map(med => `
+      <div class="medication">
+        <strong>${med.medication_name}</strong> - ${med.dosage}<br>
+        <small>Schedule: ${med.frequency || 'As needed'}</small>
+      </div>
+    `).join('') : '<p>No medications recorded</p>'}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Emergency Contacts</div>
+    ${emergencyContacts.length > 0 ? emergencyContacts.map(contact => `
+      <div class="contact">
+        <strong>${contact.name}</strong> (${contact.relationship})<br>
+        Phone: ${contact.phone}
+      </div>
+    `).join('') : '<p>No emergency contacts recorded</p>'}
+  </div>
+
+  ${profile?.medical_conditions?.length > 0 ? `
+  <div class="section">
+    <div class="alert">
+      <div class="alert-title">Medical Conditions / Allergies</div>
+      <ul>
+        ${profile.medical_conditions.map(condition => `<li>${condition}</li>`).join('')}
+      </ul>
+    </div>
+  </div>
+  ` : ''}
+
+  <div class="footer">
+    <p>This report was generated by TokHealth - Keep People Alive (KPA) System</p>
+    <p>This is NOT a substitute for professional medical records. Please verify all information with the patient.</p>
+    <p>Report ID: TH-${Date.now()}</p>
+  </div>
+</body>
+</html>
+    `;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(reportContent);
+    printWindow.document.close();
+    
+    setTimeout(() => {
+      setGenerating(false);
+      toast.success('Report generated! You can print it from the new window.');
+    }, 1000);
+  };
+
+  if (loading) {
+    return (
+      <div className="p-4 flex items-center justify-center">
+        <Activity className="w-8 h-8 text-sky-600 animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-4" data-testid="medical-export">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <FileText className="w-10 h-10 text-purple-500" />
-            <h1 className="text-4xl font-bold">
-              <span className="text-purple-500">MEDICAL</span>{' '}
-              <span className="text-white">EXPORT</span>
-            </h1>
+    <div className="p-4" data-testid="medical-export">
+      <div className="max-w-2xl mx-auto space-y-4">
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-sky-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">Medical Export</h1>
           </div>
-          <p className="text-gray-400 mb-2">Professional health reports for doctors & emergencies</p>
-          <p className="text-purple-500 text-xs italic">Complete health data in one document</p>
-          <p className="text-gray-600 text-xs">KPA System - Keep People Alive 📄</p>
+          <p className="text-slate-500 text-sm">Generate a report for your doctor visit</p>
         </div>
 
-        {/* For The Family */}
-        <Card className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-purple-500/50">
-          <CardContent className="p-6 text-center">
-            <Heart className="w-8 h-8 text-pink-500 mx-auto mb-3" />
-            <p className="text-pink-400 font-semibold mb-2">👨‍👩‍👦 For The Sanders Family</p>
-            <p className="text-gray-300 text-sm">
-              Medical reports for doctor visits, emergency situations, and family sharing.
-              Your complete health story in one professional document.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* What's Included */}
-        <Card className="bg-gray-900/50 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white">What's Included in Your Report</CardTitle>
+        <Card className="bg-white/90 border-sky-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 text-sm flex items-center">
+              <User className="w-4 h-4 mr-2 text-sky-600" />
+              Report Preview
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Current Vitals</p>
-                  <p className="text-gray-400 text-sm">Heart rate, blood pressure, SpO2, temperature</p>
+          <CardContent className="space-y-3">
+            <div className="bg-slate-50 rounded p-3">
+              <div className="text-xs text-slate-500 mb-1">Patient</div>
+              <div className="text-slate-800 font-medium">{profile?.name || 'No profile set up'}</div>
+              {profile && (
+                <div className="text-slate-500 text-sm">
+                  {profile.age} years - {profile.gender} - {profile.blood_type || 'Blood type unknown'}
                 </div>
-              </div>
+              )}
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Nutrition Summary</p>
-                  <p className="text-gray-400 text-sm">Today's meals, calories, macros</p>
-                </div>
+            <div className="bg-slate-50 rounded p-3">
+              <div className="text-xs text-slate-500 mb-1 flex items-center">
+                <Heart className="w-3 h-3 mr-1" />
+                Latest Vitals
               </div>
+              {biometrics ? (
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>HR: {biometrics.heart_rate_bpm || '-'} BPM</div>
+                  <div>BP: {biometrics.blood_pressure_systolic || '-'}/{biometrics.blood_pressure_diastolic || '-'}</div>
+                  <div>SpO2: {biometrics.blood_oxygen_spo2 || '-'}%</div>
+                  <div>Temp: {biometrics.body_temp_celsius || '-'}C</div>
+                </div>
+              ) : (
+                <div className="text-slate-400 text-sm">No vitals recorded</div>
+              )}
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Medications</p>
-                  <p className="text-gray-400 text-sm">Current prescriptions & schedules</p>
-                </div>
+            <div className="bg-slate-50 rounded p-3">
+              <div className="text-xs text-slate-500 mb-1 flex items-center">
+                <Pill className="w-3 h-3 mr-1" />
+                Medications ({prescriptions.length})
               </div>
+              {prescriptions.length > 0 ? (
+                <div className="text-sm text-slate-700">
+                  {prescriptions.slice(0, 3).map((med, i) => (
+                    <div key={i}>{med.medication_name} - {med.dosage}</div>
+                  ))}
+                  {prescriptions.length > 3 && <div className="text-slate-400">+{prescriptions.length - 3} more</div>}
+                </div>
+              ) : (
+                <div className="text-slate-400 text-sm">No medications recorded</div>
+              )}
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Emergency Contacts</p>
-                  <p className="text-gray-400 text-sm">All registered contacts with medical info</p>
-                </div>
+            <div className="bg-slate-50 rounded p-3">
+              <div className="text-xs text-slate-500 mb-1 flex items-center">
+                <AlertTriangle className="w-3 h-3 mr-1" />
+                Emergency Contacts ({emergencyContacts.length})
               </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Health Status</p>
-                  <p className="text-gray-400 text-sm">Overall wellness summary</p>
+              {emergencyContacts.length > 0 ? (
+                <div className="text-sm text-slate-700">
+                  {emergencyContacts.slice(0, 2).map((contact, i) => (
+                    <div key={i}>{contact.name} ({contact.relationship})</div>
+                  ))}
                 </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-white font-semibold">Medical History</p>
-                  <p className="text-gray-400 text-sm">Allergies, conditions, notes</p>
-                </div>
-              </div>
+              ) : (
+                <div className="text-slate-400 text-sm">No emergency contacts</div>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Generate Button */}
-        <Card className="bg-gradient-to-r from-purple-900/40 to-blue-900/40 border-2 border-purple-500">
-          <CardContent className="p-8 text-center space-y-4">
-            <FileText className="w-16 h-16 text-purple-500 mx-auto" />
-            <h3 className="text-white text-xl font-bold">Generate Your Medical Report</h3>
-            <p className="text-gray-300 text-sm max-w-lg mx-auto">
-              Creates a comprehensive, professional health report with all your TokHealth data.
-              Perfect for doctor visits, emergency situations, or sharing with family.
-            </p>
-            
-            <Button
-              onClick={generateFullReport}
-              disabled={loading}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-6 text-lg"
-              data-testid="generate-report-button"
-            >
-              {loading ? 'Generating Report...' : '📄 Generate Medical Report'}
-            </Button>
-
-            <p className="text-gray-500 text-xs">
-              Report will be copied to clipboard AND downloaded as a text file
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Success Message */}
-        {reportGenerated && (
-          <Card className="bg-green-900/20 border-green-500/50">
-            <CardContent className="p-6">
-              <div className="flex items-start space-x-3">
-                <div className="text-3xl">✅</div>
-                <div className="flex-1">
-                  <h3 className="text-green-400 font-semibold mb-2">Report Generated Successfully!</h3>
-                  <div className="space-y-2 text-sm text-gray-300">
-                    <p>✓ Copied to clipboard - paste anywhere</p>
-                    <p>✓ Downloaded as text file - check your downloads folder</p>
-                    <p>✓ Ready to share with doctors, emergency contacts, or family</p>
-                  </div>
-                  
-                  <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded">
-                    <p className="text-blue-400 text-xs font-semibold mb-1">💡 How to use:</p>
-                    <ul className="text-gray-400 text-xs space-y-1">
-                      <li>• Email to your doctor before appointments</li>
-                      <li>• Print and bring to emergency room</li>
-                      <li>• Share with family members for their records</li>
-                      <li>• Keep in your phone for paramedics if needed</li>
-                    </ul>
-                  </div>
-
-                  <Button
-                    onClick={generateFullReport}
-                    variant="outline"
-                    size="sm"
-                    className="mt-4 border-purple-500 text-purple-400"
-                  >
-                    Generate New Report
-                  </Button>
-                </div>
+        {!profile && (
+          <Card className="bg-amber-50 border-amber-300">
+            <CardContent className="p-4 flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+              <div>
+                <div className="font-medium text-amber-800">Profile Not Set Up</div>
+                <div className="text-amber-700 text-sm">Set up your baseline profile first for a complete report.</div>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Use Cases */}
-        <Card className="bg-gray-900/50 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white">When to Use Medical Reports</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <span className="text-2xl">🏥</span>
-                <div>
-                  <p className="text-white font-semibold">Doctor Visits</p>
-                  <p className="text-gray-400 text-sm">Share complete health data before appointments</p>
-                </div>
-              </div>
+        <Button
+          onClick={generateReport}
+          disabled={generating}
+          className="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-5"
+          data-testid="generate-report-button"
+        >
+          {generating ? (
+            <>
+              <Activity className="w-5 h-5 mr-2 animate-spin" />
+              Generating...
+            </>
+          ) : (
+            <>
+              <Printer className="w-5 h-5 mr-2" />
+              Generate Printable Report
+            </>
+          )}
+        </Button>
 
-              <div className="flex items-start space-x-3">
-                <span className="text-2xl">🚑</span>
-                <div>
-                  <p className="text-white font-semibold">Emergency Situations</p>
-                  <p className="text-gray-400 text-sm">Paramedics get instant access to vitals & medications</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="text-2xl">👨‍👩‍👦</span>
-                <div>
-                  <p className="text-white font-semibold">Family Sharing</p>
-                  <p className="text-gray-400 text-sm">Keep family informed about health status</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="text-2xl">💼</span>
-                <div>
-                  <p className="text-white font-semibold">Insurance & Records</p>
-                  <p className="text-gray-400 text-sm">Professional documentation for claims</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* KPA Message */}
         <div className="text-center">
-          <p className="text-purple-500 text-sm italic">
-            "Your health story, professionally documented - ready when you need it" 📄💜
-          </p>
-          <p className="text-gray-600 text-xs mt-1">
-            KPA System - Keep People Alive • For The Sanders Family
+          <p className="text-slate-500 text-xs">
+            The report will open in a new window ready for printing
           </p>
         </div>
       </div>
