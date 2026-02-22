@@ -6,9 +6,27 @@ import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
 import WisdomVault from '@/pages/WisdomVault';
+import EmergencyContacts from '@/pages/EmergencyContacts';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'emergency') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <EmergencyContacts />
+      </div>
+    );
+  }
 
   if (currentView === 'wisdom') {
     return (
@@ -239,7 +257,11 @@ const Dashboard = () => {
         {/* Secondary Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Emergency Contacts */}
-          <Card className="bg-gray-900/50 border-gray-700">
+          <Card 
+            className="bg-gray-900/50 border-gray-700"
+            onClick={() => setCurrentView('emergency')}
+            style={{cursor: 'pointer'}}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Phone className="w-5 h-5 text-orange-500" />
