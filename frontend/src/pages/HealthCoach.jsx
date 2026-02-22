@@ -12,6 +12,9 @@ const HealthCoach = () => {
   const [loading, setLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [coachName, setCoachName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [tempName, setTempName] = useState('');
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -19,12 +22,28 @@ const HealthCoach = () => {
     fetchCoachStatus();
     fetchRecentMessages();
     
+    // Load saved coach name
+    const savedName = localStorage.getItem('tokhealth_coach_name');
+    if (savedName) {
+      setCoachName(savedName);
+    } else {
+      setCoachName('AI Health Coach');
+    }
+    
     // Check if speech synthesis is supported
     if (!('speechSynthesis' in window)) {
       setVoiceEnabled(false);
       toast.error('Voice not supported in this browser - text fallback active');
     }
   }, []);
+
+  const saveCoachName = () => {
+    const newName = tempName.trim() || 'AI Health Coach';
+    setCoachName(newName);
+    localStorage.setItem('tokhealth_coach_name', newName);
+    setIsEditingName(false);
+    toast.success(`Your coach is now named "${newName}"! 💙`);
+  };
 
   const fetchCoachStatus = async () => {
     try {
@@ -167,14 +186,69 @@ const HealthCoach = () => {
           <div className="flex items-center justify-center space-x-3 mb-4">
             <Brain className="w-10 h-10 text-blue-500" />
             <h1 className="text-4xl font-bold">
-              <span className="text-blue-500">AI HEALTH</span>{' '}
-              <span className="text-white">COACH</span>
+              <span className="text-blue-500">{coachName.toUpperCase()}</span>
             </h1>
             {voiceEnabled && <Volume2 className="w-6 h-6 text-green-500" />}
           </div>
-          <p className="text-gray-400 mb-2">Voice + Text • Smart health guidance</p>
+          <Button
+            onClick={() => {
+              setIsEditingName(true);
+              setTempName(coachName === 'AI Health Coach' ? '' : coachName);
+            }}
+            variant="ghost"
+            size="sm"
+            className="text-gray-400 hover:text-white text-xs"
+          >
+            ✏️ {coachName === 'AI Health Coach' ? 'Name Your Coach' : 'Rename Coach'}
+          </Button>
+          <p className="text-gray-400 mb-2 mt-2">Voice + Text • Smart health guidance</p>
           <p className="text-blue-500 text-xs italic">Gemini for guidance • GPT-5.2 for celebrations</p>
         </div>
+
+        {/* Name Your Coach Dialog */}
+        {isEditingName && (
+          <Card className="bg-gray-900 border-2 border-blue-500 shadow-2xl">
+            <CardHeader>
+              <CardTitle className="text-white">Name Your Health Coach 💙</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-gray-300">Give your coach a personal name</Label>
+                <Input
+                  placeholder="e.g., Hope, Dr. Sarah, Coach Mike, Angel..."
+                  value={tempName}
+                  onChange={(e) => setTempName(e.target.value)}
+                  className="bg-gray-800 border-gray-700 text-white text-lg"
+                  autoFocus
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      saveCoachName();
+                    }
+                  }}
+                />
+                <p className="text-gray-500 text-xs">
+                  💡 Examples: "Hope" • "Dr. Sarah" • "Coach Mike" • "Guardian Angel"
+                </p>
+              </div>
+              
+              <div className="flex space-x-2">
+                <Button
+                  onClick={saveCoachName}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  Save Name
+                </Button>
+                <Button
+                  onClick={() => setIsEditingName(false)}
+                  variant="outline"
+                  className="border-gray-600 text-gray-400"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Voice Control */}
         <Card className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border-green-500/30">
@@ -244,7 +318,7 @@ const HealthCoach = () => {
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <MessageCircle className="w-5 h-5 mr-2 text-blue-500" />
-              Chat with Your Health Coach
+              Chat with {coachName}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -253,7 +327,7 @@ const HealthCoach = () => {
               {messages.length === 0 ? (
                 <div className="text-center py-8">
                   <Brain className="w-12 h-12 text-blue-500 mx-auto mb-3 opacity-50" />
-                  <p className="text-gray-400 mb-2">Start a conversation with your AI Health Coach</p>
+                  <p className="text-gray-400 mb-2">Start a conversation with {coachName}</p>
                   <p className="text-gray-500 text-sm">Voice + Text • Ask anything about health</p>
                 </div>
               ) : (
@@ -317,7 +391,7 @@ const HealthCoach = () => {
             </div>
 
             <p className="text-gray-500 text-xs">
-              💡 Try: "How can I manage my diabetes?" or "Tips for better sleep?"
+              💡 Try: "Hey {coachName}, how can I manage my diabetes?" or "{coachName}, tips for better sleep?"
             </p>
           </CardContent>
         </Card>
