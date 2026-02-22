@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText } from 'lucide-react';
+import BiometricsTracker from '@/pages/BiometricsTracker';
 
 const Dashboard = () => {
+  const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'biometrics') {
+    return (
+      <div>
+        <div className=\"p-4\">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant=\"outline\"
+            className=\"mb-4 border-green-500/50 text-green-500\"
+          >
+            ← Back to Dashboard
+          </Button>
+        </div>
+        <BiometricsTracker />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-4" data-testid="dashboard">
       {/* Header */}
