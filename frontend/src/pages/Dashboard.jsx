@@ -361,7 +361,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-        </div>
 
         {/* Quick Stats */}
         <Card className="bg-white/80 backdrop-blur border-sky-200">
