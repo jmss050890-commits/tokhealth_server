@@ -140,15 +140,16 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - [x] Implemented Back to Green interventions (breathing, hydration, gratitude, movement)
 - [x] Built Medical Export with printable report
 - [x] Integrated GPT-5.2 for AI Health Coach
+- [x] **AI Meal Photo Recognition** - Take photo, AI analyzes and auto-fills nutrition
 - [x] The Loop displays real data with correct zone calculations
 - [x] Back to Green button appears in yellow/red zones
 - [x] Mobile-responsive design (430px viewport tested)
-- [x] All API endpoints tested and working (30/30 tests passed)
+- [x] All API endpoints tested and working
 
-## Upcoming Tasks (P0 - Critical)
-1. AI Meal Photo Recognition UI - Connect photo capture to backend endpoint
-2. Prescription reminder notifications (browser notifications)
-3. Hydration tracking improvements
+## Upcoming Tasks (P1)
+1. Prescription reminder notifications (browser notifications)
+2. Hydration tracking improvements
+3. Wisdom Vault journal enhancements
 
 ## Future Backlog (P1-P2)
 - Barcode scanning for nutrition logging
