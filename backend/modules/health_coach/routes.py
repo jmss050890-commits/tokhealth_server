@@ -175,3 +175,147 @@ async def get_coach_messages(
     except Exception as e:
         logger.error(f"Error getting messages: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/back-to-green", response_model=dict)
+async def get_back_to_green_interventions(
+    current_zone: str = "yellow",
+    db=Depends(get_database)
+):
+    """Get interventions to help user get back to green zone"""
+    try:
+        # Get user's current health data for context
+        loop_status = await db.loop_daily.find_one(
+            {"user_id": TEMP_USER_ID},
+            {"_id": 0},
+            sort=[("date", -1)]
+        )
+        
+        # Define interventions by zone
+        interventions = {
+            "immediate": [],
+            "short_term": [],
+            "mindfulness": [],
+            "physical": []
+        }
+        
+        if current_zone in ["yellow", "red"]:
+            # Breathing exercises
+            interventions["immediate"].append({
+                "id": "breathing_478",
+                "name": "4-7-8 Breathing",
+                "description": "Breathe in for 4 seconds, hold for 7, exhale for 8. Repeat 4 times.",
+                "duration_min": 3,
+                "icon": "wind",
+                "type": "breathing"
+            })
+            
+            # Hydration
+            interventions["immediate"].append({
+                "id": "hydration",
+                "name": "Hydration Boost",
+                "description": "Drink a full glass of water right now. Dehydration affects mood and energy.",
+                "duration_min": 1,
+                "icon": "droplet",
+                "type": "hydration"
+            })
+            
+            # Gratitude
+            interventions["mindfulness"].append({
+                "id": "gratitude",
+                "name": "Gratitude Moment",
+                "description": "Name 3 things you're grateful for today. It shifts your mental state.",
+                "duration_min": 2,
+                "icon": "heart",
+                "type": "gratitude"
+            })
+            
+            # Quick walk
+            interventions["physical"].append({
+                "id": "quick_walk",
+                "name": "5-Minute Walk",
+                "description": "Step outside for a quick walk. Movement releases endorphins.",
+                "duration_min": 5,
+                "icon": "footprints",
+                "type": "movement"
+            })
+            
+            # Stretching
+            interventions["physical"].append({
+                "id": "stretch",
+                "name": "Quick Stretch",
+                "description": "Stand up and stretch your arms, neck, and back. Release tension.",
+                "duration_min": 2,
+                "icon": "activity",
+                "type": "movement"
+            })
+            
+            # Grounding
+            interventions["mindfulness"].append({
+                "id": "grounding_54321",
+                "name": "5-4-3-2-1 Grounding",
+                "description": "Name 5 things you see, 4 you hear, 3 you touch, 2 you smell, 1 you taste.",
+                "duration_min": 3,
+                "icon": "eye",
+                "type": "grounding"
+            })
+        
+        if current_zone == "red":
+            # More intense interventions for red zone
+            interventions["immediate"].insert(0, {
+                "id": "pause",
+                "name": "STOP & Pause",
+                "description": "Stop what you're doing. Take 3 deep breaths. You've got this.",
+                "duration_min": 1,
+                "icon": "pause",
+                "type": "pause",
+                "priority": "high"
+            })
+            
+            interventions["short_term"].append({
+                "id": "eat_something",
+                "name": "Fuel Your Body",
+                "description": "When did you last eat? Low blood sugar affects everything. Have a healthy snack.",
+                "duration_min": 5,
+                "icon": "utensils",
+                "type": "nutrition"
+            })
+            
+            interventions["mindfulness"].append({
+                "id": "talk_someone",
+                "name": "Reach Out",
+                "description": "Call or text someone you trust. Connection heals.",
+                "duration_min": 5,
+                "icon": "phone",
+                "type": "social"
+            })
+            
+            interventions["physical"].append({
+                "id": "cold_water",
+                "name": "Cold Water Reset",
+                "description": "Splash cold water on your face. It activates your diving reflex and calms you.",
+                "duration_min": 1,
+                "icon": "droplets",
+                "type": "reset"
+            })
+        
+        # Add motivational message based on zone
+        if current_zone == "yellow":
+            message = "You're in the yellow zone. Let's get you back to green with a few quick actions."
+        elif current_zone == "red":
+            message = "I see you're in the red zone. That's okay - let's work through this together. Start with one small step."
+        else:
+            message = "You're doing great! Here are some wellness activities to maintain your green zone."
+        
+        return success_response(
+            data={
+                "current_zone": current_zone,
+                "message": message,
+                "interventions": interventions,
+                "total_interventions": sum(len(v) for v in interventions.values())
+            },
+            message="Back to Green interventions retrieved"
+        )
+    except Exception as e:
+        logger.error(f"Error getting interventions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
