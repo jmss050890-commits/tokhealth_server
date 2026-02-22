@@ -12,10 +12,15 @@ class BaseDBModel(BaseModel):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
     def to_dict(self):
-        """Convert model to dict with ISO formatted datetimes"""
+        """Convert model to dict with ISO formatted datetimes and dates"""
+        from datetime import datetime, date
         data = self.model_dump()
-        if 'created_at' in data:
-            data['created_at'] = data['created_at'].isoformat()
-        if 'updated_at' in data:
-            data['updated_at'] = data['updated_at'].isoformat()
+        
+        # Convert all datetime and date objects to ISO strings
+        for key, value in data.items():
+            if isinstance(value, datetime):
+                data[key] = value.isoformat()
+            elif isinstance(value, date):
+                data[key] = value.isoformat()
+        
         return data
