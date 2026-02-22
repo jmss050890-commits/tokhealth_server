@@ -14,28 +14,43 @@ TEMP_USER_ID = "demo-user-001"
 async def create_entry(entry_data: WisdomVaultEntryCreate, db=Depends(get_database)):
     """Create new wisdom vault entry (journal, thought dump, etc.)"""
     try:
-        from models.wisdom_vault import EntryContent, MoodInfo
+        from datetime import datetime
         
-        content = EntryContent(
-            title=entry_data.title,
-            body=entry_data.body,
-            tags=entry_data.tags
-        )
+        # Create entry as plain dict
+        entry = {
+            "id": str(__import__('uuid').uuid4()),
+            "user_id": TEMP_USER_ID,
+            "entry_type": entry_data.entry_type,
+            "content": {
+                "title": entry_data.title,
+                "body": entry_data.body,
+                "encrypted": True,
+                "tags": entry_data.tags
+            },
+            "mood": {
+                "before": entry_data.mood_before,
+                "after": None,
+                "intensity": 5
+            },
+            "privacy": {
+                "visible_to_user_only": True,
+                "include_in_exports": False,
+                "ai_analysis_enabled": entry_data.ai_analysis_enabled
+            },
+            "ai_response": None,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
         
-        mood = MoodInfo(before=entry_data.mood_before)
+        await db.wisdom_vault_entries.insert_one(entry)
         
-        entry = WisdomVaultEntry(
-            user_id=TEMP_USER_ID,
-            entry_type=entry_data.entry_type,
-            content=content,
-            mood=mood
-        )
-        
-        await db.wisdom_vault_entries.insert_one(entry.to_dict())
+        # Remove _id for response
+        if '_id' in entry:
+            del entry['_id']
         
         logger.info(f"Wisdom Vault entry created: {entry_data.entry_type}")
         return success_response(
-            data=entry.model_dump(),
+            data=entry,
             message="Entry created successfully"
         )
     except Exception as e:
