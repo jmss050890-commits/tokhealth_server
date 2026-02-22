@@ -78,6 +78,10 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
         
         await db.biometric_readings.insert_one(log_entry)
         
+        # Remove _id from response if it exists
+        if '_id' in log_entry:
+            del log_entry['_id']
+        
         logger.info(f"Biometrics logged for {today}")
         return success_response(
             data=log_entry,
