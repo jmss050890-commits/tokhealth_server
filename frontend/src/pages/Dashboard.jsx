@@ -90,6 +90,15 @@ const Dashboard = () => {
     );
   }
 
+  if (currentView === 'profile') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <UserProfile />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 p-4" data-testid="dashboard">
       {/* Header */}
