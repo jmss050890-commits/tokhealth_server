@@ -119,6 +119,7 @@ class TestNutritionAPI:
                     "fiber_g": 0.0
                 }
             ],
+            "meal_time": datetime.now().isoformat(),
             "notes": "Test meal from automated testing"
         }
         response = requests.post(
