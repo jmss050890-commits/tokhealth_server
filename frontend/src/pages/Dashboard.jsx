@@ -111,7 +111,16 @@ const Dashboard = () => {
               <span className="text-slate-800">HEALTH</span>
             </h1>
           </div>
-          <div className="text-sm text-slate-600">Welcome back!</div>
+          <Button
+            onClick={() => setCurrentView('profile')}
+            variant="outline"
+            size="sm"
+            className="border-sky-400 text-sky-700 hover:bg-sky-100"
+            data-testid="profile-button"
+          >
+            <User className="w-4 h-4 mr-1" />
+            Profile
+          </Button>
         </div>
         <p className="text-slate-600 text-sm">Your AI-powered health companion</p>
       </div>
