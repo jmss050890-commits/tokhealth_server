@@ -100,6 +100,15 @@ const Dashboard = () => {
     );
   }
 
+  if (currentView === 'backtogreen') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <BackToGreen currentZone="yellow" onClose={() => setCurrentView('dashboard')} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 p-4" data-testid="dashboard">
       {/* Header */}
