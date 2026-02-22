@@ -17,6 +17,7 @@ from modules.wisdom_vault.routes import router as wisdom_router
 from modules.reminders.routes import router as reminders_router
 from modules.prescriptions.routes import router as prescriptions_router
 from modules.hydration.routes import router as hydration_router
+from modules.biometrics.routes import router as biometrics_router
 
 # Setup logging
 logger = setup_logging()
@@ -66,6 +67,7 @@ api_router.include_router(wisdom_router, prefix="/wisdom-vault", tags=["Wisdom V
 api_router.include_router(reminders_router, prefix="/reminders", tags=["Reminders"])
 api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["Prescriptions"])
 api_router.include_router(hydration_router, prefix="/hydration", tags=["Hydration"])
+api_router.include_router(biometrics_router, prefix="/biometrics", tags=["Biometrics"])
 
 # Mount the API router
 app.include_router(api_router)
