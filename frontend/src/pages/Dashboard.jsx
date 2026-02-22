@@ -275,8 +275,9 @@ const Dashboard = () => {
 
           {/* Hydration */}
           <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer" 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-cyan-400 hover:shadow-lg transition-all cursor-pointer" 
             data-testid="hydration-card"
+            onClick={() => setCurrentView('hydration')}
           >
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2">
