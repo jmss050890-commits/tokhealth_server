@@ -3,7 +3,7 @@
 ## Overview
 **App Name:** TokHealth  
 **Tagline:** Keep People Alive (KPA) System  
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Last Updated:** February 22, 2026
 
 ## Problem Statement
@@ -23,27 +23,49 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 
 ## Core Features
 
-### 1. Disclaimer Screen
+### 1. User Profile / Baseline (NEW)
+- Captures: name, age, sex, height, weight, activity level, blood type
+- Calculates personalized targets: BMI, BMR, TDEE, daily calories, protein, steps, water
+- Heart rate zones based on age
+- Status: COMPLETE
+
+### 2. Disclaimer Screen
 - Legal disclaimers (not medical advice, emergency situations, AI-powered insights, data privacy)
 - Checkbox acceptance required before entry
 - Status: COMPLETE
 
-### 2. Dashboard (Main Hub)
+### 3. Dashboard (Main Hub)
 - Light blue theme (user preference applied)
 - Quick access cards for all modules
+- Profile button in header
+- Medical Export card
 - Today's quick stats (Calories, Protein, Steps, Water)
 - Status: COMPLETE
 
-### 3. The Loop (Health Visualization)
+### 4. The Loop (Health Visualization)
 - Central circular status indicator
 - Green/Yellow/Red zone calculations based on:
   - Nutrition (calories, protein targets)
   - Biometrics (heart rate, blood pressure, SpO2)
   - Activity (steps)
-- Real-time data from MongoDB
+- "Back to Green" button appears when in yellow/red zone
 - Status: COMPLETE
 
-### 4. AI Health Coach
+### 5. Back to Green (NEW - Mood Changer)
+- Interventions when in yellow/red zone:
+  - STOP & Pause (high priority for red)
+  - 4-7-8 Breathing exercise (guided)
+  - Hydration Boost
+  - Gratitude Moment
+  - 5-4-3-2-1 Grounding
+  - Quick Walk / Stretching
+  - Cold Water Reset (red zone)
+  - Reach Out (social connection)
+- Animated breathing exercise with phases
+- Completion tracking
+- Status: COMPLETE
+
+### 6. AI Health Coach
 - GPT-5.2 integration via emergentintegrations library
 - Multi-turn conversation support
 - Voice output (browser TTS)
@@ -52,39 +74,42 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - Quick topic buttons (Nutrition, Exercise, Stress, Sleep)
 - Status: COMPLETE
 
-### 5. Biometrics Tracker
+### 7. Biometrics Tracker
 - Heart rate, blood pressure (systolic/diastolic)
 - Blood oxygen (SpO2), body temperature
 - Steps tracking
 - Health zone indicators after logging
 - Status: COMPLETE
 
-### 6. Nutrition Logger
+### 8. Nutrition Logger
 - Meal logging with food items
 - Macro tracking (calories, protein, carbs, fat, fiber)
-- AI meal recognition (planned)
-- Status: PARTIAL - Basic logging works
+- AI photo recognition endpoint ready (GPT-4o Vision)
+- Status: PARTIAL - Photo UI needs integration
 
-### 7. Emergency Contacts
+### 9. Emergency Contacts
 - Contact management (3-5 contacts)
-- 911 button with AI confirmation
-- Medical report generation (planned)
-- Status: PARTIAL - Basic UI exists
+- 911 button with AI confirmation (Police/Ambulance/Fire)
+- Status: COMPLETE
 
-### 8. Wisdom Vault
+### 10. Wisdom Vault
 - Private journal entries
 - Mood tracking
 - AI wellness suggestions
-- Encryption for privacy
 - Status: PARTIAL - Basic UI exists
 
-### 9. Prescription Tracker
+### 11. Prescription Tracker
 - Medication management
-- Reminder system
-- Adherence tracking
-- Status: PARTIAL - Basic UI exists
+- Basic tracking
+- Status: PARTIAL - Needs reminder notifications
 
-### 10. Hydration Tracking
+### 12. Medical Export (NEW)
+- Generates printable HTML report
+- Includes: patient info, vitals, medications, emergency contacts
+- Opens in new window for printing
+- Status: COMPLETE
+
+### 13. Hydration Tracking
 - Daily water intake
 - Progress visualization
 - Status: PARTIAL - Dashboard widget exists
@@ -93,10 +118,11 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 
 ### API Endpoints (Backend)
 - `/api/health` - Health check
+- `/api/profile/*` - User profile/baseline CRUD
 - `/api/biometrics/*` - Biometrics CRUD
-- `/api/nutrition/*` - Nutrition logging
+- `/api/nutrition/*` - Nutrition logging + photo analysis
 - `/api/loop/*` - The Loop status
-- `/api/health-coach/*` - AI coach chat
+- `/api/health-coach/*` - AI coach chat + Back to Green
 - `/api/emergency-contacts/*` - Emergency contacts
 - `/api/wisdom-vault/*` - Journal entries
 - `/api/prescriptions/*` - Medication tracking
@@ -109,28 +135,33 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 
 ## Completed Work (This Session)
 - [x] Applied light blue theme across all pages
-- [x] Fixed architectural conflict (kept web app, removed mobile-only approach)
+- [x] Created User Profile/Baseline with target calculations
+- [x] Implemented Back to Green interventions (breathing, hydration, gratitude, movement)
+- [x] Built Medical Export with printable report
 - [x] Integrated GPT-5.2 for AI Health Coach
 - [x] The Loop displays real data with correct zone calculations
+- [x] Back to Green button appears in yellow/red zones
 - [x] Mobile-responsive design (430px viewport tested)
-- [x] All API endpoints tested and working
+- [x] All API endpoints tested and working (30/30 tests passed)
 
 ## Upcoming Tasks (P0 - Critical)
-1. Emergency Contact 911 AI confirmation layer
-2. Medical report export for doctor visits
-3. Prescription reminder notifications
+1. AI Meal Photo Recognition UI - Connect photo capture to backend endpoint
+2. Prescription reminder notifications (browser notifications)
+3. Hydration tracking improvements
 
 ## Future Backlog (P1-P2)
-- AI photo recognition for meal logging
-- Barcode scanning for nutrition
+- Barcode scanning for nutrition logging
 - Drug interaction warnings
 - Advanced health trends/analytics
 - Multi-user/family support
+- Wearable device integration
 
 ## Testing
-- Backend: 16/16 tests passed
-- Frontend: All navigation and integration tests passed
-- Test file: `/app/backend/tests/test_tokhealth_api.py`
+- Backend: 30/30 tests passed
+- Frontend: All features verified at mobile viewport
+- Test files:
+  - `/app/backend/tests/test_tokhealth_api.py`
+  - `/app/backend/tests/test_new_features.py`
 
 ## Preview URL
 https://tokhealth-mobile.preview.emergentagent.com
