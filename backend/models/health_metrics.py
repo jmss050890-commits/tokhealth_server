@@ -33,6 +33,15 @@ class HealthMetrics(BaseDBModel):
     steps: int = 0
     exercise_minutes: int = 0
     sleep_hours: float = 0
+    
+    # Biometric readings
+    heart_rate_bpm: Optional[int] = None  # Beats per minute
+    blood_pressure_systolic: Optional[int] = None  # mmHg
+    blood_pressure_diastolic: Optional[int] = None  # mmHg
+    blood_oxygen_spo2: Optional[int] = None  # SpO2 percentage (95-100 normal)
+    body_temp_celsius: Optional[float] = None  # Body temperature
+    resting_heart_rate: Optional[int] = None  # Resting HR
+    
     mood: str = "neutral"  # excellent/good/neutral/poor
     energy_level: int = 5  # 1-10
     stress_level: int = 5  # 1-10
@@ -52,6 +61,15 @@ class HealthMetricsCreate(BaseModel):
     steps: int = 0
     exercise_minutes: int = 0
     sleep_hours: float = 0
+    
+    # Biometric readings
+    heart_rate_bpm: Optional[int] = None
+    blood_pressure_systolic: Optional[int] = None
+    blood_pressure_diastolic: Optional[int] = None
+    blood_oxygen_spo2: Optional[int] = None
+    body_temp_celsius: Optional[float] = None
+    resting_heart_rate: Optional[int] = None
+    
     mood: str = "neutral"
     energy_level: int = 5
     stress_level: int = 5
