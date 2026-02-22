@@ -5,33 +5,123 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Pill, Clock, Calendar, CheckCircle, AlertCircle, Plus, Trash2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Pill, Clock, Calendar, CheckCircle, AlertCircle, Plus, Trash2, Bell, BellRing, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 const PrescriptionTracker = () => {
   const [prescriptions, setPrescriptions] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [takenToday, setTakenToday] = useState({});
   
   const [formData, setFormData] = useState({
-    name: '',
+    medication_name: '',
     dosage: '',
-    form: 'tablet',
-    prescribed_by: '',
-    schedule_frequency: 'daily',
-    schedule_times: ['08:00'],
-    with_food: false,
+    frequency: '3x_daily',
+    times: ['08:00', '14:00', '20:00'],
+    with_food: true,
     instructions: '',
-    start_date: new Date().toISOString().split('T')[0],
-    days_supply: 30,
-    refills_remaining: 3
+    prescriber: ''
   });
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     fetchPrescriptions();
+    checkNotificationPermission();
+    loadTakenToday();
+    
+    // Set up reminder check interval (every minute)
+    const interval = setInterval(checkReminders, 60000);
+    return () => clearInterval(interval);
   }, []);
+
+  const checkNotificationPermission = async () => {
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        setNotificationsEnabled(true);
+      }
+    }
+  };
+
+  const requestNotificationPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        setNotificationsEnabled(true);
+        toast.success('Notifications enabled! You\'ll get reminders 3x daily.');
+        scheduleReminders();
+      } else {
+        toast.error('Notifications blocked. Please enable in browser settings.');
+      }
+    } else {
+      toast.error('Your browser doesn\'t support notifications');
+    }
+  };
+
+  const loadTakenToday = () => {
+    const today = new Date().toDateString();
+    const saved = localStorage.getItem(`tokhealth_meds_${today}`);
+    if (saved) {
+      setTakenToday(JSON.parse(saved));
+    }
+  };
+
+  const saveTakenToday = (newTaken) => {
+    const today = new Date().toDateString();
+    localStorage.setItem(`tokhealth_meds_${today}`, JSON.stringify(newTaken));
+  };
+
+  const scheduleReminders = () => {
+    // Store reminder times in localStorage
+    const reminderTimes = ['08:00', '14:00', '20:00'];
+    localStorage.setItem('tokhealth_reminder_times', JSON.stringify(reminderTimes));
+    toast.success('Reminders set for 8 AM, 2 PM, and 8 PM');
+  };
+
+  const checkReminders = () => {
+    if (!notificationsEnabled) return;
+    
+    const now = new Date();
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const reminderTimes = JSON.parse(localStorage.getItem('tokhealth_reminder_times') || '[]');
+    
+    if (reminderTimes.includes(currentTime)) {
+      // Check if we haven't already sent notification this minute
+      const lastNotification = localStorage.getItem('tokhealth_last_notification');
+      if (lastNotification !== currentTime) {
+        sendNotification();
+        localStorage.setItem('tokhealth_last_notification', currentTime);
+      }
+    }
+  };
+
+  const sendNotification = () => {
+    if (Notification.permission === 'granted') {
+      const notification = new Notification('TokHealth - Medication Reminder', {
+        body: 'Time to take your medication! Stay healthy, stay alive. 💊',
+        icon: '/favicon.ico',
+        tag: 'medication-reminder',
+        requireInteraction: true
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
+    }
+  };
+
+  const testNotification = () => {
+    if (notificationsEnabled) {
+      sendNotification();
+      toast.success('Test notification sent!');
+    } else {
+      toast.error('Please enable notifications first');
+    }
+  };
 
   const fetchPrescriptions = async () => {
     try {
@@ -46,31 +136,34 @@ const PrescriptionTracker = () => {
   };
 
   const handleAddPrescription = async () => {
-    if (!formData.name || !formData.dosage) {
+    if (!formData.medication_name || !formData.dosage) {
       toast.error('Medication name and dosage are required');
       return;
     }
 
     setLoading(true);
     try {
-      // This will be implemented when backend route is ready
-      toast.success('Prescription added! Reminder: Take your medication on schedule.');
-      
-      setFormData({
-        name: '',
-        dosage: '',
-        form: 'tablet',
-        prescribed_by: '',
-        schedule_frequency: 'daily',
-        schedule_times: ['08:00'],
-        with_food: false,
-        instructions: '',
-        start_date: new Date().toISOString().split('T')[0],
-        days_supply: 30,
-        refills_remaining: 3
+      const response = await fetch(`${BACKEND_URL}/api/prescriptions/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
-      setShowAddForm(false);
-      fetchPrescriptions();
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Medication added! Reminders will help you stay on track.');
+        setFormData({
+          medication_name: '',
+          dosage: '',
+          frequency: '3x_daily',
+          times: ['08:00', '14:00', '20:00'],
+          with_food: true,
+          instructions: '',
+          prescriber: ''
+        });
+        setShowAddForm(false);
+        fetchPrescriptions();
+      }
     } catch (error) {
       console.error('Error adding prescription:', error);
       toast.error('Failed to add prescription');
@@ -79,401 +172,259 @@ const PrescriptionTracker = () => {
     }
   };
 
-  const handleMarkAsTaken = (prescriptionId) => {
-    toast.success('Medication marked as taken! Great job staying on track! 💪');
-    // Will implement actual logging when backend is ready
+  const handleMarkAsTaken = (medId, timeSlot) => {
+    const key = `${medId}_${timeSlot}`;
+    const newTaken = { ...takenToday, [key]: true };
+    setTakenToday(newTaken);
+    saveTakenToday(newTaken);
+    toast.success('Marked as taken! Great job staying on track! 💪');
   };
 
-  const addScheduleTime = () => {
-    setFormData({
-      ...formData,
-      schedule_times: [...formData.schedule_times, '12:00']
-    });
+  const isTaken = (medId, timeSlot) => {
+    return takenToday[`${medId}_${timeSlot}`] === true;
   };
 
-  const updateScheduleTime = (index, value) => {
-    const newTimes = [...formData.schedule_times];
-    newTimes[index] = value;
-    setFormData({ ...formData, schedule_times: newTimes });
-  };
-
-  const removeScheduleTime = (index) => {
-    const newTimes = formData.schedule_times.filter((_, i) => i !== index);
-    setFormData({ ...formData, schedule_times: newTimes });
-  };
-
-  const getDaysUntilRefill = (prescription) => {
-    // Calculate based on start date and days supply
-    const startDate = new Date(prescription.start_date || Date.now());
-    const today = new Date();
-    const daysElapsed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    const daysSupply = prescription.days_supply || 30;
-    return Math.max(0, daysSupply - daysElapsed);
+  const getTimeLabel = (time) => {
+    const [hours] = time.split(':');
+    const h = parseInt(hours);
+    if (h < 12) return 'Morning';
+    if (h < 17) return 'Afternoon';
+    return 'Evening';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-900/20 via-black to-purple-900/20 p-4" data-testid="prescription-tracker">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="p-4" data-testid="prescription-tracker">
+      <div className="max-w-2xl mx-auto space-y-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <Pill className="w-10 h-10 text-pink-500" />
-            <h1 className="text-4xl font-bold">
-              <span className="text-pink-500">PRESCRIPTION</span>{' '}
-              <span className="text-white">TRACKER</span>
-            </h1>
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+              <Pill className="w-5 h-5 text-pink-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">Prescription Tracker</h1>
           </div>
-          <p className="text-gray-400 mb-2">Never miss a dose - Stay healthy, stay alive</p>
-          <p className="text-pink-500 text-xs italic">For your brother's diabetes & everyone's health 💊</p>
-          <p className="text-gray-600 text-xs">KPA System - Keep People Alive</p>
+          <p className="text-slate-500 text-sm">Never miss a dose - 3x daily reminders</p>
         </div>
 
-        {/* Family Message */}
-        <Card className="bg-gradient-to-r from-pink-900/30 to-purple-900/30 border-pink-500/50">
-          <CardContent className="p-6 text-center">
-            <p className="text-pink-400 font-semibold mb-2">👨‍👩‍👦 For The Sanders Family</p>
-            <p className="text-gray-300 text-sm">
-              Medication adherence saves lives. This tracker helps manage diabetes medications,
-              daily prescriptions, and ensures everyone stays on schedule.
-            </p>
-            <p className="text-pink-500 text-xs mt-2 italic">
-              "Fix it, Run it, Again - Until Wellness Wins" 💚
-            </p>
+        {/* Notification Setup */}
+        <Card className={`border-2 ${notificationsEnabled ? 'bg-emerald-50 border-emerald-300' : 'bg-amber-50 border-amber-300'}`}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                {notificationsEnabled ? (
+                  <BellRing className="w-6 h-6 text-emerald-600" />
+                ) : (
+                  <Bell className="w-6 h-6 text-amber-600" />
+                )}
+                <div>
+                  <p className={`font-medium ${notificationsEnabled ? 'text-emerald-800' : 'text-amber-800'}`}>
+                    {notificationsEnabled ? 'Reminders Active' : 'Enable Reminders'}
+                  </p>
+                  <p className="text-slate-600 text-xs">
+                    {notificationsEnabled ? '8 AM, 2 PM, 8 PM daily' : 'Get notified 3 times a day'}
+                  </p>
+                </div>
+              </div>
+              
+              {notificationsEnabled ? (
+                <Button
+                  onClick={testNotification}
+                  variant="outline"
+                  size="sm"
+                  className="border-emerald-400 text-emerald-700 text-xs"
+                >
+                  Test
+                </Button>
+              ) : (
+                <Button
+                  onClick={requestNotificationPermission}
+                  className="bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                >
+                  Enable
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
 
-        {/* Add Prescription Button */}
+        {/* Today's Schedule */}
+        <Card className="bg-white/90 border-sky-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 text-sm flex items-center">
+              <Clock className="w-4 h-4 mr-2 text-sky-600" />
+              Today's Schedule
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-2">
+              {['08:00', '14:00', '20:00'].map((time, idx) => {
+                const labels = ['Morning', 'Afternoon', 'Evening'];
+                const allTaken = prescriptions.every(med => isTaken(med.id || med.medication_name, time));
+                
+                return (
+                  <div
+                    key={time}
+                    className={`p-3 rounded-lg text-center border ${
+                      allTaken ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'
+                    }`}
+                  >
+                    <div className="text-xs text-slate-500">{labels[idx]}</div>
+                    <div className="text-sm font-bold text-slate-800">{time}</div>
+                    {allTaken && <CheckCircle className="w-4 h-4 text-emerald-500 mx-auto mt-1" />}
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Medications List */}
+        {prescriptions.length > 0 && (
+          <Card className="bg-white/90 border-sky-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 text-sm">Your Medications</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {prescriptions.map((med, index) => (
+                <div key={index} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h3 className="font-semibold text-slate-800">{med.medication_name}</h3>
+                      <p className="text-slate-500 text-sm">{med.dosage}</p>
+                      {med.with_food && (
+                        <span className="text-xs text-amber-600">Take with food</span>
+                      )}
+                    </div>
+                    <Pill className="w-5 h-5 text-pink-500" />
+                  </div>
+                  
+                  {/* Dose Buttons */}
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {['08:00', '14:00', '20:00'].map((time) => {
+                      const taken = isTaken(med.id || med.medication_name, time);
+                      return (
+                        <Button
+                          key={time}
+                          onClick={() => !taken && handleMarkAsTaken(med.id || med.medication_name, time)}
+                          disabled={taken}
+                          variant={taken ? 'default' : 'outline'}
+                          size="sm"
+                          className={taken 
+                            ? 'bg-emerald-500 text-white text-xs' 
+                            : 'border-pink-300 text-pink-600 text-xs'
+                          }
+                        >
+                          {taken ? (
+                            <><CheckCircle className="w-3 h-3 mr-1" /> Done</>
+                          ) : (
+                            <>{getTimeLabel(time)}</>
+                          )}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Add Button */}
         {!showAddForm && (
           <Button
             onClick={() => setShowAddForm(true)}
-            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-6"
+            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-5"
           >
             <Plus className="w-5 h-5 mr-2" />
-            Add Prescription / Medication
+            Add Medication
           </Button>
         )}
 
-        {/* Add Prescription Form */}
+        {/* Add Form */}
         {showAddForm && (
-          <Card className="bg-gray-900/50 border-pink-500/50">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <span>Add New Prescription</span>
-                <Button 
-                  variant="ghost" 
-                  onClick={() => setShowAddForm(false)}
-                  className="text-gray-400"
-                >
-                  ✕
-                </Button>
-              </CardTitle>
+          <Card className="bg-white/90 border-pink-200">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-slate-800 text-sm">Add Medication</CardTitle>
+              <Button
+                onClick={() => setShowAddForm(false)}
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+              >
+                <X className="w-4 h-4" />
+              </Button>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Medication Name *</Label>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-slate-600 text-sm">Medication Name *</Label>
                   <Input
-                    placeholder="e.g., Metformin, Lisinopril, Insulin"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="bg-gray-800 border-gray-700 text-white"
+                    placeholder="e.g., Metformin"
+                    value={formData.medication_name}
+                    onChange={(e) => setFormData({...formData, medication_name: e.target.value})}
+                    className="bg-white border-slate-200 text-slate-800"
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Dosage *</Label>
+                <div className="space-y-1">
+                  <Label className="text-slate-600 text-sm">Dosage *</Label>
                   <Input
-                    placeholder="e.g., 500mg, 10mg, 20 units"
+                    placeholder="e.g., 500mg"
                     value={formData.dosage}
                     onChange={(e) => setFormData({...formData, dosage: e.target.value})}
-                    className="bg-gray-800 border-gray-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Form</Label>
-                  <Select value={formData.form} onValueChange={(value) => setFormData({...formData, form: value})}>
-                    <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="tablet">💊 Tablet</SelectItem>
-                      <SelectItem value="capsule">💊 Capsule</SelectItem>
-                      <SelectItem value="injection">💉 Injection</SelectItem>
-                      <SelectItem value="liquid">🥤 Liquid</SelectItem>
-                      <SelectItem value="topical">🧴 Topical</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Prescribed By</Label>
-                  <Input
-                    placeholder="Dr. Smith"
-                    value={formData.prescribed_by}
-                    onChange={(e) => setFormData({...formData, prescribed_by: e.target.value})}
-                    className="bg-gray-800 border-gray-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Frequency</Label>
-                  <Select value={formData.schedule_frequency} onValueChange={(value) => setFormData({...formData, schedule_frequency: value})}>
-                    <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="twice_daily">Twice Daily</SelectItem>
-                      <SelectItem value="three_times_daily">Three Times Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="as_needed">As Needed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Start Date</Label>
-                  <Input
-                    type="date"
-                    value={formData.start_date}
-                    onChange={(e) => setFormData({...formData, start_date: e.target.value})}
-                    className="bg-gray-800 border-gray-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Days Supply</Label>
-                  <Input
-                    type="number"
-                    placeholder="30"
-                    value={formData.days_supply}
-                    onChange={(e) => setFormData({...formData, days_supply: parseInt(e.target.value)})}
-                    className="bg-gray-800 border-gray-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Refills Remaining</Label>
-                  <Input
-                    type="number"
-                    placeholder="3"
-                    value={formData.refills_remaining}
-                    onChange={(e) => setFormData({...formData, refills_remaining: parseInt(e.target.value)})}
-                    className="bg-gray-800 border-gray-700 text-white"
+                    className="bg-white border-slate-200 text-slate-800"
                   />
                 </div>
               </div>
 
-              {/* Schedule Times */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label className="text-gray-300">Schedule Times</Label>
-                  <Button
-                    type="button"
-                    onClick={addScheduleTime}
-                    variant="outline"
-                    size="sm"
-                    className="border-pink-500/50 text-pink-500"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Time
-                  </Button>
-                </div>
-                
-                <div className="space-y-2">
-                  {formData.schedule_times.map((time, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Input
-                        type="time"
-                        value={time}
-                        onChange={(e) => updateScheduleTime(index, e.target.value)}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                      {formData.schedule_times.length > 1 && (
-                        <Button
-                          type="button"
-                          onClick={() => removeScheduleTime(index)}
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-500"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-1">
+                <Label className="text-slate-600 text-sm">Frequency</Label>
+                <Select value={formData.frequency} onValueChange={(v) => setFormData({...formData, frequency: v})}>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-800">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1x_daily">Once daily</SelectItem>
+                    <SelectItem value="2x_daily">Twice daily</SelectItem>
+                    <SelectItem value="3x_daily">Three times daily</SelectItem>
+                    <SelectItem value="as_needed">As needed</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* With Food Toggle */}
               <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="with-food"
                   checked={formData.with_food}
-                  onChange={(e) => setFormData({...formData, with_food: e.target.checked})}
-                  className="w-4 h-4"
+                  onCheckedChange={(checked) => setFormData({...formData, with_food: checked})}
                 />
-                <Label htmlFor="with-food" className="text-gray-300 cursor-pointer">
-                  Take with food
-                </Label>
+                <Label htmlFor="with-food" className="text-slate-600 text-sm">Take with food</Label>
               </div>
 
-              {/* Instructions */}
-              <div className="space-y-2">
-                <Label className="text-gray-300">Special Instructions</Label>
+              <div className="space-y-1">
+                <Label className="text-slate-600 text-sm">Special Instructions</Label>
                 <Textarea
-                  placeholder="e.g., Take with full glass of water, avoid alcohol, etc."
+                  placeholder="Any special instructions..."
                   value={formData.instructions}
                   onChange={(e) => setFormData({...formData, instructions: e.target.value})}
-                  className="bg-gray-800 border-gray-700 text-white min-h-[80px]"
+                  className="bg-white border-slate-200 text-slate-800 min-h-[60px]"
                 />
               </div>
 
-              {/* Submit Button */}
               <Button
                 onClick={handleAddPrescription}
                 disabled={loading}
-                className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-6"
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white"
               >
-                {loading ? 'Adding...' : 'Save Prescription'}
+                {loading ? 'Adding...' : 'Add Medication'}
               </Button>
             </CardContent>
           </Card>
         )}
 
-        {/* Today's Medications */}
-        <Card className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border-green-500/50">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Clock className="w-5 h-5 mr-2 text-green-500" />
-              Today's Medications
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {prescriptions.length > 0 ? (
-              <div className="space-y-3">
-                {prescriptions.map((prescription) => (
-                  <div key={prescription.id} className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h4 className="text-white font-semibold text-lg flex items-center">
-                          <Pill className="w-5 h-5 mr-2 text-pink-500" />
-                          {prescription.medication_info?.name} {prescription.medication_info?.dosage}
-                        </h4>
-                        
-                        {prescription.schedule?.times && (
-                          <div className="mt-2 space-y-1">
-                            {prescription.schedule.times.map((time, idx) => (
-                              <div key={idx} className="flex items-center space-x-3">
-                                <Clock className="w-4 h-4 text-blue-500" />
-                                <span className="text-gray-300">{time}</span>
-                                <Button
-                                  onClick={() => handleMarkAsTaken(prescription.id)}
-                                  size="sm"
-                                  className="bg-green-600 hover:bg-green-700 text-xs"
-                                >
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Mark Taken
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {prescription.schedule?.with_food && (
-                          <p className="text-yellow-400 text-sm mt-2">🍽️ Take with food</p>
-                        )}
-                        
-                        {prescription.schedule?.instructions && (
-                          <p className="text-gray-400 text-sm mt-2">
-                            ℹ️ {prescription.schedule.instructions}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <Pill className="w-12 h-12 text-gray-600 mx-auto mb-3 opacity-50" />
-                <p className="text-gray-400">No medications tracked yet</p>
-                <p className="text-gray-500 text-sm mt-1">Add your first prescription above</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* All Prescriptions */}
-        {prescriptions.length > 0 && (
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">All Prescriptions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {prescriptions.map((prescription) => {
-                  const daysLeft = getDaysUntilRefill(prescription);
-                  const needsRefill = daysLeft <= 7;
-                  
-                  return (
-                    <Card key={prescription.id} className="bg-gray-800/50 border-gray-700">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
-                            <h4 className="text-white font-semibold">
-                              {prescription.medication_info?.name} {prescription.medication_info?.dosage}
-                            </h4>
-                            <p className="text-gray-400 text-sm capitalize">
-                              {prescription.medication_info?.form} • {prescription.schedule?.frequency?.replace('_', ' ')}
-                            </p>
-                            {prescription.medication_info?.prescribed_by && (
-                              <p className="text-gray-500 text-xs mt-1">
-                                Prescribed by {prescription.medication_info.prescribed_by}
-                              </p>
-                            )}
-                          </div>
-                          
-                          <div className="text-right">
-                            {prescription.adherence && (
-                              <div className="text-green-500 text-sm font-semibold">
-                                {Math.round(prescription.adherence.adherence_rate)}% adherence
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {needsRefill && (
-                          <div className="bg-orange-900/20 border border-orange-500/50 rounded p-2 mb-2">
-                            <p className="text-orange-400 text-sm font-semibold flex items-center">
-                              <AlertCircle className="w-4 h-4 mr-1" />
-                              Refill needed soon - {daysLeft} days remaining
-                            </p>
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>Refills: {prescription.duration?.refills_remaining || 0}</span>
-                          <span>Started: {new Date(prescription.duration?.start_date || Date.now()).toLocaleDateString()}</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* KPA Message */}
+        {/* Info */}
         <div className="text-center">
-          <p className="text-pink-500 text-sm italic">
-            "Medication adherence = staying alive. Never miss a dose." 💊
-          </p>
-          <p className="text-gray-600 text-xs mt-1">
-            KPA System - For your brother's diabetes & everyone's health
+          <p className="text-slate-500 text-xs">
+            Keep People Alive - Never Miss a Dose
           </p>
         </div>
       </div>
