@@ -24,23 +24,33 @@ async def log_meal(meal_data: NutritionLogCreate, db=Depends(get_database)):
         total_fat = sum(item.fat_g for item in meal_data.food_items)
         total_fiber = sum(item.fiber_g for item in meal_data.food_items)
         
-        # Create nutrition log
-        nutrition_log = NutritionLog(
-            user_id=TEMP_USER_ID,
-            **meal_data.model_dump(),
-            total_calories=total_calories,
-            total_protein_g=total_protein,
-            total_carbs_g=total_carbs,
-            total_fat_g=total_fat,
-            total_fiber_g=total_fiber
-        )
+        # Create nutrition log as plain dict
+        nutrition_log = {
+            "id": str(__import__('uuid').uuid4()),
+            "user_id": TEMP_USER_ID,
+            "meal_type": meal_data.meal_type,
+            "food_items": [item.model_dump() for item in meal_data.food_items],
+            "total_calories": total_calories,
+            "total_protein_g": total_protein,
+            "total_carbs_g": total_carbs,
+            "total_fat_g": total_fat,
+            "total_fiber_g": total_fiber,
+            "meal_time": meal_data.meal_time.isoformat() if hasattr(meal_data.meal_time, 'isoformat') else str(meal_data.meal_time),
+            "notes": meal_data.notes,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
         
         # Save to database
-        await db.nutrition_logs.insert_one(nutrition_log.to_dict())
+        await db.nutrition_logs.insert_one(nutrition_log)
+        
+        # Remove _id for response
+        if '_id' in nutrition_log:
+            del nutrition_log['_id']
         
         logger.info(f"Meal logged: {meal_data.meal_type} - {total_calories} calories")
         return success_response(
-            data=nutrition_log.model_dump(),
+            data=nutrition_log,
             message="Meal logged successfully"
         )
     except Exception as e:
