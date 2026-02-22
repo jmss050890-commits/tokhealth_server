@@ -391,6 +391,30 @@ const TheLoop = () => {
           </Button>
         </div>
 
+        {/* Back to Green Button - Show when Yellow or Red */}
+        {(overallZone === 'yellow' || overallZone === 'red') && (
+          <Card className={`border-2 ${overallZone === 'red' ? 'border-red-400 bg-red-50' : 'border-yellow-400 bg-yellow-50'}`}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className={`font-semibold ${overallZone === 'red' ? 'text-red-700' : 'text-yellow-700'}`}>
+                    Need help getting back to green?
+                  </h3>
+                  <p className="text-slate-600 text-sm">Quick interventions to improve your zone</p>
+                </div>
+                <Button
+                  onClick={() => setShowBackToGreen(true)}
+                  className={overallZone === 'red' ? 'bg-red-600 hover:bg-red-700' : 'bg-yellow-600 hover:bg-yellow-700'}
+                  data-testid="back-to-green-button"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Back to Green
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Family Motto */}
         <div className="text-center mt-6">
           <p className="text-slate-500 text-sm italic">
