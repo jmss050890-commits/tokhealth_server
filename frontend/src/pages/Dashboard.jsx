@@ -10,7 +10,7 @@ const Dashboard = () => {
   if (currentView === 'biometrics') {
     return (
       <div>
-        <div className=\"p-4\">
+        <div className="p-4">
           <Button 
             onClick={() => setCurrentView('dashboard')}
             variant="outline"
