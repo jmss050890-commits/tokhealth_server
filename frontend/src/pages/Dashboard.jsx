@@ -10,6 +10,7 @@ import EmergencyContacts from '@/pages/EmergencyContacts';
 import PrescriptionTracker from '@/pages/PrescriptionTracker';
 import HealthCoach from '@/pages/HealthCoach';
 import UserProfile from '@/pages/UserProfile';
+import BackToGreen from '@/pages/BackToGreen';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
