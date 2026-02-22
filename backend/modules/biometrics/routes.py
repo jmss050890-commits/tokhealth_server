@@ -35,31 +35,46 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
         
         if not metrics:
             # Create new metrics entry
-            from models.health_metrics import HealthMetrics
-            from datetime import date as date_class
-            metrics = HealthMetrics(
-                user_id=TEMP_USER_ID,
-                date=date_class.today(),
-                **reading.model_dump(exclude_none=True)
-            )
-            await db.health_metrics.insert_one(metrics.to_dict())
+            new_doc = {
+                "id": str(__import__('uuid').uuid4()),
+                "user_id": TEMP_USER_ID,
+                "date": today,
+                "calories_consumed": 0,
+                "calories_target": 2000,
+                "protein_g": 0,
+                "carbs_g": 0,
+                "fat_g": 0,
+                "water_intake_ml": 0,
+                "steps": 0,
+                "exercise_minutes": 0,
+                "sleep_hours": 0,
+                "mood": "neutral",
+                "energy_level": 5,
+                "stress_level": 5,
+                "loop_score": 0.0,
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            new_doc.update(reading.model_dump(exclude_none=True))
+            await db.health_metrics.insert_one(new_doc)
         else:
             # Update existing metrics
             update_data = reading.model_dump(exclude_none=True)
             if update_data:
+                update_data["updated_at"] = datetime.utcnow().isoformat()
                 await db.health_metrics.update_one(
                     {"user_id": TEMP_USER_ID, "date": today},
                     {"$set": update_data}
                 )
         
-        # Also log as separate biometric reading for history
+        # Log as separate reading for history
         log_entry = {
             "id": str(__import__('uuid').uuid4()),
             "user_id": TEMP_USER_ID,
             "timestamp": datetime.utcnow().isoformat(),
-            **reading.model_dump(exclude_none=True),
             "created_at": datetime.utcnow().isoformat()
         }
+        log_entry.update(reading.model_dump(exclude_none=True))
         
         await db.biometric_readings.insert_one(log_entry)
         
