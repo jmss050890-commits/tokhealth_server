@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     # AI Services
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    EMERGENT_LLM_KEY: str = os.getenv("EMERGENT_LLM_KEY", "")
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
