@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Activity, Heart, Droplets, Moon, TrendingUp, Brain, Utensils, Footprints, ThermometerSun } from 'lucide-react';
+import { Activity, Heart, Droplets, Moon, TrendingUp, Brain, Utensils, Footprints, ThermometerSun, Sparkles } from 'lucide-react';
+import BackToGreen from '@/pages/BackToGreen';
 
 const TheLoop = () => {
   const [loopData, setLoopData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showBackToGreen, setShowBackToGreen] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
