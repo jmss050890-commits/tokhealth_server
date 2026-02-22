@@ -11,6 +11,7 @@ import PrescriptionTracker from '@/pages/PrescriptionTracker';
 import HealthCoach from '@/pages/HealthCoach';
 import UserProfile from '@/pages/UserProfile';
 import BackToGreen from '@/pages/BackToGreen';
+import MedicalExport from '@/pages/MedicalExport';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
