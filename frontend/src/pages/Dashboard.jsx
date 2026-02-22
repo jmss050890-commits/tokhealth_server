@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
+import NutritionLogger from '@/pages/NutritionLogger';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -20,6 +21,23 @@ const Dashboard = () => {
           </Button>
         </div>
         <BiometricsTracker />
+      </div>
+    );
+  }
+
+  if (currentView === 'nutrition') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <NutritionLogger />
       </div>
     );
   }
@@ -97,7 +115,11 @@ const Dashboard = () => {
           </Card>
 
           {/* Nutrition */}
-          <Card className="bg-gray-900/50 border-gray-700 hover:border-green-500/50 transition-all cursor-pointer" data-testid="nutrition-card">
+          <Card 
+            className="bg-gray-900/50 border-gray-700 hover:border-green-500/50 transition-all cursor-pointer" 
+            data-testid="nutrition-card"
+            onClick={() => setCurrentView('nutrition')}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Heart className="w-5 h-5 text-red-500" />
