@@ -126,32 +126,32 @@ const TheLoop = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 flex items-center justify-center">
         <div className="text-center">
-          <Activity className="w-16 h-16 text-green-500 animate-spin mx-auto mb-4" />
-          <p className="text-white text-xl">Loading The Loop...</p>
+          <Activity className="w-16 h-16 text-sky-600 animate-spin mx-auto mb-4" />
+          <p className="text-slate-700 text-xl">Loading The Loop...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-4" data-testid="the-loop">
+    <div className="p-4" data-testid="the-loop">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            <span className="text-green-500">THE</span>{' '}
-            <span className="text-white">LOOP</span>
+            <span className="text-sky-600">THE</span>{' '}
+            <span className="text-slate-800">LOOP</span>
           </h1>
-          <p className="text-gray-400">Your complete health status at a glance</p>
-          <p className="text-gray-600 text-sm italic mt-1">For Jerome Jr. & Wade - The Full Circle 🔄</p>
+          <p className="text-slate-600">Your complete health status at a glance</p>
+          <p className="text-slate-500 text-sm italic mt-1">For Jerome Jr. & Wade - The Full Circle</p>
         </div>
 
         {/* Central Loop Status */}
         <div className="flex justify-center mb-8">
-          <div className={`relative w-64 h-64 rounded-full border-8 ${getZoneBorder(overallZone)} ${getZoneGlow(overallZone)} shadow-2xl flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
-            <div className="absolute inset-0 rounded-full animate-pulse opacity-20" style={{
+          <div className={`relative w-56 h-56 rounded-full border-8 ${getZoneBorder(overallZone)} ${getZoneGlow(overallZone)} shadow-2xl flex items-center justify-center bg-white`}>
+            <div className="absolute inset-0 rounded-full animate-pulse opacity-30" style={{
               background: overallZone === 'green' ? 'radial-gradient(circle, rgba(34,197,94,0.3) 0%, transparent 70%)' :
                          overallZone === 'yellow' ? 'radial-gradient(circle, rgba(234,179,8,0.3) 0%, transparent 70%)' :
                          overallZone === 'red' ? 'radial-gradient(circle, rgba(239,68,68,0.3) 0%, transparent 70%)' :
@@ -159,16 +159,16 @@ const TheLoop = () => {
             }}></div>
             
             <div className="text-center z-10">
-              <div className={`text-7xl font-bold ${getZoneText(overallZone)} mb-2`}>
+              <div className={`text-6xl font-bold mb-2`}>
                 {overallZone === 'green' && '🟢'}
                 {overallZone === 'yellow' && '🟡'}
                 {overallZone === 'red' && '🔴'}
                 {overallZone === 'gray' && '⚪'}
               </div>
-              <div className="text-white text-2xl font-bold uppercase tracking-wider">
+              <div className={`text-2xl font-bold uppercase tracking-wider ${getZoneText(overallZone)}`}>
                 {overallZone === 'gray' ? 'No Data' : overallZone}
               </div>
-              <div className="text-gray-400 text-sm mt-2">
+              <div className="text-slate-500 text-sm mt-2">
                 {overallZone === 'green' && 'Keep Going!'}
                 {overallZone === 'yellow' && 'Stay Focused'}
                 {overallZone === 'red' && 'Take Action'}
@@ -180,24 +180,24 @@ const TheLoop = () => {
 
         {/* Overall Message */}
         {overallZone !== 'gray' && (
-          <Card className={`border-2 ${getZoneBorder(overallZone)} ${getZoneGlow(overallZone)} shadow-xl`}>
+          <Card className={`border-2 ${getZoneBorder(overallZone)} bg-white/90`}>
             <CardContent className="p-6 text-center">
               {overallZone === 'green' && (
                 <div>
-                  <p className="text-green-400 text-xl font-semibold mb-2">Excellent Work! You're In The Green Zone! 🎉</p>
-                  <p className="text-gray-300">Your health metrics are on target. Keep up the great work and maintain this momentum!</p>
+                  <p className="text-green-600 text-xl font-semibold mb-2">Excellent Work! You're In The Green Zone!</p>
+                  <p className="text-slate-600">Your health metrics are on target. Keep up the great work and maintain this momentum!</p>
                 </div>
               )}
               {overallZone === 'yellow' && (
                 <div>
-                  <p className="text-yellow-400 text-xl font-semibold mb-2">Stay Focused - Yellow Zone 💪</p>
-                  <p className="text-gray-300">Some metrics need attention. Review the details below and make adjustments today.</p>
+                  <p className="text-yellow-600 text-xl font-semibold mb-2">Stay Focused - Yellow Zone</p>
+                  <p className="text-slate-600">Some metrics need attention. Review the details below and make adjustments today.</p>
                 </div>
               )}
               {overallZone === 'red' && (
                 <div>
-                  <p className="text-red-400 text-xl font-semibold mb-2">Action Required - Red Zone ⚠️</p>
-                  <p className="text-gray-300">Important health metrics need immediate attention. Review your plan and consider consulting your healthcare provider.</p>
+                  <p className="text-red-600 text-xl font-semibold mb-2">Action Required - Red Zone</p>
+                  <p className="text-slate-600">Important health metrics need immediate attention. Review your plan and consider consulting your healthcare provider.</p>
                 </div>
               )}
             </CardContent>
@@ -205,12 +205,14 @@ const TheLoop = () => {
         )}
 
         {/* Detailed Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Nutrition */}
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Utensils className="w-5 h-5 mr-2 text-green-500" />
+          <Card className="bg-white/90 border-sky-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 flex items-center text-sm">
+                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                  <Utensils className="w-4 h-4 text-emerald-600" />
+                </div>
                 Nutrition
               </CardTitle>
             </CardHeader>
@@ -218,10 +220,10 @@ const TheLoop = () => {
               {loopData?.nutrition?.totals ? (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Calories</span>
+                    <span className="text-slate-500 text-sm">Calories</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-white font-semibold">{Math.round(loopData.nutrition.totals.calories)}/2000</span>
-                      <span className="text-xl">
+                      <span className="text-slate-800 font-semibold text-sm">{Math.round(loopData.nutrition.totals.calories)}/2000</span>
+                      <span className="text-lg">
                         {calculateMetricZone(loopData.nutrition.totals.calories, 2000) === 'green' && '🟢'}
                         {calculateMetricZone(loopData.nutrition.totals.calories, 2000) === 'yellow' && '🟡'}
                         {calculateMetricZone(loopData.nutrition.totals.calories, 2000) === 'red' && '🔴'}
@@ -229,31 +231,33 @@ const TheLoop = () => {
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Protein</span>
+                    <span className="text-slate-500 text-sm">Protein</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-white font-semibold">{Math.round(loopData.nutrition.totals.protein_g)}g/120g</span>
-                      <span className="text-xl">
+                      <span className="text-slate-800 font-semibold text-sm">{Math.round(loopData.nutrition.totals.protein_g)}g/120g</span>
+                      <span className="text-lg">
                         {calculateMetricZone(loopData.nutrition.totals.protein_g, 120) === 'green' && '🟢'}
                         {calculateMetricZone(loopData.nutrition.totals.protein_g, 120) === 'yellow' && '🟡'}
                         {calculateMetricZone(loopData.nutrition.totals.protein_g, 120) === 'red' && '🔴'}
                       </span>
                     </div>
                   </div>
-                  <div className="text-gray-500 text-sm mt-2">
+                  <div className="text-slate-400 text-xs mt-2">
                     {loopData.nutrition.meals.length} meals logged today
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No meals logged today</p>
+                <p className="text-slate-400 text-sm">No meals logged today</p>
               )}
             </CardContent>
           </Card>
 
           {/* Heart & Vitals */}
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Heart className="w-5 h-5 mr-2 text-red-500" />
+          <Card className="bg-white/90 border-sky-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 flex items-center text-sm">
+                <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center mr-2">
+                  <Heart className="w-4 h-4 text-rose-600" />
+                </div>
                 Heart & Vitals
               </CardTitle>
             </CardHeader>
@@ -262,10 +266,10 @@ const TheLoop = () => {
                 <div className="space-y-2">
                   {loopData.biometrics.heart_rate_bpm && (
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Heart Rate</span>
+                      <span className="text-slate-500 text-sm">Heart Rate</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-white font-semibold">{loopData.biometrics.heart_rate_bpm} BPM</span>
-                        <span className="text-xl">
+                        <span className="text-slate-800 font-semibold text-sm">{loopData.biometrics.heart_rate_bpm} BPM</span>
+                        <span className="text-lg">
                           {loopData.biometrics.heart_rate_bpm >= 60 && loopData.biometrics.heart_rate_bpm <= 100 ? '🟢' :
                            loopData.biometrics.heart_rate_bpm >= 50 && loopData.biometrics.heart_rate_bpm <= 120 ? '🟡' : '🔴'}
                         </span>
@@ -274,12 +278,12 @@ const TheLoop = () => {
                   )}
                   {loopData.biometrics.blood_pressure_systolic && (
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Blood Pressure</span>
+                      <span className="text-slate-500 text-sm">Blood Pressure</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-white font-semibold">
+                        <span className="text-slate-800 font-semibold text-sm">
                           {loopData.biometrics.blood_pressure_systolic}/{loopData.biometrics.blood_pressure_diastolic}
                         </span>
-                        <span className="text-xl">
+                        <span className="text-lg">
                           {loopData.biometrics.blood_pressure_systolic < 120 && loopData.biometrics.blood_pressure_diastolic < 80 ? '🟢' :
                            loopData.biometrics.blood_pressure_systolic < 140 ? '🟡' : '🔴'}
                         </span>
@@ -288,10 +292,10 @@ const TheLoop = () => {
                   )}
                   {loopData.biometrics.blood_oxygen_spo2 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Blood Oxygen</span>
+                      <span className="text-slate-500 text-sm">Blood Oxygen</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-white font-semibold">{loopData.biometrics.blood_oxygen_spo2}%</span>
-                        <span className="text-xl">
+                        <span className="text-slate-800 font-semibold text-sm">{loopData.biometrics.blood_oxygen_spo2}%</span>
+                        <span className="text-lg">
                           {loopData.biometrics.blood_oxygen_spo2 >= 95 ? '🟢' :
                            loopData.biometrics.blood_oxygen_spo2 >= 90 ? '🟡' : '🔴'}
                         </span>
@@ -300,16 +304,18 @@ const TheLoop = () => {
                   )}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No vitals logged today</p>
+                <p className="text-slate-400 text-sm">No vitals logged today</p>
               )}
             </CardContent>
           </Card>
 
           {/* Activity */}
-          <Card className="bg-gray-900/50 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Footprints className="w-5 h-5 mr-2 text-blue-500" />
+          <Card className="bg-white/90 border-sky-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 flex items-center text-sm">
+                <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center mr-2">
+                  <Footprints className="w-4 h-4 text-sky-600" />
+                </div>
                 Activity
               </CardTitle>
             </CardHeader>
@@ -317,16 +323,16 @@ const TheLoop = () => {
               {loopData?.biometrics?.steps ? (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Steps</span>
+                    <span className="text-slate-500 text-sm">Steps</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-white font-semibold">{loopData.biometrics.steps.toLocaleString()}/10,000</span>
-                      <span className="text-xl">
+                      <span className="text-slate-800 font-semibold text-sm">{loopData.biometrics.steps.toLocaleString()}/10,000</span>
+                      <span className="text-lg">
                         {calculateMetricZone(loopData.biometrics.steps, 10000, 'steps') === 'green' && '🟢'}
                         {calculateMetricZone(loopData.biometrics.steps, 10000, 'steps') === 'yellow' && '🟡'}
                       </span>
                     </div>
                   </div>
-                  <div className="w-full bg-gray-800 rounded-full h-2">
+                  <div className="w-full bg-slate-200 rounded-full h-2">
                     <div 
                       className={`h-2 rounded-full ${getZoneColor(calculateMetricZone(loopData.biometrics.steps, 10000, 'steps'))}`}
                       style={{width: `${Math.min((loopData.biometrics.steps / 10000) * 100, 100)}%`}}
@@ -334,46 +340,46 @@ const TheLoop = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No activity logged today</p>
+                <p className="text-slate-400 text-sm">No activity logged today</p>
               )}
             </CardContent>
           </Card>
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           <Button 
             onClick={fetchLoopData}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-6"
+            className="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-4 text-sm"
           >
-            <Activity className="w-5 h-5 mr-2" />
-            Refresh The Loop
+            <Activity className="w-4 h-4 mr-1" />
+            Refresh
           </Button>
           
           <Button 
             variant="outline"
-            className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10 py-6"
+            className="border-sky-400 text-sky-700 hover:bg-sky-50 py-4 text-sm"
           >
-            <TrendingUp className="w-5 h-5 mr-2" />
-            View Trends
+            <TrendingUp className="w-4 h-4 mr-1" />
+            Trends
           </Button>
           
           <Button 
             variant="outline"
-            className="border-purple-500/50 text-purple-500 hover:bg-purple-500/10 py-6"
+            className="border-sky-400 text-sky-700 hover:bg-sky-50 py-4 text-sm"
           >
-            <Brain className="w-5 h-5 mr-2" />
-            Health Coach
+            <Brain className="w-4 h-4 mr-1" />
+            Coach
           </Button>
         </div>
 
         {/* Family Motto */}
-        <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm italic">
-            "Fix it, Run it, Again - Until Wellness Wins" 💚
+        <div className="text-center mt-6">
+          <p className="text-slate-500 text-sm italic">
+            "Fix it, Run it, Again - Until Wellness Wins"
           </p>
-          <p className="text-gray-600 text-xs mt-1">
-            For families everywhere - Jerome Jr. & Wade, this is your legacy 🔄
+          <p className="text-slate-400 text-xs mt-1">
+            For families everywhere - Jerome Jr. & Wade, this is your legacy
           </p>
         </div>
       </div>
