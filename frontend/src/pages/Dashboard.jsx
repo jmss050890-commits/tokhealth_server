@@ -4,9 +4,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
+import TheLoop from '@/pages/TheLoop';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'loop') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <TheLoop />
+      </div>
+    );
+  }
 
   if (currentView === 'biometrics') {
     return (
@@ -78,6 +96,7 @@ const Dashboard = () => {
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-6 text-lg shadow-lg shadow-green-500/50"
                 data-testid="show-loop-button"
+                onClick={() => setCurrentView('loop')}
               >
                 <Activity className="mr-2 h-5 w-5" />
                 SHOW THE LOOP
