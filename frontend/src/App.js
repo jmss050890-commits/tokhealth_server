@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "@/App.css";
 import DisclaimerScreen from "@/pages/DisclaimerScreen";
 import Dashboard from "@/pages/Dashboard";
+import { Toaster } from 'sonner';
 
 function App() {
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <div className="App">
+      <Toaster position="top-right" richColors />
       {!disclaimerAccepted ? (
         <DisclaimerScreen onAccept={handleAcceptDisclaimer} />
       ) : (
