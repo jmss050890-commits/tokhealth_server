@@ -18,6 +18,7 @@ from modules.reminders.routes import router as reminders_router
 from modules.prescriptions.routes import router as prescriptions_router
 from modules.hydration.routes import router as hydration_router
 from modules.biometrics.routes import router as biometrics_router
+from modules.user_profile.routes import router as profile_router
 
 # Setup logging
 logger = setup_logging()
@@ -68,6 +69,7 @@ api_router.include_router(reminders_router, prefix="/reminders", tags=["Reminder
 api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["Prescriptions"])
 api_router.include_router(hydration_router, prefix="/hydration", tags=["Hydration"])
 api_router.include_router(biometrics_router, prefix="/biometrics", tags=["Biometrics"])
+api_router.include_router(profile_router, prefix="/profile", tags=["User Profile"])
 
 # Mount the API router
 app.include_router(api_router)
