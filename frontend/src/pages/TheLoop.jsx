@@ -126,6 +126,22 @@ const TheLoop = () => {
 
   const overallZone = getOverallZone();
 
+  // Show Back to Green view
+  if (showBackToGreen) {
+    return (
+      <div className="p-4">
+        <Button
+          onClick={() => setShowBackToGreen(false)}
+          variant="outline"
+          className="mb-4 border-sky-400 text-sky-700"
+        >
+          &larr; Back to Loop
+        </Button>
+        <BackToGreen currentZone={overallZone} onClose={() => setShowBackToGreen(false)} />
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 flex items-center justify-center">
