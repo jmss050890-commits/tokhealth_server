@@ -70,6 +70,32 @@ const Dashboard = () => {
 
         {/* Quick Access Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Biometrics - NEW! */}
+          <Card 
+            className="bg-gray-900/50 border-gray-700 hover:border-red-500/50 transition-all cursor-pointer" 
+            data-testid="biometrics-card"
+            onClick={() => setCurrentView('biometrics')}
+          >
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="w-5 h-5 text-red-500" />
+                <span className="text-white">Biometrics</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 text-sm mb-3">Track vitals & health stats</p>
+              <div className="space-y-1 mb-3 text-xs text-gray-500">
+                <div>• Heart Rate</div>
+                <div>• Blood Pressure</div>
+                <div>• Blood Oxygen</div>
+                <div>• Steps</div>
+              </div>
+              <Button variant="outline" className="w-full border-red-500/50 text-red-500 hover:bg-red-500/10">
+                Log Vitals
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Nutrition */}
           <Card className="bg-gray-900/50 border-gray-700 hover:border-green-500/50 transition-all cursor-pointer" data-testid="nutrition-card">
             <CardHeader>
