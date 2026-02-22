@@ -8,9 +8,27 @@ import TheLoop from '@/pages/TheLoop';
 import WisdomVault from '@/pages/WisdomVault';
 import EmergencyContacts from '@/pages/EmergencyContacts';
 import PrescriptionTracker from '@/pages/PrescriptionTracker';
+import HealthCoach from '@/pages/HealthCoach';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+
+  if (currentView === 'coach') {
+    return (
+      <div>
+        <div className="p-4">
+          <Button 
+            onClick={() => setCurrentView('dashboard')}
+            variant="outline"
+            className="mb-4 border-green-500/50 text-green-500"
+          >
+            &larr; Back to Dashboard
+          </Button>
+        </div>
+        <HealthCoach />
+      </div>
+    );
+  }
 
   if (currentView === 'prescriptions') {
     return (
@@ -208,7 +226,11 @@ const Dashboard = () => {
           </Card>
 
           {/* AI Coach */}
-          <Card className="bg-gray-900/50 border-gray-700 hover:border-blue-500/50 transition-all cursor-pointer" data-testid="coach-card">
+          <Card 
+            className="bg-gray-900/50 border-gray-700 hover:border-blue-500/50 transition-all cursor-pointer" 
+            data-testid="coach-card"
+            onClick={() => setCurrentView('coach')}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Activity className="w-5 h-5 text-blue-500" />
