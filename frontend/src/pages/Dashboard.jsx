@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User } from 'lucide-react';
+import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User, Users, BarChart3 } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
@@ -13,6 +13,8 @@ import UserProfile from '@/pages/UserProfile';
 import BackToGreen from '@/pages/BackToGreen';
 import MedicalExport from '@/pages/MedicalExport';
 import HydrationTracker from '@/pages/HydrationTracker';
+import FamilyManager from '@/pages/FamilyManager';
+import HealthTrends from '@/pages/HealthTrends';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
