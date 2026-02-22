@@ -15,16 +15,40 @@ TEMP_USER_ID = "demo-user-001"
 async def create_contact(contact_data: EmergencyContactCreate, db=Depends(get_database)):
     """Create new emergency contact"""
     try:
-        contact = EmergencyContact(
-            user_id=TEMP_USER_ID,
-            **contact_data.model_dump()
-        )
+        from datetime import datetime
         
-        await db.emergency_contacts.insert_one(contact.to_dict())
+        # Create contact as plain dict
+        contact = {
+            "id": str(__import__('uuid').uuid4()),
+            "user_id": TEMP_USER_ID,
+            "name": contact_data.name,
+            "relationship": contact_data.relationship,
+            "phone_primary": contact_data.phone_primary,
+            "phone_secondary": contact_data.phone_secondary,
+            "email": contact_data.email,
+            "address": contact_data.address,
+            "is_primary_contact": contact_data.is_primary_contact,
+            "medical_info": contact_data.medical_info,
+            "priority_order": contact_data.priority_order,
+            "notification_preferences": {
+                "sms": True,
+                "call": True,
+                "email": False
+            },
+            "last_contacted": None,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
         
-        logger.info(f"Emergency contact created: {contact.name}")
+        await db.emergency_contacts.insert_one(contact)
+        
+        # Remove _id for response
+        if '_id' in contact:
+            del contact['_id']
+        
+        logger.info(f"Emergency contact created: {contact_data.name}")
         return success_response(
-            data=contact.model_dump(),
+            data=contact,
             message="Emergency contact created successfully"
         )
     except Exception as e:
