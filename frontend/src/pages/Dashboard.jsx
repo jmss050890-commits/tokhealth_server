@@ -13,18 +13,23 @@ import HealthCoach from '@/pages/HealthCoach';
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
 
+  const BackButton = () => (
+    <div className="bg-gradient-to-r from-sky-100 to-cyan-100 p-4 sticky top-0 z-10">
+      <Button 
+        onClick={() => setCurrentView('dashboard')}
+        variant="outline"
+        className="border-sky-400 text-sky-700 hover:bg-sky-100"
+        data-testid="back-to-dashboard"
+      >
+        &larr; Back
+      </Button>
+    </div>
+  );
+
   if (currentView === 'coach') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <HealthCoach />
       </div>
     );
@@ -32,16 +37,8 @@ const Dashboard = () => {
 
   if (currentView === 'prescriptions') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <PrescriptionTracker />
       </div>
     );
@@ -49,16 +46,8 @@ const Dashboard = () => {
 
   if (currentView === 'emergency') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <EmergencyContacts />
       </div>
     );
@@ -66,16 +55,8 @@ const Dashboard = () => {
 
   if (currentView === 'wisdom') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <WisdomVault />
       </div>
     );
@@ -83,16 +64,8 @@ const Dashboard = () => {
 
   if (currentView === 'loop') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <TheLoop />
       </div>
     );
@@ -100,16 +73,8 @@ const Dashboard = () => {
 
   if (currentView === 'biometrics') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <BiometricsTracker />
       </div>
     );
@@ -117,16 +82,8 @@ const Dashboard = () => {
 
   if (currentView === 'nutrition') {
     return (
-      <div>
-        <div className="p-4">
-          <Button 
-            onClick={() => setCurrentView('dashboard')}
-            variant="outline"
-            className="mb-4 border-green-500/50 text-green-500"
-          >
-            &larr; Back to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
         <NutritionLogger />
       </div>
     );
