@@ -372,23 +372,52 @@ const Dashboard = () => {
 
           {/* Medical Export */}
           <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer col-span-2"
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer"
             onClick={() => setCurrentView('export')}
             data-testid="export-card"
           >
-            <CardContent className="p-4 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-teal-600" />
-                </div>
-                <div>
-                  <span className="text-slate-800 text-sm font-semibold">Medical Export</span>
-                  <p className="text-slate-500 text-xs">Print report for doctor visits</p>
-                </div>
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
+                <FileText className="w-4 h-4 text-teal-600" />
               </div>
-              <Button variant="outline" className="border-teal-300 text-teal-600 hover:bg-teal-50 text-xs">
-                Generate
-              </Button>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Medical Export</span>
+                <p className="text-slate-500 text-xs">Print for doctor</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Family */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-violet-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('family')}
+            data-testid="family-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
+                <Users className="w-4 h-4 text-violet-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Family</span>
+                <p className="text-slate-500 text-xs">Multi-user</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Health Trends */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer col-span-2"
+            onClick={() => setCurrentView('trends')}
+            data-testid="trends-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-amber-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Health Trends</span>
+                <p className="text-slate-500 text-xs">Analytics & insights</p>
+              </div>
             </CardContent>
           </Card>
         </div>
