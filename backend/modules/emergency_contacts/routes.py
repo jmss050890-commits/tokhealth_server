@@ -1,26 +1,41 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from typing import List
+from datetime import datetime, timezone
 import logging
+import uuid
 
 from core.database import get_database
 from models.emergency_contact import EmergencyContact, EmergencyContactCreate
 from utils.response import success_response
+from utils.auth import get_current_user_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 TEMP_USER_ID = "demo-user-001"
 
+async def get_user_id(authorization: str, db) -> str:
+    """Get user_id from auth or fallback to temp"""
+    if authorization:
+        try:
+            return await get_current_user_id(authorization, db)
+        except:
+            pass
+    return TEMP_USER_ID
+
 @router.post("/", response_model=dict)
-async def create_contact(contact_data: EmergencyContactCreate, db=Depends(get_database)):
+async def create_contact(
+    contact_data: EmergencyContactCreate,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Create new emergency contact"""
     try:
-        from datetime import datetime
+        user_id = await get_user_id(authorization, db)
         
-        # Create contact as plain dict
         contact = {
-            "id": str(__import__('uuid').uuid4()),
-            "user_id": TEMP_USER_ID,
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
             "name": contact_data.name,
             "relationship": contact_data.relationship,
             "phone_primary": contact_data.phone_primary,
@@ -36,15 +51,12 @@ async def create_contact(contact_data: EmergencyContactCreate, db=Depends(get_da
                 "email": False
             },
             "last_contacted": None,
-            "created_at": datetime.utcnow().isoformat(),
-            "updated_at": datetime.utcnow().isoformat()
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
         }
         
         await db.emergency_contacts.insert_one(contact)
-        
-        # Remove _id for response
-        if '_id' in contact:
-            del contact['_id']
+        contact.pop("_id", None)
         
         logger.info(f"Emergency contact created: {contact_data.name}")
         return success_response(
@@ -56,11 +68,16 @@ async def create_contact(contact_data: EmergencyContactCreate, db=Depends(get_da
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/", response_model=dict)
-async def get_contacts(db=Depends(get_database)):
+async def get_contacts(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get all emergency contacts"""
     try:
+        user_id = await get_user_id(authorization, db)
+        
         contacts = await db.emergency_contacts.find(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         ).sort("priority_order", 1).to_list(50)
         
@@ -73,12 +90,18 @@ async def get_contacts(db=Depends(get_database)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{contact_id}", response_model=dict)
-async def delete_contact(contact_id: str, db=Depends(get_database)):
+async def delete_contact(
+    contact_id: str,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Delete emergency contact"""
     try:
+        user_id = await get_user_id(authorization, db)
+        
         result = await db.emergency_contacts.delete_one({
             "id": contact_id,
-            "user_id": TEMP_USER_ID
+            "user_id": user_id
         })
         
         if result.deleted_count == 0:
