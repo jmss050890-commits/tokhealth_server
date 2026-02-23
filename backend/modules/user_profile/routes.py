@@ -115,9 +115,19 @@ def calculate_targets(weight_kg: float, height_cm: float, age: int, gender: str,
     }
 
 @router.post("/", response_model=dict)
-async def create_or_update_profile(profile_data: UserProfileCreate, db=Depends(get_database)):
+async def create_or_update_profile(
+    profile_data: UserProfileCreate,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Create or update user baseline profile"""
     try:
+        # Get user_id from auth token, fallback to temp for backward compatibility
+        if authorization:
+            user_id = await get_current_user_id(authorization, db)
+        else:
+            user_id = TEMP_USER_ID
+        
         # Calculate personalized targets
         targets = calculate_targets(
             profile_data.weight_kg,
@@ -128,7 +138,7 @@ async def create_or_update_profile(profile_data: UserProfileCreate, db=Depends(g
         )
         
         profile = {
-            "user_id": TEMP_USER_ID,
+            "user_id": user_id,
             "name": profile_data.name,
             "age": profile_data.age,
             "gender": profile_data.gender,
@@ -145,7 +155,7 @@ async def create_or_update_profile(profile_data: UserProfileCreate, db=Depends(g
         
         # Upsert - update if exists, insert if not
         await db.user_profiles.update_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"$set": profile},
             upsert=True
         )
