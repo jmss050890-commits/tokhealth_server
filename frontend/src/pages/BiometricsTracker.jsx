@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Heart, Activity, Droplet, Thermometer, TrendingUp } from 'lucide-react';
+import { Heart, Activity, Droplet, Thermometer, TrendingUp, Camera } from 'lucide-react';
 import { getAuthHeaders } from '@/utils/auth';
+import BiometricScanner from '@/pages/BiometricScanner';
 
 const BiometricsTracker = () => {
   const [biometrics, setBiometrics] = useState({
@@ -18,9 +19,18 @@ const BiometricsTracker = () => {
 
   const [zones, setZones] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
 
   const handleInputChange = (field, value) => {
     setBiometrics(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleScanResults = (results) => {
+    setBiometrics(prev => ({
+      ...prev,
+      heart_rate_bpm: results.heartRate.toString()
+    }));
+    setShowScanner(false);
   };
 
   const handleSubmit = async () => {
