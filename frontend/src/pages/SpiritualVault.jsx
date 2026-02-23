@@ -189,9 +189,33 @@ const SpiritualVault = () => {
       case 'reflection': return '💭';
       case 'scripture': return '📖';
       case 'meditation': return '🧘';
+      case 'declaration': return '🔥';
       default: return '✨';
     }
   };
+
+  const faithDeclarations = [
+    {
+      title: "Speak It Into Existence",
+      verse: "Therefore I tell you, whatever you ask for in prayer, believe that you have received it, and it will be yours.",
+      reference: "Mark 11:24"
+    },
+    {
+      title: "Faith With Works",
+      verse: "Faith without works is dead.",
+      reference: "James 2:26"
+    },
+    {
+      title: "God Will Provide",
+      verse: "And my God will meet all your needs according to the riches of his glory in Christ Jesus.",
+      reference: "Philippians 4:19"
+    },
+    {
+      title: "Declare It",
+      verse: "You will also declare a thing, and it will be established for you; so light will shine on your ways.",
+      reference: "Job 22:28"
+    }
+  ];
 
   const getMoodColor = (mood) => {
     switch (mood) {
