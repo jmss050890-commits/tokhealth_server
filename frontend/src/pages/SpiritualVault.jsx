@@ -486,6 +486,128 @@ const SpiritualVault = () => {
             </div>
           </>
         )}
+
+        {/* AI Spiritual Guide Tab */}
+        {activeTab === 'coach' && (
+          <div className="space-y-4">
+            <Card className="bg-gradient-to-br from-purple-50 to-amber-50 border-purple-200">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-purple-800 text-sm flex items-center">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Spiritual Guide
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-slate-600 text-sm">
+                  Share what's on your heart. I'm here to offer encouragement, scripture, and spiritual guidance.
+                </p>
+                
+                <div>
+                  <Label className="text-xs text-slate-600">What kind of guidance do you need?</Label>
+                  <Select value={coachContext} onValueChange={setCoachContext}>
+                    <SelectTrigger className="h-9 bg-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">General Guidance</SelectItem>
+                      <SelectItem value="comfort">Comfort & Peace</SelectItem>
+                      <SelectItem value="gratitude">Gratitude & Thanksgiving</SelectItem>
+                      <SelectItem value="scripture">Scripture & Wisdom</SelectItem>
+                      <SelectItem value="meditation">Meditation & Reflection</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Textarea
+                  placeholder="What's on your heart today? Share your thoughts, questions, or feelings..."
+                  value={coachMessage}
+                  onChange={(e) => setCoachMessage(e.target.value)}
+                  className="bg-white border-slate-200 min-h-[80px]"
+                  data-testid="coach-message"
+                />
+
+                <Button 
+                  onClick={askCoach} 
+                  disabled={coachLoading}
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  data-testid="ask-guide-btn"
+                >
+                  {coachLoading ? (
+                    <Activity className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4 mr-2" />
+                  )}
+                  {coachLoading ? 'Seeking wisdom...' : 'Ask for Guidance'}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* AI Response */}
+            {coachResponse && (
+              <Card className="bg-white border-amber-300 shadow-md">
+                <CardContent className="p-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-amber-400 flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-purple-800 font-medium text-sm mb-1">Spiritual Guide</p>
+                      <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">{coachResponse}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Quick prompts */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setCoachMessage("I'm feeling anxious and need peace");
+                  setCoachContext("comfort");
+                }}
+                className="border-purple-200 text-purple-700 text-xs h-auto py-2"
+              >
+                I need peace
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setCoachMessage("Help me count my blessings today");
+                  setCoachContext("gratitude");
+                }}
+                className="border-amber-200 text-amber-700 text-xs h-auto py-2"
+              >
+                Count blessings
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setCoachMessage("Share a verse to encourage me");
+                  setCoachContext("scripture");
+                }}
+                className="border-purple-200 text-purple-700 text-xs h-auto py-2"
+              >
+                Share scripture
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setCoachMessage("Guide me in a moment of meditation");
+                  setCoachContext("meditation");
+                }}
+                className="border-amber-200 text-amber-700 text-xs h-auto py-2"
+              >
+                Meditation
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
