@@ -641,6 +641,54 @@ const SpiritualVault = () => {
             </div>
           </div>
         )}
+
+        {/* Declare Tab - Speak It Into Existence */}
+        {activeTab === 'declare' && (
+          <div className="space-y-4">
+            <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-300">
+              <CardContent className="p-4 text-center">
+                <div className="text-4xl mb-2">🔥</div>
+                <h3 className="text-xl font-bold text-amber-800 mb-2">Speak It Into Existence</h3>
+                <p className="text-amber-700 text-sm">
+                  Faith without works is dead. Declare God's promises over your life, then put in the work. He will provide.
+                </p>
+              </CardContent>
+            </Card>
+
+            {faithDeclarations.map((declaration, index) => (
+              <Card key={index} className="bg-white border-amber-200 hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  <h4 className="font-bold text-amber-700 mb-2">{declaration.title}</h4>
+                  <p className="text-slate-700 italic mb-2">"{declaration.verse}"</p>
+                  <p className="text-amber-600 text-sm font-medium">— {declaration.reference}</p>
+                </CardContent>
+              </Card>
+            ))}
+
+            <Card className="bg-gradient-to-r from-purple-100 to-amber-100 border-purple-200">
+              <CardContent className="p-4">
+                <h4 className="font-bold text-purple-800 mb-2">✨ TokHealth Testimony</h4>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  This app was spoken into existence through faith and hard work. Late nights after 12-hour shifts, 
+                  believing in the vision God planted. If you're reading this - whatever God put in your heart, 
+                  speak it, work for it, and watch Him provide.
+                </p>
+                <p className="text-purple-600 text-sm font-medium mt-2">— Keep People Alive 💙</p>
+              </CardContent>
+            </Card>
+
+            <Button
+              onClick={() => {
+                setActiveTab('journal');
+                setShowNewEntry(true);
+                setNewEntry({...newEntry, entry_type: 'declaration', title: 'My Declaration'});
+              }}
+              className="w-full bg-amber-600 hover:bg-amber-700"
+            >
+              🔥 Write Your Declaration
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
