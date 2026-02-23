@@ -145,6 +145,21 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - `/api/prescriptions/*` - Medications
 - `/api/hydration/*` - Water tracking
 
+### Fitbit Integration
+- `GET /api/fitbit/auth/url` - Get OAuth authorization URL
+- `GET /api/fitbit/callback` - Handle OAuth callback
+- `GET /api/fitbit/status` - Check connection status
+- `POST /api/fitbit/sync` - Sync all Fitbit data
+- `GET /api/fitbit/steps/today` - Get today's steps
+- `GET /api/fitbit/heart-rate/today` - Get today's heart rate
+- `DELETE /api/fitbit/disconnect` - Remove Fitbit connection
+
+### Data Import
+- `GET /api/import/template` - Get CSV template
+- `POST /api/import/import/csv` - Upload CSV health data
+- `POST /api/import/manual` - Log manual health entry
+- `GET /api/import/history` - Get health data history
+
 ## Database Collections
 - `users` - User accounts (email, password_hash, name, token)
 - `family_links` - Family connections (from_user_id, to_user_id, status)
