@@ -3,14 +3,14 @@
 ## Overview
 **App Name:** TokHealth  
 **Tagline:** Keep People Alive (KPA) System  
-**Version:** 1.1.0  
-**Last Updated:** February 22, 2026
+**Version:** 1.2.0  
+**Last Updated:** February 23, 2026
 
 ## Problem Statement
 Build a mobile-first health and wellness tracking application for monitoring nutrition, fitness, mental wellness, and overall well-being. The app should be usable on a mobile phone with an AI-driven interface.
 
 ## Target Users
-- Families tracking health metrics
+- Families tracking health metrics together
 - Individuals managing chronic conditions (diabetes, heart conditions)
 - Health-conscious users wanting comprehensive wellness tracking
 
@@ -19,30 +19,52 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - **Backend:** FastAPI (Python)
 - **Database:** MongoDB
 - **AI Integration:** GPT-5.2 via Emergent LLM Key
+- **Authentication:** Token-based auth with Bearer tokens
 - **Deployment:** Web app optimized for mobile browsers
 
 ## Core Features
 
-### 1. User Profile / Baseline (NEW)
+### 1. User Authentication (NEW - v1.2.0)
+- **Individual Accounts** - Each user has their own email/password account
+- User registration with email, password, name
+- Secure login with token-based auth
+- Session persistence via localStorage
+- Logout functionality
+- All user data isolated by user_id
+- Status: COMPLETE
+
+### 2. Family Linking System (NEW - v1.2.0)
+- **Invite-based Family Connections** - Link with family by email
+- Each person maintains their own independent account
+- Send family invitations to other TokHealth users
+- Accept/decline incoming invitations
+- View linked family members' health status (Green/Yellow/Red zone)
+- Remove family links at any time
+- Family dashboard shows all linked members
+- Status: COMPLETE
+
+### 3. User Profile / Baseline
 - Captures: name, age, sex, height, weight, activity level, blood type
 - Calculates personalized targets: BMI, BMR, TDEE, daily calories, protein, steps, water
 - Heart rate zones based on age
+- Now linked to authenticated user
 - Status: COMPLETE
 
-### 2. Disclaimer Screen
+### 4. Disclaimer Screen
 - Legal disclaimers (not medical advice, emergency situations, AI-powered insights, data privacy)
 - Checkbox acceptance required before entry
 - Status: COMPLETE
 
-### 3. Dashboard (Main Hub)
+### 5. Dashboard (Main Hub)
 - Light blue theme (user preference applied)
+- **Shows logged-in user's name in header**
+- Logout button in header
 - Quick access cards for all modules
-- Profile button in header
-- Medical Export card
+- Profile button, Medical Export card
 - Today's quick stats (Calories, Protein, Steps, Water)
 - Status: COMPLETE
 
-### 4. The Loop (Health Visualization)
+### 6. The Loop (Health Visualization)
 - Central circular status indicator
 - Green/Yellow/Red zone calculations based on:
   - Nutrition (calories, protein targets)
@@ -51,128 +73,121 @@ Build a mobile-first health and wellness tracking application for monitoring nut
 - "Back to Green" button appears when in yellow/red zone
 - Status: COMPLETE
 
-### 5. Back to Green (NEW - Mood Changer)
-- Interventions when in yellow/red zone:
-  - STOP & Pause (high priority for red)
-  - 4-7-8 Breathing exercise (guided)
-  - Hydration Boost
-  - Gratitude Moment
-  - 5-4-3-2-1 Grounding
-  - Quick Walk / Stretching
-  - Cold Water Reset (red zone)
-  - Reach Out (social connection)
-- Animated breathing exercise with phases
+### 7. Back to Green (Mood Changer)
+- Interventions when in yellow/red zone
+- Animated breathing exercises
 - Completion tracking
 - Status: COMPLETE
 
-### 6. AI Health Coach
+### 8. AI Health Coach
 - GPT-5.2 integration via emergentintegrations library
-- Multi-turn conversation support
-- **Voice INPUT** - Speak to the coach using microphone (Speech-to-Text)
-- **Voice OUTPUT** - Coach speaks responses (Text-to-Speech)
+- Voice INPUT (Speech-to-Text) & OUTPUT (Text-to-Speech)
 - Customizable coach name
-- Context-aware responses based on user's health data
-- Quick topic buttons (Nutrition, Exercise, Stress, Sleep)
+- Context-aware responses
 - Status: COMPLETE
 
-### 7. Biometrics Tracker
-- Heart rate, blood pressure (systolic/diastolic)
-- Blood oxygen (SpO2), body temperature
-- Steps tracking
-- Health zone indicators after logging
+### 9. Biometrics Tracker
+- Heart rate, blood pressure, SpO2, temperature, steps
+- Health zone indicators
+- User-specific data storage
 - Status: COMPLETE
 
-### 8. Nutrition Logger
-- Meal logging with food items
-- Macro tracking (calories, protein, carbs, fat, fiber)
-- **AI Photo Recognition** - Take/upload photo, AI identifies foods and estimates nutrition
-- Auto-populates meal form from photo analysis
+### 10. Nutrition Logger
+- Meal logging with macros
+- **AI Photo Recognition** for food identification
 - Status: COMPLETE
 
-### 9. Emergency Contacts
-- Contact management (3-5 contacts)
-- 911 button with AI confirmation (Police/Ambulance/Fire)
+### 11. Emergency Contacts
+- Contact management with 911 AI confirmation
 - Status: COMPLETE
 
-### 10. Wisdom Vault
-- Private journal entries with mood tracking (before/after)
-- Entry types: Journal, Gratitude, Reflection
-- **AI Wellness Suggestions** - Get personalized advice from AI
-- **Journal Prompts** - Random prompts to inspire writing
-- Tag support for organization
-- Expandable past entries
+### 12. Wisdom Vault
+- Private journal with mood tracking
+- AI Wellness Suggestions
 - Status: COMPLETE
 
-### 11. Prescription Tracker
-- Medication management with dosage
-- **3x Daily Reminders** (8 AM, 2 PM, 8 PM) with browser notifications
-- Mark doses as taken (Morning/Afternoon/Evening)
-- Take with food indicator
+### 13. Prescription Tracker
+- Medication management with reminders
 - Status: COMPLETE
 
-### 12. Medical Export (NEW)
-- Generates printable HTML report
-- Includes: patient info, vitals, medications, emergency contacts
-- Opens in new window for printing
+### 14. Medical Export
+- Printable HTML health report
 - Status: COMPLETE
 
-### 13. Hydration Tracking
-- Daily water intake tracking
-- **Quick Log Buttons** - 1 Glass, Bottle, Mug, Small
-- Progress visualization with percentage
-- Motivational messages
-- Hydration tips
+### 15. Hydration Tracking
+- Quick log buttons, progress visualization
 - Status: COMPLETE
 
-## Technical Details
+## API Endpoints
 
-### API Endpoints (Backend)
-- `/api/health` - Health check
-- `/api/profile/*` - User profile/baseline CRUD
+### Authentication
+- `POST /api/auth/register` - Create new account
+- `POST /api/auth/login` - Login and get token
+- `GET /api/auth/me?token=xxx` - Get current user
+- `POST /api/auth/logout?token=xxx` - Logout
+
+### Family
+- `GET /api/family/members` - Get linked family members
+- `POST /api/family/invite` - Send family invitation
+- `GET /api/family/invites/pending` - Get pending invites (sent & received)
+- `POST /api/family/invites/{link_id}/respond` - Accept/decline invite
+- `GET /api/family/dashboard` - Family health status overview
+- `DELETE /api/family/members/{user_id}` - Remove family link
+
+### Health Data (all require Bearer token)
+- `/api/profile/*` - User profile CRUD
 - `/api/biometrics/*` - Biometrics CRUD
-- `/api/nutrition/*` - Nutrition logging + photo analysis
+- `/api/nutrition/*` - Nutrition logging
 - `/api/loop/*` - The Loop status
-- `/api/health-coach/*` - AI coach chat + Back to Green
+- `/api/health-coach/*` - AI coach
 - `/api/emergency-contacts/*` - Emergency contacts
 - `/api/wisdom-vault/*` - Journal entries
-- `/api/prescriptions/*` - Medication tracking
+- `/api/prescriptions/*` - Medications
+- `/api/hydration/*` - Water tracking
 
-### Environment Variables
-- `MONGO_URL` - MongoDB connection
-- `DB_NAME` - Database name
-- `EMERGENT_LLM_KEY` - AI integration key
-- `REACT_APP_BACKEND_URL` - Frontend API URL
+## Database Collections
+- `users` - User accounts (email, password_hash, name, token)
+- `family_links` - Family connections (from_user_id, to_user_id, status)
+- `user_profiles` - Health profiles linked to user_id
+- `health_metrics` - Daily health data by user_id
+- `biometric_readings` - Biometric history by user_id
+- Plus existing collections for nutrition, prescriptions, etc.
 
-## Completed Work (This Session)
-- [x] Applied light blue theme across all pages
-- [x] Created User Profile/Baseline with target calculations
-- [x] Implemented Back to Green interventions (breathing, hydration, gratitude, movement)
-- [x] Built Medical Export with printable report
-- [x] Integrated GPT-5.2 for AI Health Coach
-- [x] **AI Meal Photo Recognition** - Take photo, AI analyzes and auto-fills nutrition
-- [x] The Loop displays real data with correct zone calculations
-- [x] Back to Green button appears in yellow/red zones
-- [x] Mobile-responsive design (430px viewport tested)
-- [x] All API endpoints tested and working
+## Completed Work (v1.2.0 - February 23, 2026)
+- [x] User authentication system (register, login, logout)
+- [x] Token-based auth with Bearer token support
+- [x] Individual user accounts with data isolation
+- [x] Family linking via email invitations
+- [x] Accept/decline family invites
+- [x] Family dashboard showing members' health zones
+- [x] Dashboard shows logged-in user name
+- [x] All health data endpoints updated for auth
+- [x] Frontend auth screen (login/register toggle)
+- [x] Frontend family manager with invite system
+- [x] 100% test pass rate (20/20 backend, all frontend flows)
 
-## Upcoming Tasks (P1)
-1. Prescription reminder notifications (browser notifications)
-2. Hydration tracking improvements
-3. Wisdom Vault journal enhancements
+## Upcoming Tasks (P0-P1)
+1. Google Fit Integration - Auto-sync steps and heart rate
+2. Apple HealthKit Integration - iOS wearable support
+3. Custom app icon/favicon
 
-## Future Backlog (P1-P2)
+## Future Backlog (P2)
 - Barcode scanning for nutrition logging
 - Drug interaction warnings
 - Advanced health trends/analytics
-- Multi-user/family support
-- Wearable device integration
+- Push notifications for reminders
 
 ## Testing
-- Backend: 30/30 tests passed
-- Frontend: All features verified at mobile viewport
+- Backend: 20/20 auth & family tests passed
+- Frontend: All auth and family UI flows verified
 - Test files:
-  - `/app/backend/tests/test_tokhealth_api.py`
-  - `/app/backend/tests/test_new_features.py`
+  - `/app/backend/tests/test_auth_family.py`
+  - `/app/test_reports/iteration_3.json`
+
+## Test Accounts
+- Meka: meka@demo.com / pass123
+- JJ: jj@demo.com / pass123
+(Both accounts are linked as family)
 
 ## Preview URL
 https://tokhealth-kpa.preview.emergentagent.com
