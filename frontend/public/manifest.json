@@ -1,0 +1,30 @@
+{
+  "short_name": "TokHealth",
+  "name": "TokHealth - Keep People Alive",
+  "description": "AI-powered health and wellness tracking for you and your family",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0ea5e9",
+  "background_color": "#e0f2fe",
+  "orientation": "portrait",
+  "categories": ["health", "fitness", "medical"]
+}
