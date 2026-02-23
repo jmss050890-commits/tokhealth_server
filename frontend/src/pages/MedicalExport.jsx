@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileText, Download, Activity, Heart, Pill, AlertTriangle, User, Calendar, Printer } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const MedicalExport = () => {
   const [profile, setProfile] = useState(null);
@@ -21,10 +22,10 @@ const MedicalExport = () => {
   const fetchAllData = async () => {
     try {
       const [profileRes, biometricsRes, prescriptionsRes, emergencyRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/profile/`),
-        fetch(`${BACKEND_URL}/api/biometrics/today`),
-        fetch(`${BACKEND_URL}/api/prescriptions/`),
-        fetch(`${BACKEND_URL}/api/emergency-contacts/`)
+        fetch(`${BACKEND_URL}/api/profile/`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/biometrics/today`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/prescriptions/`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/emergency-contacts/`, { headers: getAuthHeaders() })
       ]);
 
       const profileData = await profileRes.json();
