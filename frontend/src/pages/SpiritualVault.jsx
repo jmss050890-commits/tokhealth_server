@@ -270,6 +270,15 @@ const SpiritualVault = () => {
             <Heart className="w-4 h-4 mr-1" />
             Prayers
           </Button>
+          <Button
+            variant={activeTab === 'coach' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('coach')}
+            className={activeTab === 'coach' ? 'bg-purple-600' : 'border-purple-300 text-purple-700'}
+            size="sm"
+          >
+            <MessageCircle className="w-4 h-4 mr-1" />
+            Guide
+          </Button>
         </div>
 
         {/* Journal Tab */}
