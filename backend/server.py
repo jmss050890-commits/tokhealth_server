@@ -23,6 +23,7 @@ from modules.family.routes import router as family_router
 from modules.trends.routes import router as trends_router
 from modules.auth.routes import router as auth_router
 from modules.import_data.routes import router as import_router
+from modules.fitbit.routes import router as fitbit_router
 
 # Setup logging
 logger = setup_logging()
