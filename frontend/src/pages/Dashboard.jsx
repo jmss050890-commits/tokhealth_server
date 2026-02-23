@@ -427,7 +427,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
 
           {/* Health Trends */}
           <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer col-span-2"
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer"
             onClick={() => setCurrentView('trends')}
             data-testid="trends-card"
           >
@@ -438,6 +438,23 @@ const Dashboard = ({ currentUser, onLogout }) => {
               <div>
                 <span className="text-slate-800 text-sm font-semibold">Health Trends</span>
                 <p className="text-slate-500 text-xs">Analytics & insights</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Import Data */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-cyan-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('import')}
+            data-testid="import-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center">
+                <Upload className="w-4 h-4 text-cyan-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Import Data</span>
+                <p className="text-slate-500 text-xs">CSV & devices</p>
               </div>
             </CardContent>
           </Card>
