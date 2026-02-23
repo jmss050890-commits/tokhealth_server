@@ -1,18 +1,112 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, FileText, Download, CheckCircle, AlertCircle, Activity, Watch } from 'lucide-react';
+import { Upload, FileText, Download, CheckCircle, AlertCircle, Activity, Watch, RefreshCw, Unlink } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
 
 const ImportData = () => {
   const [uploading, setUploading] = useState(false);
   const [importResult, setImportResult] = useState(null);
+  const [fitbitStatus, setFitbitStatus] = useState({ connected: false, loading: true });
+  const [syncing, setSyncing] = useState(false);
   const fileInputRef = useRef(null);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  useEffect(() => {
+    // Check URL for Fitbit callback result
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('fitbit_connected') === 'true') {
+      toast.success('Fitbit connected successfully!');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    if (params.get('fitbit_error')) {
+      toast.error(`Fitbit connection failed: ${params.get('fitbit_error')}`);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    
+    checkFitbitStatus();
+  }, []);
+
+  const checkFitbitStatus = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/fitbit/status`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        setFitbitStatus({ connected: data.data.connected, loading: false, ...data.data });
+      }
+    } catch (error) {
+      console.error('Error checking Fitbit status:', error);
+      setFitbitStatus({ connected: false, loading: false });
+    }
+  };
+
+  const connectFitbit = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/fitbit/auth/url`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success && data.data.authorization_url) {
+        window.location.href = data.data.authorization_url;
+      } else {
+        toast.error('Failed to get Fitbit authorization URL');
+      }
+    } catch (error) {
+      console.error('Error connecting Fitbit:', error);
+      toast.error('Failed to connect to Fitbit');
+    }
+  };
+
+  const disconnectFitbit = async () => {
+    if (!confirm('Are you sure you want to disconnect Fitbit?')) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/fitbit/disconnect`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Fitbit disconnected');
+        setFitbitStatus({ connected: false, loading: false });
+      }
+    } catch (error) {
+      console.error('Error disconnecting Fitbit:', error);
+      toast.error('Failed to disconnect Fitbit');
+    }
+  };
+
+  const syncFitbitData = async () => {
+    setSyncing(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/fitbit/sync`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        const synced = data.data;
+        let message = 'Synced: ';
+        if (synced.steps !== undefined) message += `${synced.steps} steps, `;
+        if (synced.resting_heart_rate) message += `${synced.resting_heart_rate} BPM, `;
+        if (synced.sleep_hours) message += `${synced.sleep_hours}h sleep`;
+        toast.success(message.replace(/, $/, ''));
+      } else {
+        toast.error(data.detail || 'Sync failed');
+      }
+    } catch (error) {
+      console.error('Error syncing Fitbit:', error);
+      toast.error('Failed to sync Fitbit data');
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const downloadTemplate = async () => {
     try {
