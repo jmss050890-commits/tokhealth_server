@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Activity, Heart, Droplets, Moon, TrendingUp, Brain, Utensils, Footprints, ThermometerSun, Sparkles } from 'lucide-react';
 import BackToGreen from '@/pages/BackToGreen';
+import { getAuthHeaders } from '@/utils/auth';
 
 const TheLoop = () => {
   const [loopData, setLoopData] = useState(null);
@@ -21,9 +22,9 @@ const TheLoop = () => {
       
       // Fetch all health data
       const [biometricsRes, nutritionRes, loopStatusRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/biometrics/today`),
-        fetch(`${BACKEND_URL}/api/nutrition/today`),
-        fetch(`${BACKEND_URL}/api/loop/status`)
+        fetch(`${BACKEND_URL}/api/biometrics/today`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/nutrition/today`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/loop/status`, { headers: getAuthHeaders() })
       ]);
 
       const biometrics = await biometricsRes.json();
