@@ -151,6 +151,37 @@ const SpiritualVault = () => {
     }
   };
 
+  const askCoach = async () => {
+    if (!coachMessage.trim()) {
+      toast.error('Please enter your question or thought');
+      return;
+    }
+
+    setCoachLoading(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/spiritual/guidance`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          message: coachMessage,
+          context: coachContext
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setCoachResponse(data.data.response);
+      } else {
+        toast.error('Failed to get guidance');
+      }
+    } catch (error) {
+      console.error('Error getting guidance:', error);
+      toast.error('Failed to connect to spiritual guide');
+    } finally {
+      setCoachLoading(false);
+    }
+  };
+
   const getEntryIcon = (type) => {
     switch (type) {
       case 'gratitude': return '🙏';
