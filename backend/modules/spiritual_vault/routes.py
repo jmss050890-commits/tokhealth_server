@@ -262,3 +262,92 @@ async def get_spiritual_stats(
     except Exception as e:
         logger.error(f"Error getting stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/guidance", response_model=dict)
+async def get_spiritual_guidance(
+    request: SpiritualGuidanceRequest,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
+    """Get AI spiritual guidance and encouragement"""
+    try:
+        if not AI_AVAILABLE or not EMERGENT_LLM_KEY:
+            return success_response(
+                data={"response": "The Lord is my shepherd; I shall not want. Take comfort in knowing you are loved and guided."},
+                message="Guidance provided"
+            )
+        
+        user_id = await get_user_id(authorization, db)
+        
+        # Get user's recent spiritual entries for context
+        recent_entries = await db.spiritual_entries.find(
+            {"user_id": user_id},
+            {"_id": 0, "content": 1, "entry_type": 1, "mood": 1}
+        ).sort("created_at", -1).limit(3).to_list(3)
+        
+        context_info = ""
+        if recent_entries:
+            context_info = "Recent spiritual journal entries: " + "; ".join([
+                f"{e.get('entry_type', 'entry')}: {e.get('content', '')[:100]}" 
+                for e in recent_entries
+            ])
+        
+        # Build system prompt based on context
+        context_prompts = {
+            "general": "You are a compassionate spiritual guide offering wisdom, encouragement, and biblical insights.",
+            "comfort": "You are providing comfort and peace during difficult times, offering hope and reassurance from scripture.",
+            "gratitude": "You are helping cultivate gratitude and thanksgiving, highlighting blessings and God's goodness.",
+            "scripture": "You are sharing relevant scripture verses with brief, meaningful reflections.",
+            "meditation": "You are guiding peaceful meditation and reflection, helping find inner peace and connection with God."
+        }
+        
+        system_prompt = f"""You are a loving, faith-based spiritual guide within TokHealth's Spiritual Vault. 
+{context_prompts.get(request.context, context_prompts['general'])}
+
+Guidelines:
+- Be warm, compassionate, and encouraging
+- Share relevant scripture when appropriate (include the reference)
+- Keep responses concise but meaningful (2-4 sentences)
+- Respect all faith backgrounds while being rooted in Christian wisdom
+- Offer practical spiritual encouragement
+- Never give medical advice - only spiritual support
+
+{context_info}"""
+
+        messages = [
+            LlmMessage(role="system", content=system_prompt),
+            LlmMessage(role="user", content=request.message)
+        ]
+        
+        response = await chat(
+            api_key=EMERGENT_LLM_KEY,
+            messages=messages,
+            model="gpt-5.2"
+        )
+        
+        ai_response = response.content if hasattr(response, 'content') else str(response)
+        
+        # Save the interaction
+        interaction = {
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "user_message": request.message,
+            "ai_response": ai_response,
+            "context": request.context,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.spiritual_guidance.insert_one(interaction)
+        
+        return success_response(
+            data={"response": ai_response},
+            message="Spiritual guidance provided"
+        )
+    except Exception as e:
+        logger.error(f"Error getting spiritual guidance: {e}")
+        # Fallback response
+        return success_response(
+            data={"response": "Be still and know that I am God. (Psalm 46:10) Take a moment to breathe and feel His presence with you."},
+            message="Guidance provided"
+        )
+
