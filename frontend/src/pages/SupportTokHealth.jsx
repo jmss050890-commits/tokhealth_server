@@ -14,12 +14,13 @@ const SupportTokHealth = ({ onClose }) => {
   ];
 
   const handleSupport = (amount) => {
-    // For now, show thank you message
-    // In production, this would connect to Stripe/PayPal
-    setShowThankYou(true);
+    if (!amount) return;
     
-    // Open payment link (you can replace with actual payment link later)
-    // window.open(`https://your-payment-link.com?amount=${amount}`, '_blank');
+    // Open PayPal.me with the selected amount
+    window.open(`https://paypal.me/TokHealthKPA/${amount}`, '_blank');
+    
+    // Show thank you message
+    setShowThankYou(true);
   };
 
   if (showThankYou) {
