@@ -468,6 +468,23 @@ const Dashboard = ({ currentUser, onLogout }) => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Spiritual Vault */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-purple-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('spiritual')}
+            data-testid="spiritual-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-purple-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Spiritual Vault</span>
+                <p className="text-slate-500 text-xs">Faith & gratitude</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Quick Stats */}
