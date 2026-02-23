@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
@@ -6,10 +6,12 @@ import logging
 
 from core.database import get_database
 from utils.response import success_response
+from utils.auth import get_current_user_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# Fallback for unauthenticated requests (backward compatibility)
 TEMP_USER_ID = "demo-user-001"
 
 class UserProfileCreate(BaseModel):
