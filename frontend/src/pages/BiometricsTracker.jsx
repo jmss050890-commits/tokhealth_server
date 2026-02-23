@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Heart, Activity, Droplet, Thermometer, TrendingUp } from 'lucide-react';
+import { getAuthHeaders } from '@/utils/auth';
 
 const BiometricsTracker = () => {
   const [biometrics, setBiometrics] = useState({
@@ -36,12 +37,14 @@ const BiometricsTracker = () => {
 
       const response = await fetch(`${BACKEND_URL}/api/biometrics/log`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(dataToSubmit)
       });
 
       if (response.ok) {
-        const zonesResponse = await fetch(`${BACKEND_URL}/api/biometrics/zones`);
+        const zonesResponse = await fetch(`${BACKEND_URL}/api/biometrics/zones`, {
+          headers: getAuthHeaders()
+        });
         const zonesData = await zonesResponse.json();
         setZones(zonesData.data);
         
