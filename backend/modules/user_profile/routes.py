@@ -170,11 +170,20 @@ async def create_or_update_profile(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/", response_model=dict)
-async def get_profile(db=Depends(get_database)):
+async def get_profile(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get user baseline profile"""
     try:
+        # Get user_id from auth token, fallback to temp for backward compatibility
+        if authorization:
+            user_id = await get_current_user_id(authorization, db)
+        else:
+            user_id = TEMP_USER_ID
+            
         profile = await db.user_profiles.find_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         )
         
@@ -188,6 +197,8 @@ async def get_profile(db=Depends(get_database)):
             data=profile,
             message="Profile retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting profile: {e}")
         raise HTTPException(status_code=500, detail=str(e))
