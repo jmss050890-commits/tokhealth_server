@@ -288,25 +288,55 @@ const ImportData = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             {/* Fitbit */}
-            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+            <div className={`flex items-center justify-between p-3 rounded-lg border ${fitbitStatus.connected ? 'bg-teal-50 border-teal-300' : 'bg-slate-50 border-slate-200'}`}>
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${fitbitStatus.connected ? 'bg-teal-500' : 'bg-teal-400'}`}>
                   <Activity className="w-4 h-4 text-white" />
                 </div>
                 <div>
                   <p className="font-medium text-slate-800 text-sm">Fitbit</p>
-                  <p className="text-slate-500 text-xs">Steps, heart rate, sleep</p>
+                  <p className="text-slate-500 text-xs">
+                    {fitbitStatus.connected ? 'Connected - Steps, heart rate, sleep' : 'Steps, heart rate, sleep'}
+                  </p>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-teal-400 text-teal-700 hover:bg-teal-50"
-                data-testid="connect-fitbit-btn"
-                disabled
-              >
-                Coming Soon
-              </Button>
+              <div className="flex space-x-2">
+                {fitbitStatus.connected ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={syncFitbitData}
+                      disabled={syncing}
+                      className="border-teal-400 text-teal-700 hover:bg-teal-50 text-xs"
+                      data-testid="sync-fitbit-btn"
+                    >
+                      <RefreshCw className={`w-3 h-3 mr-1 ${syncing ? 'animate-spin' : ''}`} />
+                      {syncing ? 'Syncing...' : 'Sync'}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={disconnectFitbit}
+                      className="text-slate-400 hover:text-red-500 text-xs"
+                      data-testid="disconnect-fitbit-btn"
+                    >
+                      <Unlink className="w-3 h-3" />
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={connectFitbit}
+                    className="border-teal-400 text-teal-700 hover:bg-teal-50 text-xs"
+                    data-testid="connect-fitbit-btn"
+                    disabled={fitbitStatus.loading}
+                  >
+                    {fitbitStatus.loading ? 'Loading...' : 'Connect'}
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Apple Health */}
@@ -330,9 +360,11 @@ const ImportData = () => {
               </Button>
             </div>
 
-            <p className="text-slate-400 text-xs text-center pt-2">
-              Device integrations coming soon! For now, export data from your device app and import via CSV.
-            </p>
+            {!fitbitStatus.connected && (
+              <p className="text-slate-400 text-xs text-center pt-2">
+                Connect your Fitbit to automatically sync steps, heart rate, and sleep data.
+              </p>
+            )}
           </CardContent>
         </Card>
 
