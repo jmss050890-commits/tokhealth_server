@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sparkles, Heart, BookOpen, Sun, Plus, Check, Trash2, Activity } from 'lucide-react';
+import { Sparkles, Heart, BookOpen, Sun, Plus, Check, Trash2, Activity, MessageCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
 
@@ -17,6 +17,13 @@ const SpiritualVault = () => {
   const [activeTab, setActiveTab] = useState('journal');
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [showNewPrayer, setShowNewPrayer] = useState(false);
+  
+  // AI Coach state
+  const [showCoach, setShowCoach] = useState(false);
+  const [coachMessage, setCoachMessage] = useState('');
+  const [coachContext, setCoachContext] = useState('general');
+  const [coachResponse, setCoachResponse] = useState('');
+  const [coachLoading, setCoachLoading] = useState(false);
   
   const [newEntry, setNewEntry] = useState({
     entry_type: 'gratitude',
