@@ -98,6 +98,36 @@ const BiometricsTracker = () => {
           <h1 className="text-2xl font-bold text-slate-800">Biometric Tracker</h1>
         </div>
 
+        {/* Camera Scan Button */}
+        <Card className="bg-gradient-to-r from-sky-500 to-cyan-500 border-0 shadow-lg">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-white">
+                <h3 className="font-semibold flex items-center">
+                  <Camera className="w-5 h-5 mr-2" />
+                  Quick Scan
+                </h3>
+                <p className="text-white/80 text-sm">Measure heart rate with your camera</p>
+              </div>
+              <Button 
+                onClick={() => setShowScanner(true)}
+                className="bg-white text-sky-600 hover:bg-white/90"
+                data-testid="open-scanner-btn"
+              >
+                Scan Now
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Scanner Modal */}
+        {showScanner && (
+          <BiometricScanner 
+            onClose={() => setShowScanner(false)}
+            onSaveResults={handleScanResults}
+          />
+        )}
+
         <Card className="bg-white/90 border-sky-200">
           <CardHeader>
             <CardTitle className="text-slate-800">Log Your Biometrics</CardTitle>
