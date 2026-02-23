@@ -521,8 +521,24 @@ const Dashboard = ({ currentUser, onLogout }) => {
         </Card>
       </div>
 
+      {/* Support Modal */}
+      {showSupport && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="max-w-md w-full">
+            <SupportTokHealth onClose={() => setShowSupport(false)} />
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
-      <div className="max-w-6xl mx-auto mt-6 text-center">
+      <div className="max-w-6xl mx-auto mt-6 text-center space-y-2">
+        <button 
+          onClick={() => setShowSupport(true)}
+          className="text-xs text-purple-500 hover:text-purple-700 font-medium transition-colors"
+        >
+          <Heart className="w-3 h-3 inline mr-1" />
+          Support Our Mission
+        </button>
         <p className="text-xs text-sky-600/70 font-medium">
           TokHealth v1.0 | Keep People Alive
         </p>
