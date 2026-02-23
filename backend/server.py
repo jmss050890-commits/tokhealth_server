@@ -75,6 +75,7 @@ api_router.include_router(biometrics_router, prefix="/biometrics", tags=["Biomet
 api_router.include_router(profile_router, prefix="/profile", tags=["User Profile"])
 api_router.include_router(family_router, prefix="/family", tags=["Family"])
 api_router.include_router(trends_router, prefix="/trends", tags=["Health Trends"])
+api_router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 
 # Mount the API router
 app.include_router(api_router)
