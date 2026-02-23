@@ -4,15 +4,24 @@ from typing import Optional, List
 from datetime import datetime, timezone
 import logging
 import uuid
+import os
 
 from core.database import get_database
 from utils.response import success_response
 from utils.auth import get_current_user_id
 
+# Import emergent integrations for AI
+try:
+    from emergentintegrations.llm.chat import chat, LlmMessage
+    AI_AVAILABLE = True
+except ImportError:
+    AI_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 TEMP_USER_ID = "demo-user-001"
+EMERGENT_LLM_KEY = os.getenv("EMERGENT_LLM_KEY", "")
 
 class SpiritualEntry(BaseModel):
     entry_type: str  # prayer, gratitude, reflection, scripture, meditation
@@ -25,6 +34,10 @@ class PrayerRequest(BaseModel):
     request: str
     for_whom: Optional[str] = "self"
     answered: Optional[bool] = False
+
+class SpiritualGuidanceRequest(BaseModel):
+    message: str
+    context: Optional[str] = "general"  # general, comfort, gratitude, scripture, meditation
 
 async def get_user_id(authorization: str, db) -> str:
     """Get user_id from auth or fallback to temp"""
