@@ -303,6 +303,15 @@ const SpiritualVault = () => {
             <MessageCircle className="w-4 h-4 mr-1" />
             Guide
           </Button>
+          <Button
+            variant={activeTab === 'declare' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('declare')}
+            className={activeTab === 'declare' ? 'bg-purple-600' : 'border-purple-300 text-purple-700'}
+            size="sm"
+          >
+            🔥
+            Declare
+          </Button>
         </div>
 
         {/* Journal Tab */}
