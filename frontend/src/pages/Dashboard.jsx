@@ -161,16 +161,27 @@ const Dashboard = ({ currentUser, onLogout }) => {
               <span className="text-slate-800">HEALTH</span>
             </h1>
           </div>
-          <Button
-            onClick={() => setCurrentView('profile')}
-            variant="outline"
-            size="sm"
-            className="border-sky-400 text-sky-700 hover:bg-sky-100"
-            data-testid="profile-button"
-          >
-            <User className="w-4 h-4 mr-1" />
-            Profile
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={() => setCurrentView('profile')}
+              variant="outline"
+              size="sm"
+              className="border-sky-400 text-sky-700 hover:bg-sky-100"
+              data-testid="profile-button"
+            >
+              <User className="w-4 h-4 mr-1" />
+              {currentUser?.name || 'Profile'}
+            </Button>
+            <Button
+              onClick={onLogout}
+              variant="ghost"
+              size="sm"
+              className="text-slate-500 hover:text-red-600 hover:bg-red-50"
+              data-testid="logout-button"
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         <p className="text-slate-600 text-sm">Your AI-powered health companion</p>
       </div>
