@@ -17,9 +17,11 @@ import FamilyManager from '@/pages/FamilyManager';
 import HealthTrends from '@/pages/HealthTrends';
 import ImportData from '@/pages/ImportData';
 import SpiritualVault from '@/pages/SpiritualVault';
+import SupportTokHealth from '@/pages/SupportTokHealth';
 
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentView, setCurrentView] = useState('dashboard');
+  const [showSupport, setShowSupport] = useState(false);
 
   const BackButton = () => (
     <div className="bg-gradient-to-r from-sky-100 to-cyan-100 p-4 sticky top-0 z-10">
