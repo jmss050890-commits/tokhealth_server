@@ -204,11 +204,20 @@ async def get_profile(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/targets", response_model=dict)
-async def get_personalized_targets(db=Depends(get_database)):
+async def get_personalized_targets(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get personalized health targets based on baseline"""
     try:
+        # Get user_id from auth token, fallback to temp for backward compatibility
+        if authorization:
+            user_id = await get_current_user_id(authorization, db)
+        else:
+            user_id = TEMP_USER_ID
+            
         profile = await db.user_profiles.find_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         )
         
@@ -236,6 +245,8 @@ async def get_personalized_targets(db=Depends(get_database)):
             data=targets,
             message="Personalized targets retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting targets: {e}")
         raise HTTPException(status_code=500, detail=str(e))
