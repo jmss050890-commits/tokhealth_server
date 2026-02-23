@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Activity, Heart, Scale, Ruler, Calendar, Target, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const UserProfile = ({ onProfileSaved }) => {
   const [profile, setProfile] = useState(null);
@@ -31,7 +32,9 @@ const UserProfile = ({ onProfileSaved }) => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/profile/`);
+      const response = await fetch(`${BACKEND_URL}/api/profile/`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success && data.data) {
         setProfile(data.data);
@@ -64,7 +67,7 @@ const UserProfile = ({ onProfileSaved }) => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/profile/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           ...formData,
           age: parseInt(formData.age),
