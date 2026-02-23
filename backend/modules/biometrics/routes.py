@@ -1,15 +1,18 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from typing import Optional
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 import logging
+import uuid
 
 from core.database import get_database
 from utils.response import success_response
+from utils.auth import get_current_user_id
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# Fallback for backward compatibility
 TEMP_USER_ID = "demo-user-001"
 
 class BiometricReading(BaseModel):
@@ -21,23 +24,37 @@ class BiometricReading(BaseModel):
     resting_heart_rate: Optional[int] = None
     steps: Optional[int] = None
 
+async def get_user_id(authorization: str, db) -> str:
+    """Get user_id from auth or fallback to temp"""
+    if authorization:
+        try:
+            return await get_current_user_id(authorization, db)
+        except:
+            pass
+    return TEMP_USER_ID
+
 @router.post("/log", response_model=dict)
-async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
+async def log_biometrics(
+    reading: BiometricReading,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Log biometric readings"""
     try:
+        user_id = await get_user_id(authorization, db)
         today = date.today().isoformat()
         
         # Get or create today's health metrics
         metrics = await db.health_metrics.find_one({
-            "user_id": TEMP_USER_ID,
+            "user_id": user_id,
             "date": today
         })
         
         if not metrics:
             # Create new metrics entry
             new_doc = {
-                "id": str(__import__('uuid').uuid4()),
-                "user_id": TEMP_USER_ID,
+                "id": str(uuid.uuid4()),
+                "user_id": user_id,
                 "date": today,
                 "calories_consumed": 0,
                 "calories_target": 2000,
@@ -52,8 +69,8 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
                 "energy_level": 5,
                 "stress_level": 5,
                 "loop_score": 0.0,
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
             }
             new_doc.update(reading.model_dump(exclude_none=True))
             await db.health_metrics.insert_one(new_doc)
@@ -61,18 +78,18 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
             # Update existing metrics
             update_data = reading.model_dump(exclude_none=True)
             if update_data:
-                update_data["updated_at"] = datetime.utcnow().isoformat()
+                update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
                 await db.health_metrics.update_one(
-                    {"user_id": TEMP_USER_ID, "date": today},
+                    {"user_id": user_id, "date": today},
                     {"$set": update_data}
                 )
         
         # Log as separate reading for history
         log_entry = {
-            "id": str(__import__('uuid').uuid4()),
-            "user_id": TEMP_USER_ID,
-            "timestamp": datetime.utcnow().isoformat(),
-            "created_at": datetime.utcnow().isoformat()
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
         }
         log_entry.update(reading.model_dump(exclude_none=True))
         
@@ -82,7 +99,7 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
         if '_id' in log_entry:
             del log_entry['_id']
         
-        logger.info(f"Biometrics logged for {today}")
+        logger.info(f"Biometrics logged for {user_id} on {today}")
         return success_response(
             data=log_entry,
             message="Biometric reading logged successfully"
@@ -92,13 +109,17 @@ async def log_biometrics(reading: BiometricReading, db=Depends(get_database)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/today", response_model=dict)
-async def get_today_biometrics(db=Depends(get_database)):
+async def get_today_biometrics(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get today's biometric readings"""
     try:
+        user_id = await get_user_id(authorization, db)
         today = date.today().isoformat()
         
         metrics = await db.health_metrics.find_one(
-            {"user_id": TEMP_USER_ID, "date": today},
+            {"user_id": user_id, "date": today},
             {"_id": 0}
         )
         
@@ -137,12 +158,15 @@ async def get_today_biometrics(db=Depends(get_database)):
 @router.get("/history", response_model=dict)
 async def get_biometric_history(
     days: int = 7,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get biometric reading history"""
     try:
+        user_id = await get_user_id(authorization, db)
+        
         readings = await db.biometric_readings.find(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         ).sort("timestamp", -1).limit(days * 10).to_list(100)
         
@@ -155,13 +179,17 @@ async def get_biometric_history(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/zones", response_model=dict)
-async def get_biometric_zones(db=Depends(get_database)):
+async def get_biometric_zones(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get health zones for biometric readings"""
     try:
+        user_id = await get_user_id(authorization, db)
         today = date.today().isoformat()
         
         metrics = await db.health_metrics.find_one(
-            {"user_id": TEMP_USER_ID, "date": today},
+            {"user_id": user_id, "date": today},
             {"_id": 0}
         )
         
