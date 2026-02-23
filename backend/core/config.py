@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
     ENCRYPTION_KEY: str = os.getenv("ENCRYPTION_KEY", "your-encryption-key-32-chars-long")
     
+    # Fitbit Integration
+    FITBIT_CLIENT_ID: str = os.getenv("FITBIT_CLIENT_ID", "")
+    FITBIT_CLIENT_SECRET: str = os.getenv("FITBIT_CLIENT_SECRET", "")
+    FITBIT_REDIRECT_URI: str = os.getenv("FITBIT_REDIRECT_URI", "")
+    
     class Config:
         env_file = ".env"
         case_sensitive = True
