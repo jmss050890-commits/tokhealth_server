@@ -272,6 +272,16 @@ const Dashboard = ({ currentUser, onLogout }) => {
     );
   }
 
+  if (currentView === 'barcode') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <BarcodeScanner />
+        <AskCoachButton context="User is scanning food barcodes for nutrition info" pageTitle="Barcode Scanner" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 p-4" data-testid="dashboard">
       {/* Header */}
