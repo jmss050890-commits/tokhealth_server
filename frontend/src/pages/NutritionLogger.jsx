@@ -91,7 +91,7 @@ const NutritionLogger = () => {
       
       const response = await fetch(`${BACKEND_URL}/api/nutrition/analyze-photo`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           image_base64: base64Data,
           meal_type: mealType
