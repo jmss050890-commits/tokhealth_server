@@ -642,8 +642,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Bell className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">{t('cards.notifications')}</span>
-                <p className="text-slate-500 text-xs">{t('cards.notifications_desc')}</p>
+                <span className="text-slate-800 text-sm font-semibold">Reminders</span>
+                <p className="text-slate-500 text-xs">Notifications</p>
               </div>
             </CardContent>
           </Card>
@@ -659,8 +659,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <ScanLine className="w-4 h-4 text-emerald-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">{t('cards.barcode')}</span>
-                <p className="text-slate-500 text-xs">{t('cards.barcode_desc')}</p>
+                <span className="text-slate-800 text-sm font-semibold">Barcode Scanner</span>
+                <p className="text-slate-500 text-xs">Scan food labels</p>
               </div>
             </CardContent>
           </Card>
