@@ -1,50 +1,67 @@
-from fastapi import APIRouter, HTTPException, Depends
-from datetime import date
+from fastapi import APIRouter, HTTPException, Depends, Header
+from pydantic import BaseModel
+from typing import Optional
+from datetime import date, datetime, timezone
 import logging
+import uuid
 
 from core.database import get_database
 from utils.response import success_response
+from utils.auth import get_current_user_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 TEMP_USER_ID = "demo-user-001"
 
+class HydrationLog(BaseModel):
+    amount_ml: int = 250
+    beverage_type: str = "water"
+
+async def get_user_id(authorization: str, db) -> str:
+    if authorization:
+        try:
+            return await get_current_user_id(authorization, db)
+        except:
+            pass
+    return TEMP_USER_ID
+
 @router.post("/log", response_model=dict)
 async def log_water(
-    amount_ml: int = 250,
-    beverage_type: str = "water",
+    log_data: HydrationLog,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Log water/hydration intake"""
     try:
-        from utils.datetime_utils import now_utc, today_date
+        user_id = await get_user_id(authorization, db)
+        today = date.today().isoformat()
         
         # Get today's total
-        today = today_date().isoformat()
         today_logs = await db.hydration_logs.find(
-            {"user_id": TEMP_USER_ID, "date": today}
+            {"user_id": user_id, "date": today}
         ).to_list(100)
         
-        daily_total = sum(log.get("amount_ml", 0) for log in today_logs) + amount_ml
+        daily_total = sum(log.get("amount_ml", 0) for log in today_logs) + log_data.amount_ml
         
         # Create log entry
         log_entry = {
-            "id": str(__import__('uuid').uuid4()),
-            "user_id": TEMP_USER_ID,
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
             "date": today,
-            "time": now_utc().isoformat(),
-            "amount_ml": amount_ml,
-            "beverage_type": beverage_type,
+            "time": datetime.now(timezone.utc).isoformat(),
+            "amount_ml": log_data.amount_ml,
+            "beverage_type": log_data.beverage_type,
             "daily_total_ml": daily_total,
             "daily_target_ml": 2500,
             "progress_pct": (daily_total / 2500) * 100,
-            "created_at": now_utc().isoformat()
+            "created_at": datetime.now(timezone.utc).isoformat()
         }
         
         await db.hydration_logs.insert_one(log_entry)
+        log_entry.pop("_id", None)
         
-        logger.info(f"Hydration logged: {amount_ml}ml, total: {daily_total}ml")
+        logger.info(f"Hydration logged: {log_data.amount_ml}ml, total: {daily_total}ml")
         return success_response(
             data=log_entry,
             message="Hydration logged successfully"
@@ -54,17 +71,21 @@ async def log_water(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/today", response_model=dict)
-async def get_today_hydration(db=Depends(get_database)):
-    """Get today's hydration summary"""
+async def get_today_hydration(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
+    """Get today's hydration data"""
     try:
+        user_id = await get_user_id(authorization, db)
         today = date.today().isoformat()
         
-        logs = await db.hydration_logs.find(
-            {"user_id": TEMP_USER_ID, "date": today},
+        today_logs = await db.hydration_logs.find(
+            {"user_id": user_id, "date": today},
             {"_id": 0}
         ).to_list(100)
         
-        total_ml = sum(log.get("amount_ml", 0) for log in logs)
+        total_ml = sum(log.get("amount_ml", 0) for log in today_logs)
         target_ml = 2500
         
         return success_response(
@@ -73,10 +94,33 @@ async def get_today_hydration(db=Depends(get_database)):
                 "total_ml": total_ml,
                 "target_ml": target_ml,
                 "progress_pct": (total_ml / target_ml) * 100,
-                "logs": logs
+                "logs": today_logs
             },
             message="Today's hydration retrieved"
         )
     except Exception as e:
         logger.error(f"Error getting hydration: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/history", response_model=dict)
+async def get_hydration_history(
+    days: int = 7,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
+    """Get hydration history"""
+    try:
+        user_id = await get_user_id(authorization, db)
+        
+        logs = await db.hydration_logs.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(days * 10).to_list(100)
+        
+        return success_response(
+            data=logs,
+            message=f"Retrieved {len(logs)} hydration logs"
+        )
+    except Exception as e:
+        logger.error(f"Error getting history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
