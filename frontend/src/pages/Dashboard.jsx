@@ -28,6 +28,7 @@ import { getAuthHeaders } from '@/utils/auth';
 import { useTranslation } from 'react-i18next';
 
 const Dashboard = ({ currentUser, onLogout }) => {
+  const { t } = useTranslation();
   const [currentView, setCurrentView] = useState('dashboard');
   const [showSupport, setShowSupport] = useState(false);
   const [quickStats, setQuickStats] = useState({
