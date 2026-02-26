@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="40" time="4.893" timestamp="2026-02-26T06:05:29.299211+00:00" hostname="agent-env-c28f846e-ab8e-4b12-bd34-82d18144cde7"><testcase classname="backend.tests.test_privacy_auth.TestAuthEndpoints" name="test_01_login_user1" time="0.209" /><testcase classname="backend.tests.test_privacy_auth.TestAuthEndpoints" name="test_02_register_user2" time="0.107" /><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_profile_get_401" time="0.111" /><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_profile_post_401" time="0.109"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:73: in test_profile_post_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_profile_targets_401" time="0.097" /><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_nutrition_today_401" time="0.097"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:85: in test_nutrition_today_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_nutrition_log_401" time="0.099"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:94: in test_nutrition_log_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_hydration_today_401" time="0.112"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:100: in test_hydration_today_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_hydration_log_401" time="0.105"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:109: in test_hydration_log_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_prescriptions_get_401" time="0.119"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:115: in test_prescriptions_get_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_prescriptions_post_401" time="0.116"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:124: in test_prescriptions_post_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_emergency_contacts_get_401" time="0.109"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:130: in test_emergency_contacts_get_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_emergency_contacts_post_401" time="0.102"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:139: in test_emergency_contacts_post_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_health_coach_status_401" time="0.116"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:145: in test_health_coach_status_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_health_coach_chat_401" time="0.107"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:154: in test_health_coach_chat_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_loop_status_401" time="0.122" /><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_trends_summary_401" time="0.098"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:166: in test_trends_summary_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_wisdom_vault_entries_get_401" time="0.108"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:172: in test_wisdom_vault_entries_get_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_wisdom_vault_entries_post_401" time="0.095"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:181: in test_wisdom_vault_entries_post_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_biometrics_log_401" time="0.098"><failure message="AssertionError: Expected 401, got 500&#10;assert 500 == 401&#10; +  where 500 = &lt;Response [500]&gt;.status_code">backend/tests/test_privacy_auth.py:190: in test_biometrics_log_401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
+E   AssertionError: Expected 401, got 500
+E   assert 500 == 401
+E    +  where 500 = &lt;Response [500]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_privacy_auth.Test401WithoutAuth" name="test_medication_check_interactions_401" time="0.096" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user1_creates_prescription" time="0.094" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user2_creates_prescription" time="0.120" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user2_cannot_see_user1_prescriptions" time="0.100" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user1_creates_emergency_contact" time="0.108" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user2_cannot_see_user1_contacts" time="0.120" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user1_logs_hydration" time="0.096" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user2_cannot_see_user1_hydration" time="0.115" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user1_creates_wisdom_entry" time="0.093" /><testcase classname="backend.tests.test_privacy_auth.TestUserDataIsolation" name="test_user2_cannot_see_user1_wisdom" time="0.096" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_profile_with_auth" time="0.109" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_nutrition_today_with_auth" time="0.114" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_hydration_today_with_auth" time="0.120" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_prescriptions_with_auth" time="0.111" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_emergency_contacts_with_auth" time="0.108" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_health_coach_status_with_auth" time="0.105" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_loop_status_with_auth" time="0.108" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_trends_summary_with_auth" time="0.145" /><testcase classname="backend.tests.test_privacy_auth.TestAuthenticatedEndpointsWork" name="test_wisdom_vault_entries_with_auth" time="0.120" /><testcase classname="backend.tests.test_privacy_auth.TestMedicationSearch" name="test_medication_search_works" time="0.351" /></testsuite></testsuites>
