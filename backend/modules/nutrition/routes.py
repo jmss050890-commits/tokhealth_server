@@ -136,7 +136,7 @@ async def log_meal(
         # Create nutrition log as plain dict
         nutrition_log = {
             "id": str(__import__('uuid').uuid4()),
-            "user_id": TEMP_USER_ID,
+            "user_id": user_id,
             "meal_type": meal_data.meal_type,
             "food_items": [item.model_dump() for item in meal_data.food_items],
             "total_calories": total_calories,
@@ -194,7 +194,7 @@ async def get_today_nutrition(db=Depends(get_database)):
         
         logs = await db.nutrition_logs.find(
             {
-                "user_id": TEMP_USER_ID,
+                "user_id": user_id,
                 "meal_time": {"$regex": f"^{today}"}
             },
             {"_id": 0}
