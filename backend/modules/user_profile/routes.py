@@ -24,6 +24,9 @@ class UserProfileCreate(BaseModel):
     health_goals: List[str] = []
     medical_conditions: List[str] = []
     blood_type: Optional[str] = None
+    allergies: List[str] = []
+    food_tolerances: List[str] = []
+    spiritual_preference: Optional[str] = None
 
 class UserProfileUpdate(BaseModel):
     name: Optional[str] = None
@@ -35,6 +38,9 @@ class UserProfileUpdate(BaseModel):
     health_goals: Optional[List[str]] = None
     medical_conditions: Optional[List[str]] = None
     blood_type: Optional[str] = None
+    allergies: Optional[List[str]] = None
+    food_tolerances: Optional[List[str]] = None
+    spiritual_preference: Optional[str] = None
 
 def calculate_bmr(weight_kg: float, height_cm: float, age: int, gender: str) -> float:
     """Calculate Basal Metabolic Rate using Mifflin-St Jeor equation"""
