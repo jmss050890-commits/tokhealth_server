@@ -60,6 +60,8 @@ async def search_medication(
                 data=results[:15],
                 message=f"Found {len(results)} results"
             )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"RxNorm search error: {e}")
         return success_response(data=[], message="Search failed")
@@ -91,6 +93,8 @@ async def get_medication_info(
                         info[name.lower().replace(" ", "_")] = value
 
             return success_response(data=info, message="Medication info retrieved")
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"RxNorm info error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -139,6 +143,8 @@ async def check_interactions(
             },
             message="Interaction check complete"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Interaction check error: {e}")
         return success_response(

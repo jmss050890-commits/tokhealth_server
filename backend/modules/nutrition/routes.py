@@ -113,6 +113,8 @@ Be realistic with estimates. If you cannot identify a food, make your best guess
     except ImportError as e:
         logger.error(f"Import error: {e}")
         raise HTTPException(status_code=500, detail="AI vision not available")
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error analyzing photo: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -162,6 +164,8 @@ async def log_meal(
             data=nutrition_log,
             message="Meal logged successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error logging meal: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -184,6 +188,8 @@ async def get_nutrition_logs(
             data=logs,
             message=f"Retrieved {len(logs)} nutrition logs"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error retrieving logs: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -225,6 +231,8 @@ async def get_today_nutrition(
             },
             message="Today's nutrition retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting today's nutrition: {e}")
         raise HTTPException(status_code=500, detail=str(e))

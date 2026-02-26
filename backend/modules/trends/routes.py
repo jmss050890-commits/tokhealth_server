@@ -74,6 +74,8 @@ async def get_trends_summary(
             data=trends,
             message=f"Trends for last {days} days"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting trends: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -192,6 +194,8 @@ async def get_ai_insights(
             },
             message="Health insights generated"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error generating insights: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -283,6 +287,8 @@ async def get_goals_progress(
             },
             message="Goals progress retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting goals: {e}")
         raise HTTPException(status_code=500, detail=str(e))

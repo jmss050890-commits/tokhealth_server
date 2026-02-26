@@ -58,6 +58,8 @@ async def create_contact(
             data=contact,
             message="Emergency contact created successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating contact: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -80,6 +82,8 @@ async def get_contacts(
             data=contacts,
             message=f"Retrieved {len(contacts)} emergency contacts"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error retrieving contacts: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -104,6 +108,8 @@ async def delete_contact(
         
         logger.info(f"Emergency contact deleted: {contact_id}")
         return success_response(message="Contact deleted successfully")
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:

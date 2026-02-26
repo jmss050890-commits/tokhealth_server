@@ -47,6 +47,8 @@ async def get_loop_status(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting Loop status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -71,6 +73,8 @@ async def get_health_trends(
             data=metrics,
             message=f"Retrieved {len(metrics)} days of health trends"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:

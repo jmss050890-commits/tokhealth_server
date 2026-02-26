@@ -61,6 +61,8 @@ async def log_water(
             data=log_entry,
             message="Hydration logged successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error logging hydration: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -93,6 +95,8 @@ async def get_today_hydration(
             },
             message="Today's hydration retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting hydration: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -116,6 +120,8 @@ async def get_hydration_history(
             data=logs,
             message=f"Retrieved {len(logs)} hydration logs"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting history: {e}")
         raise HTTPException(status_code=500, detail=str(e))

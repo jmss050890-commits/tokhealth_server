@@ -56,6 +56,8 @@ async def get_fitbit_auth_url(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error generating Fitbit auth URL: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -136,6 +138,8 @@ async def fitbit_callback(
                 status_code=302
             )
             
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -228,6 +232,8 @@ async def get_fitbit_status(
             )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error checking Fitbit status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -256,6 +262,8 @@ async def disconnect_fitbit(
                 data=None,
                 message="Fitbit was not connected"
             )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -308,6 +316,8 @@ async def get_fitbit_steps_today(
                 data={"date": today, "steps": steps, "source": "fitbit"},
                 message="Steps retrieved from Fitbit"
             )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -368,6 +378,8 @@ async def get_fitbit_heart_rate_today(
             )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error fetching Fitbit heart rate: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -399,6 +411,8 @@ async def sync_fitbit_data(
                     steps_data = steps_response.json()
                     if "activities-steps" in steps_data and len(steps_data["activities-steps"]) > 0:
                         synced_data["steps"] = int(steps_data["activities-steps"][0].get("value", 0))
+            except HTTPException:
+                raise
             except Exception as e:
                 logger.error(f"Error syncing steps: {e}")
             
@@ -413,6 +427,8 @@ async def sync_fitbit_data(
                     if "activities-heart" in hr_data and len(hr_data["activities-heart"]) > 0:
                         heart_value = hr_data["activities-heart"][0].get("value", {})
                         synced_data["resting_heart_rate"] = heart_value.get("restingHeartRate")
+            except HTTPException:
+                raise
             except Exception as e:
                 logger.error(f"Error syncing heart rate: {e}")
             
@@ -427,6 +443,8 @@ async def sync_fitbit_data(
                     if "summary" in sleep_data:
                         total_minutes = sleep_data["summary"].get("totalMinutesAsleep", 0)
                         synced_data["sleep_hours"] = round(total_minutes / 60, 1)
+            except HTTPException:
+                raise
             except Exception as e:
                 logger.error(f"Error syncing sleep: {e}")
         
@@ -460,6 +478,8 @@ async def sync_fitbit_data(
             data=synced_data,
             message="Fitbit data synced successfully"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:

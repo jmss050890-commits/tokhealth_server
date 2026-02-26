@@ -74,6 +74,8 @@ async def register(user_data: UserRegister, db=Depends(get_database)):
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Registration error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -115,6 +117,8 @@ async def login(credentials: UserLogin, db=Depends(get_database)):
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Login error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -134,6 +138,8 @@ async def get_current_user(token: str, db=Depends(get_database)):
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Get user error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -151,6 +157,8 @@ async def logout(token: str, db=Depends(get_database)):
             data=None,
             message="Logged out successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Logout error: {e}")
         raise HTTPException(status_code=500, detail=str(e))

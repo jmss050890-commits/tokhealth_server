@@ -98,6 +98,8 @@ async def log_biometrics(
             data=log_entry,
             message="Biometric reading logged successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error logging biometrics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -145,6 +147,8 @@ async def get_today_biometrics(
             data=biometric_data,
             message="Today's biometrics retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting biometrics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -168,6 +172,8 @@ async def get_biometric_history(
             data=readings,
             message=f"Retrieved {len(readings)} biometric readings"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -252,6 +258,8 @@ async def get_biometric_zones(
             data={"zones": zones, "overall": overall},
             message="Biometric zones calculated"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error calculating zones: {e}")
         raise HTTPException(status_code=500, detail=str(e))

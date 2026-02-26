@@ -67,6 +67,8 @@ async def create_entry(
             data=entry,
             message="Entry created successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating entry: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -94,6 +96,8 @@ async def get_entries(
             data=entries,
             message=f"Retrieved {len(entries)} entries"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error retrieving entries: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -158,6 +162,8 @@ async def analyze_lab_result(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Lab analysis error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -180,6 +186,8 @@ async def get_lab_results(
             data=results,
             message=f"Retrieved {len(results)} lab results"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting lab results: {e}")
         raise HTTPException(status_code=500, detail=str(e))

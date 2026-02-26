@@ -35,6 +35,8 @@ async def get_reminders(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting reminders: {e}")
         raise HTTPException(status_code=500, detail=str(e))

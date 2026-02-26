@@ -173,6 +173,8 @@ async def create_or_update_profile(
             data=profile,
             message="Profile saved successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error saving profile: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -201,6 +203,8 @@ async def get_profile(
             data=profile,
             message="Profile retrieved"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -245,6 +249,8 @@ async def get_personalized_targets(
             data=targets,
             message="Personalized targets retrieved"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:

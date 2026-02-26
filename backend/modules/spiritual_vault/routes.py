@@ -74,6 +74,8 @@ async def create_entry(
             data=entry_doc,
             message="Entry saved to your Spiritual Vault"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating spiritual entry: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -102,6 +104,8 @@ async def get_entries(
             data=entries,
             message=f"Retrieved {len(entries)} entries"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting spiritual entries: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -133,6 +137,8 @@ async def add_prayer_request(
             data=prayer_doc,
             message="Prayer request added"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error adding prayer: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -160,6 +166,8 @@ async def get_prayer_requests(
             data=prayers,
             message=f"Retrieved {len(prayers)} prayer requests"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting prayers: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -191,6 +199,8 @@ async def mark_prayer_answered(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error marking prayer answered: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -217,6 +227,8 @@ async def delete_entry(
             data=None,
             message="Entry deleted"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -255,6 +267,8 @@ async def get_spiritual_stats(
             data=stats,
             message="Spiritual stats retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -339,6 +353,8 @@ Guidelines:
             data={"response": ai_response},
             message="Spiritual guidance provided"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting spiritual guidance: {e}")
         # Fallback response

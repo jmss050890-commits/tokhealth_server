@@ -76,6 +76,8 @@ async def log_manual_entry(
             data=update_data,
             message="Health data saved successfully"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error logging manual entry: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -165,6 +167,8 @@ async def import_csv_data(
             },
             message=f"Imported {imported_count} records" + (f" with {len(errors)} errors" if errors else "")
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error importing CSV: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -214,6 +218,8 @@ async def get_health_history(
             data=records,
             message=f"Retrieved {len(records)} records"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting history: {e}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -65,6 +65,8 @@ async def get_coach_status(
             },
             message="Health Coach status retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting coach status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -160,6 +162,8 @@ Important: You are NOT a doctor. Always encourage professional medical consultat
     except ImportError as e:
         logger.error(f"Import error: {e}")
         raise HTTPException(status_code=500, detail="AI integration not available")
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in chat: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -187,6 +191,8 @@ async def get_coach_messages(
             data=messages,
             message=f"Retrieved {len(messages)} coaching messages"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting messages: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -333,6 +339,8 @@ async def get_back_to_green_interventions(
             },
             message="Back to Green interventions retrieved"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting interventions: {e}")
         raise HTTPException(status_code=500, detail=str(e))

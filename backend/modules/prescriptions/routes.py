@@ -42,6 +42,8 @@ async def get_prescriptions(
             data=prescriptions,
             message=f"Retrieved {len(prescriptions)} prescriptions"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting prescriptions: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -77,6 +79,8 @@ async def create_prescription(
             data=prescription_doc,
             message="Prescription added"
         )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating prescription: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -103,6 +107,8 @@ async def delete_prescription(
             data=None,
             message="Prescription removed"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:

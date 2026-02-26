@@ -82,6 +82,8 @@ async def get_family_members(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error getting family members: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -143,6 +145,8 @@ async def send_family_invite(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error sending invite: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -175,6 +179,8 @@ async def get_pending_invites(
             },
             message=f"{len(received)} pending invites"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -223,6 +229,8 @@ async def respond_to_invite(
         )
     except HTTPException:
         raise
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error responding to invite: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -252,6 +260,8 @@ async def remove_family_member(
             data={"removed_user_id": target_user_id},
             message="Family member removed"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
@@ -329,6 +339,8 @@ async def get_family_dashboard(
             },
             message="Family dashboard retrieved"
         )
+    except HTTPException:
+        raise
     except HTTPException:
         raise
     except Exception as e:
