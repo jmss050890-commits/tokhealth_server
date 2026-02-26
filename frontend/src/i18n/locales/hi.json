@@ -1,0 +1,13 @@
+{
+  "app_name": "TokHealth",
+  "tagline": "लोगों को जीवित रखें",
+  "nav": { "dashboard": "डैशबोर्ड", "profile": "प्रोफ़ाइल", "logout": "लॉग आउट" },
+  "dashboard": { "welcome": "वापसी पर स्वागत है", "quick_stats": "त्वरित आँकड़े", "calories": "कैलोरी", "water": "पानी", "steps": "कदम", "heart_rate": "हृदय गति", "features": "सुविधाएँ", "support": "हमारे मिशन का समर्थन करें" },
+  "cards": { "loop": "द लूप", "loop_desc": "आपका स्वास्थ्य क्षेत्र", "coach": "स्वास्थ्य कोच", "coach_desc": "AI मार्गदर्शन", "nutrition": "पोषण", "nutrition_desc": "अपना भोजन ट्रैक करें", "biometrics": "बायोमेट्रिक्स", "biometrics_desc": "महत्वपूर्ण संकेत", "hydration": "जलयोजन", "hydration_desc": "पानी का सेवन", "prescriptions": "नुस्खे", "prescriptions_desc": "आपकी दवाइयाँ", "wisdom": "ज्ञान तिजोरी", "wisdom_desc": "डायरी और लैब", "spiritual": "आध्यात्मिक तिजोरी", "spiritual_desc": "आस्था और कृतज्ञता", "emergency": "आपातकालीन", "emergency_desc": "त्वरित संपर्क", "export": "चिकित्सा निर्यात", "export_desc": "रिपोर्ट प्रिंट करें", "trends": "स्वास्थ्य रुझान", "trends_desc": "आपके विश्लेषण", "family": "परिवार", "family_desc": "जुड़े हुए खाते", "import": "डेटा आयात", "import_desc": "CSV और उपकरण", "privacy": "डेटा गोपनीयता", "privacy_desc": "निर्यात और प्रबंधन", "healthkit": "Apple Health", "healthkit_desc": "HealthKit सिंक", "notifications": "अनुस्मारक", "notifications_desc": "सूचनाएँ", "barcode": "बारकोड स्कैनर", "barcode_desc": "खाद्य लेबल स्कैन करें" },
+  "auth": { "sign_in": "साइन इन", "sign_up": "साइन अप", "email": "ईमेल", "password": "पासवर्ड", "name": "पूरा नाम", "login_success": "वापसी पर स्वागत!", "register_success": "खाता बनाया गया!", "no_account": "खाता नहीं है?", "have_account": "पहले से खाता है?" },
+  "profile": { "title": "आपकी बेसलाइन", "personal_info": "व्यक्तिगत जानकारी", "allergies": "एलर्जी", "food_tolerances": "खाद्य असहिष्णुता", "spiritual_pref": "आध्यात्मिक प्राथमिकता", "save": "प्रोफ़ाइल सहेजें", "update": "प्रोफ़ाइल अपडेट करें" },
+  "coach": { "title": "आपका स्वास्थ्य कोच", "ask": "अपने कोच से पूछें", "placeholder": "अपना प्रश्न लिखें...", "thinking": "सोच रहा है...", "send_photo": "विश्लेषण के लिए फोटो भेजें" },
+  "common": { "loading": "लोड हो रहा है...", "save": "सहेजें", "cancel": "रद्द करें", "delete": "हटाएँ", "back": "वापस", "search": "खोजें", "add": "जोड़ें", "edit": "संपादित करें", "close": "बंद करें", "confirm": "पुष्टि करें", "today": "आज", "no_data": "अभी तक कोई डेटा नहीं", "error": "कुछ गलत हो गया", "success": "सफलता" },
+  "privacy": { "title": "डेटा गोपनीयता डैशबोर्ड", "subtitle": "आपका डेटा, आपका नियंत्रण", "export_data": "अपना डेटा निर्यात करें", "delete_account": "खाता हटाएँ", "records": "रिकॉर्ड", "total_records": "कुल रिकॉर्ड" },
+  "language": "भाषा"
+}

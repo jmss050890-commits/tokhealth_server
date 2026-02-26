@@ -1,0 +1,13 @@
+{
+  "app_name": "توك هيلث",
+  "tagline": "حافظ على حياة الناس",
+  "nav": { "dashboard": "لوحة التحكم", "profile": "الملف الشخصي", "logout": "تسجيل الخروج" },
+  "dashboard": { "welcome": "مرحبا بعودتك", "quick_stats": "إحصائيات سريعة", "calories": "السعرات الحرارية", "water": "الماء", "steps": "الخطوات", "heart_rate": "معدل ضربات القلب", "features": "الميزات", "support": "ادعم مهمتنا" },
+  "cards": { "loop": "الحلقة", "loop_desc": "منطقتك الصحية", "coach": "مدرب الصحة", "coach_desc": "إرشادات بالذكاء الاصطناعي", "nutrition": "التغذية", "nutrition_desc": "تتبع وجباتك", "biometrics": "القياسات الحيوية", "biometrics_desc": "تتبع العلامات", "hydration": "الترطيب", "hydration_desc": "استهلاك الماء", "prescriptions": "الوصفات الطبية", "prescriptions_desc": "أدويتك", "wisdom": "خزنة الحكمة", "wisdom_desc": "اليوميات والمختبر", "spiritual": "الخزنة الروحية", "spiritual_desc": "الإيمان والامتنان", "emergency": "الطوارئ", "emergency_desc": "جهات الاتصال السريعة", "export": "التصدير الطبي", "export_desc": "طباعة التقرير", "trends": "اتجاهات الصحة", "trends_desc": "تحليلاتك", "family": "العائلة", "family_desc": "الحسابات المرتبطة", "import": "استيراد البيانات", "import_desc": "CSV والأجهزة", "privacy": "خصوصية البيانات", "privacy_desc": "تصدير وإدارة", "healthkit": "أبل هيلث", "healthkit_desc": "مزامنة HealthKit", "notifications": "التذكيرات", "notifications_desc": "الإشعارات", "barcode": "ماسح الباركود", "barcode_desc": "مسح ملصقات الطعام" },
+  "auth": { "sign_in": "تسجيل الدخول", "sign_up": "إنشاء حساب", "email": "البريد الإلكتروني", "password": "كلمة المرور", "name": "الاسم الكامل", "login_success": "مرحبا بعودتك!", "register_success": "تم إنشاء الحساب!", "no_account": "ليس لديك حساب؟", "have_account": "لديك حساب بالفعل؟" },
+  "profile": { "title": "خط الأساس الخاص بك", "personal_info": "المعلومات الشخصية", "allergies": "الحساسية", "food_tolerances": "حساسيات الطعام", "spiritual_pref": "التفضيل الروحي", "save": "حفظ الملف الشخصي", "update": "تحديث الملف الشخصي" },
+  "coach": { "title": "مدربك الصحي", "ask": "اسأل مدربك الصحي", "placeholder": "اكتب سؤالك...", "thinking": "جاري التفكير...", "send_photo": "أرسل صورة للتحليل" },
+  "common": { "loading": "جاري التحميل...", "save": "حفظ", "cancel": "إلغاء", "delete": "حذف", "back": "رجوع", "search": "بحث", "add": "إضافة", "edit": "تعديل", "close": "إغلاق", "confirm": "تأكيد", "today": "اليوم", "no_data": "لا توجد بيانات بعد", "error": "حدث خطأ ما", "success": "نجاح" },
+  "privacy": { "title": "لوحة خصوصية البيانات", "subtitle": "بياناتك، تحكمك", "export_data": "تصدير بياناتك", "delete_account": "حذف الحساب", "records": "سجلات", "total_records": "إجمالي السجلات" },
+  "language": "اللغة"
+}

@@ -1,0 +1,13 @@
+{
+  "app_name": "TokHealth",
+  "tagline": "মানুষকে বাঁচিয়ে রাখুন",
+  "nav": { "dashboard": "ড্যাশবোর্ড", "profile": "প্রোফাইল", "logout": "লগ আউট" },
+  "dashboard": { "welcome": "স্বাগতম", "quick_stats": "দ্রুত পরিসংখ্যান", "calories": "ক্যালোরি", "water": "পানি", "steps": "পদক্ষেপ", "heart_rate": "হৃদস্পন্দন", "features": "বৈশিষ্ট্য", "support": "আমাদের মিশন সমর্থন করুন" },
+  "cards": { "loop": "দ্য লুপ", "loop_desc": "আপনার স্বাস্থ্য জোন", "coach": "স্বাস্থ্য কোচ", "coach_desc": "AI নির্দেশনা", "nutrition": "পুষ্টি", "nutrition_desc": "আপনার খাবার ট্র্যাক করুন", "biometrics": "বায়োমেট্রিক্স", "biometrics_desc": "গুরুত্বপূর্ণ লক্ষণ ট্র্যাক", "hydration": "হাইড্রেশন", "hydration_desc": "পানি গ্রহণ", "prescriptions": "প্রেসক্রিপশন", "prescriptions_desc": "আপনার ওষুধ", "wisdom": "জ্ঞান ভল্ট", "wisdom_desc": "ডায়েরি ও ল্যাব", "spiritual": "আধ্যাত্মিক ভল্ট", "spiritual_desc": "বিশ্বাস ও কৃতজ্ঞতা", "emergency": "জরুরি", "emergency_desc": "দ্রুত যোগাযোগ", "export": "মেডিকেল এক্সপোর্ট", "export_desc": "রিপোর্ট প্রিন্ট", "trends": "স্বাস্থ্য প্রবণতা", "trends_desc": "আপনার বিশ্লেষণ", "family": "পরিবার", "family_desc": "লিঙ্কড অ্যাকাউন্ট", "import": "ডেটা আমদানি", "import_desc": "CSV ও ডিভাইস", "privacy": "ডেটা গোপনীয়তা", "privacy_desc": "এক্সপোর্ট ও পরিচালনা", "healthkit": "Apple Health", "healthkit_desc": "HealthKit সিঙ্ক", "notifications": "অনুস্মারক", "notifications_desc": "বিজ্ঞপ্তি", "barcode": "বারকোড স্ক্যানার", "barcode_desc": "খাদ্য লেবেল স্ক্যান" },
+  "auth": { "sign_in": "সাইন ইন", "sign_up": "সাইন আপ", "email": "ইমেইল", "password": "পাসওয়ার্ড", "name": "পুরো নাম", "login_success": "স্বাগতম!", "register_success": "অ্যাকাউন্ট তৈরি হয়েছে!", "no_account": "অ্যাকাউন্ট নেই?", "have_account": "অ্যাকাউন্ট আছে?" },
+  "profile": { "title": "আপনার বেসলাইন", "personal_info": "ব্যক্তিগত তথ্য", "allergies": "অ্যালার্জি", "food_tolerances": "খাদ্য অসহিষ্ণুতা", "spiritual_pref": "আধ্যাত্মিক পছন্দ", "save": "প্রোফাইল সংরক্ষণ", "update": "প্রোফাইল আপডেট" },
+  "coach": { "title": "আপনার স্বাস্থ্য কোচ", "ask": "আপনার কোচকে জিজ্ঞাসা করুন", "placeholder": "আপনার প্রশ্ন লিখুন...", "thinking": "চিন্তা করছি...", "send_photo": "বিশ্লেষণের জন্য ছবি পাঠান" },
+  "common": { "loading": "লোড হচ্ছে...", "save": "সংরক্ষণ", "cancel": "বাতিল", "delete": "মুছুন", "back": "পিছনে", "search": "অনুসন্ধান", "add": "যোগ করুন", "edit": "সম্পাদনা", "close": "বন্ধ", "confirm": "নিশ্চিত", "today": "আজ", "no_data": "এখনো কোনো তথ্য নেই", "error": "কিছু ভুল হয়েছে", "success": "সফল" },
+  "privacy": { "title": "ডেটা গোপনীয়তা ড্যাশবোর্ড", "subtitle": "আপনার ডেটা, আপনার নিয়ন্ত্রণ", "export_data": "আপনার ডেটা এক্সপোর্ট করুন", "delete_account": "অ্যাকাউন্ট মুছুন", "records": "রেকর্ড", "total_records": "মোট রেকর্ড" },
+  "language": "ভাষা"
+}
