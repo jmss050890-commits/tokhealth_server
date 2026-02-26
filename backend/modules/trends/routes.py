@@ -82,11 +82,13 @@ async def get_trends_summary(
 async def get_ai_insights(
     days: int = Query(default=7, ge=1, le=30),
     member_id: Optional[str] = None,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get AI-generated health insights"""
     try:
-        user_id = member_id or TEMP_USER_ID
+        current_user_id = await get_user_id(authorization, db)
+        user_id = member_id or current_user_id
         start_date = datetime.now(timezone.utc) - timedelta(days=days)
         
         # Get recent data
