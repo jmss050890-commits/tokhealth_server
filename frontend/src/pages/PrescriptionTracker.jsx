@@ -437,6 +437,36 @@ const PrescriptionTracker = () => {
           </Card>
         )}
 
+        {/* Medicine Label Scanner */}
+        <Card className="bg-white/90 border-cyan-200">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Camera className="w-8 h-8 text-cyan-600" />
+              <div>
+                <p className="text-cyan-800 font-medium text-sm">Scan Medicine Label</p>
+                <p className="text-slate-500 text-xs">Take a photo of your medicine bottle or label</p>
+              </div>
+            </div>
+            <input
+              ref={medScannerRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleMedScan}
+              className="hidden"
+              data-testid="med-scanner-input"
+            />
+            <Button
+              onClick={() => medScannerRef.current?.click()}
+              disabled={scanningMed}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white"
+              data-testid="med-scanner-btn"
+            >
+              {scanningMed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* Interaction Checker */}
         {prescriptions.length >= 2 && (
           <Card className="bg-white/90 border-amber-200">
