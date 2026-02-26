@@ -75,11 +75,13 @@ async def create_entry(
 async def get_entries(
     entry_type: str = None,
     days: int = 30,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get wisdom vault entries"""
     try:
-        query = {"user_id": TEMP_USER_ID}
+        user_id = await get_user_id(authorization, db)
+        query = {"user_id": user_id}
         if entry_type:
             query["entry_type"] = entry_type
         
