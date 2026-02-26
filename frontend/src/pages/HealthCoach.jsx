@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2, Mic, MicOff } from 'lucide-react';
+import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2, Mic, MicOff, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
 
@@ -19,6 +19,8 @@ const HealthCoach = () => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
   const [sessionId] = useState(() => `session_${Date.now()}`);
+  const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
+  const photoInputRef = useRef(null);
   
   // Voice input states
   const [isListening, setIsListening] = useState(false);
