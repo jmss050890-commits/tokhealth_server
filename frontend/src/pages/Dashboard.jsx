@@ -24,6 +24,7 @@ import NotificationSettings from '@/pages/NotificationSettings';
 import BarcodeScanner from '@/pages/BarcodeScanner';
 import AskCoachButton from '@/components/AskCoachButton';
 import { getAuthHeaders } from '@/utils/auth';
+import i18n from '@/i18n';
 
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentView, setCurrentView] = useState('dashboard');
