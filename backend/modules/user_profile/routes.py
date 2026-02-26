@@ -131,11 +131,7 @@ async def create_or_update_profile(
 ):
     """Create or update user baseline profile"""
     try:
-        # Get user_id from auth token, fallback to temp for backward compatibility
-        if authorization:
-            user_id = await get_current_user_id(authorization, db)
-        else:
-            user_id = TEMP_USER_ID
+        user_id = await get_user_id(authorization, db)
         
         # Calculate personalized targets
         targets = calculate_targets(
