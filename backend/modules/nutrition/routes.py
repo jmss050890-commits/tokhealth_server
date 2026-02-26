@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, date, timezone
@@ -10,14 +10,18 @@ from dotenv import load_dotenv
 from core.database import get_database
 from models.nutrition import NutritionLog, NutritionLogCreate
 from utils.response import success_response, error_response
+from utils.auth import get_current_user_id
 
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# Temporary user_id for MVP (will add auth later)
-TEMP_USER_ID = "demo-user-001"
+
+async def get_user_id(authorization: str, db) -> str:
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 class PhotoAnalysisRequest(BaseModel):
     image_base64: str
