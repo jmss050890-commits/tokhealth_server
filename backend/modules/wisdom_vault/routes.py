@@ -33,7 +33,7 @@ async def create_entry(
         # Create entry as plain dict
         entry = {
             "id": str(__import__('uuid').uuid4()),
-            "user_id": TEMP_USER_ID,
+            "user_id": user_id,
             "entry_type": entry_data.entry_type,
             "content": {
                 "title": entry_data.title,
