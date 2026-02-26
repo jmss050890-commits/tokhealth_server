@@ -23,7 +23,6 @@ import AppleHealthKit from '@/pages/AppleHealthKit';
 import NotificationSettings from '@/pages/NotificationSettings';
 import BarcodeScanner from '@/pages/BarcodeScanner';
 import AskCoachButton from '@/components/AskCoachButton';
-import LanguageSelector from '@/components/LanguageSelector';
 import { getAuthHeaders } from '@/utils/auth';
 
 const Dashboard = ({ currentUser, onLogout }) => {
