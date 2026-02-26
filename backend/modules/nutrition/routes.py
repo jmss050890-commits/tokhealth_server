@@ -28,9 +28,14 @@ class PhotoAnalysisRequest(BaseModel):
     meal_type: str = "meal"
 
 @router.post("/analyze-photo", response_model=dict)
-async def analyze_food_photo(request: PhotoAnalysisRequest, db=Depends(get_database)):
+async def analyze_food_photo(
+    request: PhotoAnalysisRequest,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Analyze a food photo using AI vision to identify foods and estimate nutrition"""
     try:
+        user_id = await get_user_id(authorization, db)
         from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
         
         api_key = os.environ.get("EMERGENT_LLM_KEY")
