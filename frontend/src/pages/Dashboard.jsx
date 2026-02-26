@@ -303,7 +303,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
               data-testid="profile-button"
             >
               <User className="w-4 h-4 mr-1" />
-              {currentUser?.name || 'Profile'}
+              {currentUser?.name || t('nav.profile')}
             </Button>
             <Button
               onClick={onLogout}
@@ -316,7 +316,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
             </Button>
           </div>
         </div>
-        <p className="text-slate-600 text-sm">Your AI-powered health companion</p>
+        <p className="text-slate-600 text-sm">{t('dashboard.subtitle')}</p>
       </div>
 
       {/* Main Content */}
@@ -333,15 +333,15 @@ const Dashboard = ({ currentUser, onLogout }) => {
                   <div className="absolute inset-0 bg-white/20 blur-2xl rounded-full"></div>
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-white">THE LOOP</h2>
-              <p className="text-white/90">See your complete health status at a glance</p>
+              <h2 className="text-2xl font-bold text-white">{t('cards.loop').toUpperCase()}</h2>
+              <p className="text-white/90">{t('dashboard.loop_subtitle')}</p>
               <Button 
                 className="bg-white hover:bg-sky-50 text-sky-700 font-semibold px-8 py-6 text-lg shadow-lg"
                 data-testid="show-loop-button"
                 onClick={() => setCurrentView('loop')}
               >
                 <Activity className="mr-2 h-5 w-5" />
-                SHOW THE LOOP
+                {t('dashboard.show_loop')}
               </Button>
             </div>
           </CardContent>
@@ -350,12 +350,12 @@ const Dashboard = ({ currentUser, onLogout }) => {
         {/* Main Features Grid - Daily Essentials */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {[
-            { key: 'biometrics', icon: Activity, color: 'rose', testId: 'biometrics-card', desc: 'Track vitals' },
-            { key: 'nutrition', icon: Heart, color: 'emerald', testId: 'nutrition-card', desc: 'Track meals' },
-            { key: 'coach', icon: Activity, color: 'sky', testId: 'coach-card', desc: 'AI guidance' },
-            { key: 'prescriptions', icon: Pill, color: 'pink', testId: 'prescriptions-card', desc: 'Your meds' },
-            { key: 'hydration', icon: Droplets, color: 'cyan', testId: 'hydration-card', desc: 'Water intake' },
-            { key: 'wisdom', icon: BookOpen, color: 'violet', testId: 'wisdom-card', desc: 'Journal & labs' },
+            { key: 'biometrics', icon: Activity, color: 'rose', testId: 'biometrics-card' },
+            { key: 'nutrition', icon: Heart, color: 'emerald', testId: 'nutrition-card' },
+            { key: 'coach', icon: Activity, color: 'sky', testId: 'coach-card' },
+            { key: 'prescriptions', icon: Pill, color: 'pink', testId: 'prescriptions-card' },
+            { key: 'hydration', icon: Droplets, color: 'cyan', testId: 'hydration-card' },
+            { key: 'wisdom', icon: BookOpen, color: 'violet', testId: 'wisdom-card' },
           ].map(item => (
             <Card
               key={item.key}
@@ -367,8 +367,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className={`w-10 h-10 rounded-full bg-${item.color}-100 flex items-center justify-center`}>
                   <item.icon className={`w-5 h-5 text-${item.color}-600`} />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t(`cards.${item.key}`)}</span>
-                <p className="text-slate-500 text-xs">{item.desc}</p>
+                <span className="text-slate-800 text-sm font-semibold">{t(`cards.${item.key}`)}</span>
+                <p className="text-slate-500 text-xs">{t(`cards.${item.key}_desc`)}</p>
               </CardContent>
             </Card>
           ))}
@@ -378,16 +378,25 @@ const Dashboard = ({ currentUser, onLogout }) => {
         <div className="space-y-2">
           <button
             onClick={() => setShowMore(!showMore)}
-            className="w-full text-center py-2 text-sky-600 text-sm font-medium hover:text-sky-700"
+            className="w-full flex items-center justify-center gap-2 py-2 text-sky-600 text-sm font-medium hover:text-sky-700"
             data-testid="show-more-btn"
           >
-            {showMore ? 'Show Less' : 'More Features'}
+            {showMore ? (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                {t('dashboard.show_less')}
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                {t('dashboard.more_features')}
+              </>
+            )}
           </button>
 
           {showMore && (
             <div className="grid grid-cols-3 gap-2">
               {[
-                { key: 'loop', view: 'loop', icon: Activity, color: 'sky', testId: 'loop-card-more' },
                 { key: 'spiritual', view: 'spiritual', icon: Sparkles, color: 'purple', testId: 'spiritual-card' },
                 { key: 'emergency', view: 'emergency', icon: Phone, color: 'orange', testId: 'emergency-card' },
                 { key: 'barcode', view: 'barcode', icon: ScanLine, color: 'emerald', testId: 'barcode-card' },
@@ -409,7 +418,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                     <div className={`w-8 h-8 rounded-full bg-${item.color}-100 flex items-center justify-center`}>
                       <item.icon className={`w-4 h-4 text-${item.color}-600`} />
                     </div>
-                    <span className="text-slate-700 text-xs font-medium">{i18n.t(`cards.${item.key}`)}</span>
+                    <span className="text-slate-700 text-xs font-medium">{t(`cards.${item.key}`)}</span>
                   </CardContent>
                 </Card>
               ))}
@@ -420,27 +429,27 @@ const Dashboard = ({ currentUser, onLogout }) => {
         {/* Quick Stats */}
         <Card className="bg-white/80 backdrop-blur border-sky-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-slate-800 text-sm">Today's Quick Stats</CardTitle>
+            <CardTitle className="text-slate-800 text-sm">{t('dashboard.today_stats')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 gap-2">
               <div className="text-center">
-                <div className="text-slate-500 text-xs mb-1">Calories</div>
+                <div className="text-slate-500 text-xs mb-1">{t('dashboard.calories')}</div>
                 <div className="text-lg font-bold text-slate-800">{quickStats.calories}</div>
                 <div className="text-xs text-slate-400">/ {quickStats.caloriesTarget}</div>
               </div>
               <div className="text-center">
-                <div className="text-slate-500 text-xs mb-1">Protein</div>
+                <div className="text-slate-500 text-xs mb-1">{t('dashboard.protein')}</div>
                 <div className="text-lg font-bold text-slate-800">{quickStats.protein}g</div>
                 <div className="text-xs text-slate-400">/ {quickStats.proteinTarget}g</div>
               </div>
               <div className="text-center">
-                <div className="text-slate-500 text-xs mb-1">Steps</div>
+                <div className="text-slate-500 text-xs mb-1">{t('dashboard.steps')}</div>
                 <div className="text-lg font-bold text-slate-800">{quickStats.steps}</div>
                 <div className="text-xs text-slate-400">/ {(quickStats.stepsTarget/1000).toFixed(0)}k</div>
               </div>
               <div className="text-center">
-                <div className="text-slate-500 text-xs mb-1">Water</div>
+                <div className="text-slate-500 text-xs mb-1">{t('dashboard.water')}</div>
                 <div className="text-lg font-bold text-slate-800">{(quickStats.water/1000).toFixed(1)}</div>
                 <div className="text-xs text-slate-400">/ {(quickStats.waterTarget/1000).toFixed(1)}L</div>
               </div>
@@ -468,10 +477,10 @@ const Dashboard = ({ currentUser, onLogout }) => {
           className="text-xs text-purple-500 hover:text-purple-700 font-medium transition-colors"
         >
           <Heart className="w-3 h-3 inline mr-1" />
-          Support Our Mission
+          {t('dashboard.support')}
         </button>
         <p className="text-xs text-sky-600/70 font-medium">
-          TokHealth v1.0 | Keep People Alive
+          TokHealth v1.0 | {t('tagline')}
         </p>
       </div>
     </div>
