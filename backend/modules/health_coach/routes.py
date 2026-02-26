@@ -70,20 +70,24 @@ async def get_coach_status(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/chat", response_model=dict)
-async def chat_with_coach(chat_message: ChatMessage, db=Depends(get_database)):
+async def chat_with_coach(
+    chat_message: ChatMessage,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Chat with AI Health Coach using GPT-5.2"""
     try:
+        user_id = await get_user_id(authorization, db)
         from emergentintegrations.llm.chat import LlmChat, UserMessage
         
         api_key = os.environ.get("EMERGENT_LLM_KEY")
         if not api_key:
             raise HTTPException(status_code=500, detail="LLM API key not configured")
         
-        session_id = f"{TEMP_USER_ID}_{chat_message.session_id}"
+        session_id = f"{user_id}_{chat_message.session_id}"
         
-        # Get user's health context
         loop_status = await db.loop_daily.find_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0},
             sort=[("date", -1)]
         )
