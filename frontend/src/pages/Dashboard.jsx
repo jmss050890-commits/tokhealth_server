@@ -224,6 +224,36 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <SpiritualVault />
+        <AskCoachButton context="User is viewing their spiritual journal and prayers" pageTitle="Spiritual Vault" />
+      </div>
+    );
+  }
+
+  if (currentView === 'privacy') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <DataPrivacy />
+      </div>
+    );
+  }
+
+  if (currentView === 'healthkit') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <AppleHealthKit />
+        <AskCoachButton context="User is setting up Apple HealthKit sync" pageTitle="Apple HealthKit" />
+      </div>
+    );
+  }
+
+  if (currentView === 'notifications') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <NotificationSettings />
+        <AskCoachButton context="User is setting up health reminders and notifications" pageTitle="Notifications" />
       </div>
     );
   }
