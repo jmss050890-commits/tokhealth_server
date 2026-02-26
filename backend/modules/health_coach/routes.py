@@ -142,7 +142,7 @@ Important: You are NOT a doctor. Always encourage professional medical consultat
         
         # Store message in database
         await db.health_coach_messages.insert_one({
-            "user_id": TEMP_USER_ID,
+            "user_id": user_id,
             "session_id": session_id,
             "user_message": chat_message.message,
             "coach_response": response,
