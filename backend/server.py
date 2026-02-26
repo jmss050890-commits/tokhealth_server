@@ -25,6 +25,7 @@ from modules.auth.routes import router as auth_router
 from modules.import_data.routes import router as import_router
 from modules.fitbit.routes import router as fitbit_router
 from modules.spiritual_vault.routes import router as spiritual_router
+from modules.medication.routes import router as medication_router
 
 # Setup logging
 logger = setup_logging()
@@ -82,6 +83,7 @@ api_router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 api_router.include_router(import_router, prefix="/import", tags=["Data Import"])
 api_router.include_router(fitbit_router, prefix="/fitbit", tags=["Fitbit"])
 api_router.include_router(spiritual_router, prefix="/spiritual", tags=["Spiritual Vault"])
+api_router.include_router(medication_router, prefix="/medication", tags=["Medication"])
 
 # Mount the API router
 app.include_router(api_router)
