@@ -678,6 +678,9 @@ const Dashboard = ({ currentUser, onLogout }) => {
         </div>
       )}
 
+      {/* Floating AI Coach */}
+      <AskCoachButton context="User is on the main dashboard viewing their health overview" pageTitle="Dashboard" />
+
       {/* Footer */}
       <div className="max-w-6xl mx-auto mt-6 text-center space-y-2">
         <button 
