@@ -399,11 +399,55 @@ const PrescriptionTracker = () => {
           </Card>
         )}
 
+        {/* Interaction Checker */}
+        {prescriptions.length >= 2 && (
+          <Card className="bg-white/90 border-amber-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 text-sm flex items-center">
+                <Shield className="w-4 h-4 mr-2 text-amber-600" />
+                Drug Interaction Checker
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-slate-500 text-xs">
+                Check for potential interactions between your {prescriptions.length} medications
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {prescriptions.map((med, i) => (
+                  <span key={i} className="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">
+                    {med.medication_name}
+                  </span>
+                ))}
+              </div>
+              <Button
+                onClick={checkInteractions}
+                disabled={checkingInteractions}
+                className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                data-testid="check-interactions-btn"
+              >
+                {checkingInteractions ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Checking Interactions...</>
+                ) : (
+                  <><Shield className="w-4 h-4 mr-2" />Check Interactions</>
+                )}
+              </Button>
+
+              {interactionResult && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-2">
+                  <p className="text-slate-700 text-sm whitespace-pre-wrap">{interactionResult.analysis}</p>
+                  <p className="text-amber-600 text-xs mt-2 italic">{interactionResult.disclaimer}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Add Button */}
         {!showAddForm && (
           <Button
             onClick={() => setShowAddForm(true)}
             className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-5"
+            data-testid="add-medication-btn"
           >
             <Plus className="w-5 h-5 mr-2" />
             Add Medication
