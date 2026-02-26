@@ -12,19 +12,14 @@ from utils.auth import get_current_user_id
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
-
 class HydrationLog(BaseModel):
     amount_ml: int = 250
     beverage_type: str = "water"
 
 async def get_user_id(authorization: str, db) -> str:
-    if authorization:
-        try:
-            return await get_current_user_id(authorization, db)
-        except:
-            pass
-    return TEMP_USER_ID
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 @router.post("/log", response_model=dict)
 async def log_water(

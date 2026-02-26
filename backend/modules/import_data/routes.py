@@ -13,8 +13,6 @@ from utils.auth import get_current_user_id
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
-
 class ManualHealthEntry(BaseModel):
     date: str  # YYYY-MM-DD
     steps: Optional[int] = None
@@ -27,13 +25,10 @@ class ManualHealthEntry(BaseModel):
     water_ml: Optional[int] = None
 
 async def get_user_id(authorization: str, db) -> str:
-    """Get user_id from auth or fallback to temp"""
-    if authorization:
-        try:
-            return await get_current_user_id(authorization, db)
-        except:
-            pass
-    return TEMP_USER_ID
+    """Get user_id from auth token - requires authentication"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 @router.post("/manual", response_model=dict)
 async def log_manual_entry(

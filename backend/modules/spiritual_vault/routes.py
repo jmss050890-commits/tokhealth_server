@@ -20,7 +20,6 @@ except ImportError:
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
 EMERGENT_LLM_KEY = os.getenv("EMERGENT_LLM_KEY", "")
 
 class SpiritualEntry(BaseModel):
@@ -40,13 +39,10 @@ class SpiritualGuidanceRequest(BaseModel):
     context: Optional[str] = "general"  # general, comfort, gratitude, scripture, meditation
 
 async def get_user_id(authorization: str, db) -> str:
-    """Get user_id from auth or fallback to temp"""
-    if authorization:
-        try:
-            return await get_current_user_id(authorization, db)
-        except:
-            pass
-    return TEMP_USER_ID
+    """Get user_id from auth token - requires authentication"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 @router.post("/entry", response_model=dict)
 async def create_entry(
