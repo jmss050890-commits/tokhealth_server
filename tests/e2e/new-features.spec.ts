@@ -60,7 +60,7 @@ test.describe('P1 - User Profile New Fields', () => {
   });
 
   test('should display allergies input field', async ({ page }) => {
-    await page.getByTestId('profile-button').click({ force: true });
+    await page.getByTestId('profile-button').click();
     await expect(page.getByTestId('user-profile')).toBeVisible({ timeout: 10000 });
     
     // Allergies input should be present
