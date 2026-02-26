@@ -433,6 +433,26 @@ const HealthCoach = () => {
 
             {/* Input */}
             <div className="flex space-x-2">
+              {/* Camera Button */}
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handlePhotoAnalysis}
+                className="hidden"
+                data-testid="coach-photo-input"
+              />
+              <Button
+                onClick={() => photoInputRef.current?.click()}
+                variant="outline"
+                className="border-sky-300 text-sky-600 hover:bg-sky-50"
+                disabled={loading || analyzingPhoto}
+                data-testid="coach-camera-btn"
+              >
+                {analyzingPhoto ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
+              </Button>
+
               {/* Microphone Button */}
               {speechSupported && (
                 <Button
