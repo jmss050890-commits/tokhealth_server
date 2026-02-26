@@ -19,10 +19,16 @@ async def get_user_id(authorization: str, db) -> str:
     return await get_current_user_id(authorization, db)
 
 @router.post("/entries", response_model=dict)
-async def create_entry(entry_data: WisdomVaultEntryCreate, db=Depends(get_database)):
+async def create_entry(
+    entry_data: WisdomVaultEntryCreate,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Create new wisdom vault entry (journal, thought dump, etc.)"""
     try:
-        from datetime import datetime
+        from datetime import datetime, timezone
+
+        user_id = await get_user_id(authorization, db)
         
         # Create entry as plain dict
         entry = {
