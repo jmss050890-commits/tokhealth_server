@@ -199,11 +199,13 @@ async def get_ai_insights(
 @router.get("/goals", response_model=dict)
 async def get_goals_progress(
     member_id: Optional[str] = None,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get progress towards health goals"""
     try:
-        user_id = member_id or TEMP_USER_ID
+        current_user_id = await get_user_id(authorization, db)
+        user_id = member_id or current_user_id
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         
         # Get user profile for targets
