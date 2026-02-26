@@ -189,9 +189,13 @@ async def get_nutrition_logs(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/today", response_model=dict)
-async def get_today_nutrition(db=Depends(get_database)):
+async def get_today_nutrition(
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Get today's nutrition summary"""
     try:
+        user_id = await get_user_id(authorization, db)
         today = date.today().isoformat()
         
         logs = await db.nutrition_logs.find(
