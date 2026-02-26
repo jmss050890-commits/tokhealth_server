@@ -184,11 +184,7 @@ async def get_profile(
 ):
     """Get user baseline profile"""
     try:
-        # Get user_id from auth token, fallback to temp for backward compatibility
-        if authorization:
-            user_id = await get_current_user_id(authorization, db)
-        else:
-            user_id = TEMP_USER_ID
+        user_id = await get_user_id(authorization, db)
             
         profile = await db.user_profiles.find_one(
             {"user_id": user_id},
