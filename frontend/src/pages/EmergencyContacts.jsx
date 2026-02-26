@@ -120,7 +120,8 @@ const EmergencyContacts = () => {
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/emergency-contacts/${contactId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: getAuthHeaders()
       });
 
       const data = await response.json();
