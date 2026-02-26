@@ -345,325 +345,74 @@ const Dashboard = ({ currentUser, onLogout }) => {
           </CardContent>
         </Card>
 
-        {/* Quick Access Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Biometrics */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer" 
-            data-testid="biometrics-card"
-            onClick={() => setCurrentView('biometrics')}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-rose-600" />
+        {/* Main Features Grid - Daily Essentials */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {[
+            { key: 'biometrics', icon: Activity, color: 'rose', testId: 'biometrics-card', desc: 'Track vitals' },
+            { key: 'nutrition', icon: Heart, color: 'emerald', testId: 'nutrition-card', desc: 'Track meals' },
+            { key: 'coach', icon: Activity, color: 'sky', testId: 'coach-card', desc: 'AI guidance' },
+            { key: 'prescriptions', icon: Pill, color: 'pink', testId: 'prescriptions-card', desc: 'Your meds' },
+            { key: 'hydration', icon: Droplets, color: 'cyan', testId: 'hydration-card', desc: 'Water intake' },
+            { key: 'wisdom', icon: BookOpen, color: 'violet', testId: 'wisdom-card', desc: 'Journal & labs' },
+          ].map(item => (
+            <Card
+              key={item.key}
+              className={`bg-white/80 backdrop-blur border-sky-200 hover:border-${item.color}-400 hover:shadow-lg transition-all cursor-pointer`}
+              onClick={() => setCurrentView(item.key === 'coach' ? 'coach' : item.key)}
+              data-testid={item.testId}
+            >
+              <CardContent className="p-4 flex flex-col items-center text-center space-y-2">
+                <div className={`w-10 h-10 rounded-full bg-${item.color}-100 flex items-center justify-center`}>
+                  <item.icon className={`w-5 h-5 text-${item.color}-600`} />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.biometrics')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Track vitals</p>
-              <Button variant="outline" className="w-full border-rose-300 text-rose-600 hover:bg-rose-50 text-xs py-1">
-                Log Vitals
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Nutrition */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer" 
-            data-testid="nutrition-card"
-            onClick={() => setCurrentView('nutrition')}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-emerald-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.nutrition')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Track meals</p>
-              <Button variant="outline" className="w-full border-emerald-300 text-emerald-600 hover:bg-emerald-50 text-xs py-1">
-                Log Meal
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* AI Coach */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer" 
-            data-testid="coach-card"
-            onClick={() => setCurrentView('coach')}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-sky-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.coach')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Get guidance</p>
-              <Button variant="outline" className="w-full border-sky-300 text-sky-600 hover:bg-sky-50 text-xs py-1">
-                View Coach
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Wisdom Vault */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer" 
-            data-testid="wisdom-card"
-            onClick={() => setCurrentView('wisdom')}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-violet-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.wisdom')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Journal & wellness</p>
-              <Button variant="outline" className="w-full border-violet-300 text-violet-600 hover:bg-violet-50 text-xs py-1">
-                New Entry
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Hydration */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-cyan-400 hover:shadow-lg transition-all cursor-pointer" 
-            data-testid="hydration-card"
-            onClick={() => setCurrentView('hydration')}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center">
-                  <Droplets className="w-4 h-4 text-cyan-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.hydration')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="mb-2">
-                <div className="flex justify-between text-xs text-slate-500 mb-1">
-                  <span>Today</span>
-                  <span>0 / 2.5L</span>
-                </div>
-                <div className="w-full bg-slate-200 rounded-full h-1.5">
-                  <div className="bg-cyan-500 h-1.5 rounded-full" style={{width: '0%'}}></div>
-                </div>
-              </div>
-              <Button variant="outline" className="w-full border-cyan-300 text-cyan-600 hover:bg-cyan-50 text-xs py-1">
-                + Log Water
-              </Button>
-            </CardContent>
-          </Card>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t(`cards.${item.key}`)}</span>
+                <p className="text-slate-500 text-xs">{item.desc}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Secondary Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Emergency Contacts */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-orange-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('emergency')}
-            data-testid="emergency-card"
+        {/* More Features - Expandable */}
+        <div className="space-y-2">
+          <button
+            onClick={() => setShowMore(!showMore)}
+            className="w-full text-center py-2 text-sky-600 text-sm font-medium hover:text-sky-700"
+            data-testid="show-more-btn"
           >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-orange-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.emergency')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Quick contacts & 911</p>
-              <Button variant="outline" className="w-full border-orange-300 text-orange-600 hover:bg-orange-50 text-xs py-1">
-                Manage
-              </Button>
-            </CardContent>
-          </Card>
+            {showMore ? 'Show Less' : 'More Features'}
+          </button>
 
-          {/* Prescriptions */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-pink-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('prescriptions')}
-            data-testid="prescriptions-card"
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
-                  <Pill className="w-4 h-4 text-pink-600" />
-                </div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.prescriptions')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-slate-500 text-xs mb-2">Track medications</p>
-              <Button variant="outline" className="w-full border-pink-300 text-pink-600 hover:bg-pink-50 text-xs py-1">
-                View Meds
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Medical Export */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('export')}
-            data-testid="export-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                <FileText className="w-4 h-4 text-teal-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.export')}</span>
-                <p className="text-slate-500 text-xs">Print for doctor</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Family */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-violet-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('family')}
-            data-testid="family-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
-                <Users className="w-4 h-4 text-violet-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.family')}</span>
-                <p className="text-slate-500 text-xs">Multi-user</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Health Trends */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('trends')}
-            data-testid="trends-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-amber-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.trends')}</span>
-                <p className="text-slate-500 text-xs">Analytics & insights</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Import Data */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-cyan-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('import')}
-            data-testid="import-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center">
-                <Upload className="w-4 h-4 text-cyan-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.import')}</span>
-                <p className="text-slate-500 text-xs">CSV & devices</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Spiritual Vault */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-purple-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('spiritual')}
-            data-testid="spiritual-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-purple-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.spiritual')}</span>
-                <p className="text-slate-500 text-xs">Faith & gratitude</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Data Privacy */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('privacy')}
-            data-testid="privacy-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
-                <Shield className="w-4 h-4 text-sky-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.privacy')}</span>
-                <p className="text-slate-500 text-xs">Export & manage</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Apple HealthKit */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-rose-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('healthkit')}
-            data-testid="healthkit-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">
-                <Heart className="w-4 h-4 text-rose-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.healthkit')}</span>
-                <p className="text-slate-500 text-xs">HealthKit sync</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Notifications */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('notifications')}
-            data-testid="notifications-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                <Bell className="w-4 h-4 text-amber-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.notifications')}</span>
-                <p className="text-slate-500 text-xs">Notifications</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Barcode Scanner */}
-          <Card 
-            className="bg-white/80 backdrop-blur border-sky-200 hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer"
-            onClick={() => setCurrentView('barcode')}
-            data-testid="barcode-card"
-          >
-            <CardContent className="p-3 flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                <ScanLine className="w-4 h-4 text-emerald-600" />
-              </div>
-              <div>
-                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.barcode')}</span>
-                <p className="text-slate-500 text-xs">Scan food labels</p>
-              </div>
-            </CardContent>
-          </Card>
+          {showMore && (
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { key: 'loop', view: 'loop', icon: Activity, color: 'sky', testId: 'loop-card-more' },
+                { key: 'spiritual', view: 'spiritual', icon: Sparkles, color: 'purple', testId: 'spiritual-card' },
+                { key: 'emergency', view: 'emergency', icon: Phone, color: 'orange', testId: 'emergency-card' },
+                { key: 'barcode', view: 'barcode', icon: ScanLine, color: 'emerald', testId: 'barcode-card' },
+                { key: 'trends', view: 'trends', icon: BarChart3, color: 'amber', testId: 'trends-card' },
+                { key: 'export', view: 'export', icon: FileText, color: 'teal', testId: 'export-card' },
+                { key: 'family', view: 'family', icon: Users, color: 'violet', testId: 'family-card' },
+                { key: 'import', view: 'import', icon: Upload, color: 'cyan', testId: 'import-card' },
+                { key: 'privacy', view: 'privacy', icon: Shield, color: 'sky', testId: 'privacy-card' },
+                { key: 'healthkit', view: 'healthkit', icon: Heart, color: 'rose', testId: 'healthkit-card' },
+                { key: 'notifications', view: 'notifications', icon: Bell, color: 'amber', testId: 'notifications-card' },
+              ].map(item => (
+                <Card
+                  key={item.key}
+                  className="bg-white/80 backdrop-blur border-slate-200 hover:shadow-md transition-all cursor-pointer"
+                  onClick={() => setCurrentView(item.view)}
+                  data-testid={item.testId}
+                >
+                  <CardContent className="p-3 flex flex-col items-center text-center space-y-1">
+                    <div className={`w-8 h-8 rounded-full bg-${item.color}-100 flex items-center justify-center`}>
+                      <item.icon className={`w-4 h-4 text-${item.color}-600`} />
+                    </div>
+                    <span className="text-slate-700 text-xs font-medium">{i18n.t(`cards.${item.key}`)}</span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Quick Stats */}
