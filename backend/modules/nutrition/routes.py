@@ -118,9 +118,14 @@ Be realistic with estimates. If you cannot identify a food, make your best guess
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/log", response_model=dict)
-async def log_meal(meal_data: NutritionLogCreate, db=Depends(get_database)):
+async def log_meal(
+    meal_data: NutritionLogCreate,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
     """Log a meal with nutrition information"""
     try:
+        user_id = await get_user_id(authorization, db)
         # Calculate totals
         total_calories = sum(item.calories for item in meal_data.food_items)
         total_protein = sum(item.protein_g for item in meal_data.food_items)
