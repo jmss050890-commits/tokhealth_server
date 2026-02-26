@@ -100,6 +100,48 @@ async def get_medication_info(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/lookup/{drug_name}", response_model=dict)
+async def lookup_drug_details(
+    drug_name: str,
+    authorization: str = Header(None),
+    db=Depends(get_database)
+):
+    """Look up drug details from OpenFDA"""
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            # Search OpenFDA for drug label info
+            response = await client.get(
+                "https://api.fda.gov/drug/label.json",
+                params={"search": f'openfda.brand_name:"{drug_name}"+openfda.generic_name:"{drug_name}"', "limit": 3}
+            )
+
+            results = []
+            if response.status_code == 200:
+                data = response.json()
+                for item in data.get("results", []):
+                    openfda = item.get("openfda", {})
+                    results.append({
+                        "brand_name": openfda.get("brand_name", ["N/A"])[0] if openfda.get("brand_name") else "N/A",
+                        "generic_name": openfda.get("generic_name", ["N/A"])[0] if openfda.get("generic_name") else "N/A",
+                        "manufacturer": openfda.get("manufacturer_name", ["N/A"])[0] if openfda.get("manufacturer_name") else "N/A",
+                        "purpose": (item.get("purpose", ["N/A"]) or ["N/A"])[0][:200],
+                        "warnings": (item.get("warnings", ["N/A"]) or ["N/A"])[0][:500],
+                        "dosage": (item.get("dosage_and_administration", ["N/A"]) or ["N/A"])[0][:300],
+                        "side_effects": (item.get("adverse_reactions", ["N/A"]) or ["N/A"])[0][:500],
+                        "drug_class": openfda.get("pharm_class_epc", ["N/A"])[0] if openfda.get("pharm_class_epc") else "N/A"
+                    })
+
+            return success_response(
+                data=results,
+                message=f"Found {len(results)} results for '{drug_name}'"
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Drug lookup error: {e}")
+        return success_response(data=[], message="Drug lookup unavailable")
+
+
 @router.post("/check-interactions", response_model=dict)
 async def check_interactions(
     request: InteractionCheckRequest,
