@@ -283,18 +283,18 @@ test.describe('Wisdom Vault Drug Lookup', () => {
     await page.getByTestId('wisdom-tab-lab').click();
     
     // Should show drug lookup section
-    await expect(page.getByTestId('drug-search-input')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByTestId('drug-search-btn')).toBeVisible();
+    await expect(page.getByTestId('drug-lookup-input')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByTestId('drug-lookup-btn')).toBeVisible();
   });
 
   test('should search for drug information', async ({ page }) => {
     // Click Lab tab
     await page.getByTestId('wisdom-tab-lab').click();
-    await expect(page.getByTestId('drug-search-input')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByTestId('drug-lookup-input')).toBeVisible({ timeout: 5000 });
     
     // Search for aspirin
-    await page.getByTestId('drug-search-input').fill('aspirin');
-    await page.getByTestId('drug-search-btn').click();
+    await page.getByTestId('drug-lookup-input').fill('aspirin');
+    await page.getByTestId('drug-lookup-btn').click();
     
     // Wait for results (OpenFDA may take a moment)
     // Should show either results or "no results" message
