@@ -32,6 +32,8 @@ const PrescriptionTracker = () => {
   const [interactionResult, setInteractionResult] = useState(null);
   const [checkingInteractions, setCheckingInteractions] = useState(false);
   const searchTimeoutRef = useRef(null);
+  const medScannerRef = useRef(null);
+  const [scanningMed, setScanningMed] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
