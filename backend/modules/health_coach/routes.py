@@ -195,13 +195,15 @@ async def get_coach_messages(
 @router.get("/back-to-green", response_model=dict)
 async def get_back_to_green_interventions(
     current_zone: str = "yellow",
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get interventions to help user get back to green zone"""
     try:
-        # Get user's current health data for context
+        user_id = await get_user_id(authorization, db)
+
         loop_status = await db.loop_daily.find_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0},
             sort=[("date", -1)]
         )
