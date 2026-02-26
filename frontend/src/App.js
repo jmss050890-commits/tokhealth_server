@@ -5,6 +5,7 @@ import Dashboard from "@/pages/Dashboard";
 import AuthScreen from "@/pages/AuthScreen";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+import LanguageSelector from "@/components/LanguageSelector";
 import { Toaster } from 'sonner';
 
 function App() {
