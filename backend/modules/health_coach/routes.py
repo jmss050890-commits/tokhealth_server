@@ -93,7 +93,7 @@ async def chat_with_coach(
         )
         
         biometrics = await db.biometrics_daily.find_one(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0},
             sort=[("date", -1)]
         )
