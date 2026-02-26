@@ -182,7 +182,7 @@ const WisdomVault = () => {
 
       const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/entries`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(entryData)
       });
 
