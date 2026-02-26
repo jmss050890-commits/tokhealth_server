@@ -71,7 +71,7 @@ test.describe('The Loop Page', () => {
   test('should display Activity section', async ({ page }) => {
     await page.getByTestId('show-loop-button').click();
     await expect(page.getByTestId('the-loop')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('text=Activity')).toBeVisible();
+    await expect(page.getByText('Activity', { exact: true }).first()).toBeVisible();
   });
 
   test('should have Refresh button', async ({ page }) => {
