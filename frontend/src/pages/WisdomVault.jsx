@@ -54,7 +54,64 @@ const WisdomVault = () => {
 
   useEffect(() => {
     fetchEntries();
+    fetchLabResults();
   }, []);
+
+  const fetchLabResults = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/lab-results`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        setLabResults(data.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching lab results:', error);
+    }
+  };
+
+  const handleLabUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file (JPG, PNG, etc.)');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File too large. Max 10MB.');
+      return;
+    }
+
+    setAnalyzingLab(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const token = localStorage.getItem('tokhealth_token');
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/analyze-lab`, {
+        method: 'POST',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Lab result analyzed! Check results below.');
+        fetchLabResults();
+      } else {
+        toast.error('Failed to analyze lab result');
+      }
+    } catch (error) {
+      console.error('Error uploading lab result:', error);
+      toast.error('Failed to upload lab result');
+    } finally {
+      setAnalyzingLab(false);
+      if (labFileRef.current) labFileRef.current.value = '';
+    }
+  };
 
   const fetchEntries = async () => {
     try {
