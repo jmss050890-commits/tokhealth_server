@@ -45,13 +45,9 @@ const NutritionLogger = () => {
 
   const fetchTodaysMeals = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/nutrition/today`);
-      const data = await response.json();
-      if (data.success) {
-        setTodaysMeals(data.data.meals || []);
-        setTodayTotals({
-          calories: data.data.totals?.calories || 0,
-          protein: data.data.totals?.protein_g || 0,
+      const response = await fetch(`${BACKEND_URL}/api/nutrition/today`, {
+        headers: getAuthHeaders()
+      });
           carbs: data.data.totals?.carbs_g || 0,
           fat: data.data.totals?.fat_g || 0
         });
