@@ -22,7 +22,9 @@ const BackToGreen = ({ currentZone = 'yellow', onClose }) => {
 
   const fetchInterventions = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/health-coach/back-to-green?current_zone=${currentZone}`);
+      const response = await fetch(`${BACKEND_URL}/api/health-coach/back-to-green?current_zone=${currentZone}`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success) {
         setInterventions(data.data);
