@@ -27,7 +27,76 @@ const PrescriptionTracker = () => {
     prescriber: ''
   });
 
+  const [drugSearchResults, setDrugSearchResults] = useState([]);
+  const [searchingDrugs, setSearchingDrugs] = useState(false);
+  const [interactionResult, setInteractionResult] = useState(null);
+  const [checkingInteractions, setCheckingInteractions] = useState(false);
+  const searchTimeoutRef = useRef(null);
+
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  const searchDrugs = async (query) => {
+    if (!query || query.length < 2) {
+      setDrugSearchResults([]);
+      return;
+    }
+    setSearchingDrugs(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/medication/search?query=${encodeURIComponent(query)}`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        setDrugSearchResults(data.data || []);
+      }
+    } catch (error) {
+      console.error('Drug search error:', error);
+    } finally {
+      setSearchingDrugs(false);
+    }
+  };
+
+  const handleMedNameChange = (value) => {
+    setFormData({...formData, medication_name: value});
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    searchTimeoutRef.current = setTimeout(() => searchDrugs(value), 400);
+  };
+
+  const selectDrug = (drug) => {
+    setFormData({...formData, medication_name: drug.name});
+    setDrugSearchResults([]);
+  };
+
+  const checkInteractions = async () => {
+    if (prescriptions.length < 2) {
+      toast.error('Need at least 2 medications to check interactions');
+      return;
+    }
+
+    setCheckingInteractions(true);
+    setInteractionResult(null);
+    try {
+      const medNames = prescriptions.map(p => p.medication_name);
+      const response = await fetch(`${BACKEND_URL}/api/medication/check-interactions`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ medication_names: medNames })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setInteractionResult(data.data);
+        toast.success('Interaction check complete');
+      } else {
+        toast.error('Failed to check interactions');
+      }
+    } catch (error) {
+      console.error('Interaction check error:', error);
+      toast.error('Failed to check interactions');
+    } finally {
+      setCheckingInteractions(false);
+    }
+  };
 
   useEffect(() => {
     fetchPrescriptions();
