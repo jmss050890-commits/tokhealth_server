@@ -167,12 +167,14 @@ Important: You are NOT a doctor. Always encourage professional medical consultat
 @router.get("/messages", response_model=dict)
 async def get_coach_messages(
     days: int = 7,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get recent coaching messages"""
     try:
+        user_id = await get_user_id(authorization, db)
         messages = await db.health_coach_messages.find(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         ).sort("created_at", -1).limit(days).to_list(days)
         
