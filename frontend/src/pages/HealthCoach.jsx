@@ -163,6 +163,53 @@ const HealthCoach = () => {
     }
   };
 
+  const handlePhotoAnalysis = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    setAnalyzingPhoto(true);
+    const userMsg = {
+      sender: 'user',
+      text: `[Sent a photo: ${file.name}]`,
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, userMsg]);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const token = localStorage.getItem('tokhealth_token');
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/analyze-lab`, {
+        method: 'POST',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const coachMsg = {
+          sender: 'coach',
+          text: `Here's what I see in your photo:\n\n${data.data.analysis}\n\nWould you like me to explain anything further?`,
+          timestamp: new Date().toISOString()
+        };
+        setMessages(prev => [...prev, coachMsg]);
+        if (voiceEnabled) speakText(coachMsg.text);
+      } else {
+        setMessages(prev => [...prev, { sender: 'coach', text: 'I had trouble analyzing that image. Could you try again with a clearer photo?', timestamp: new Date().toISOString() }]);
+      }
+    } catch {
+      setMessages(prev => [...prev, { sender: 'coach', text: 'Sorry, I couldn\'t process that photo right now. Please try again.', timestamp: new Date().toISOString() }]);
+    } finally {
+      setAnalyzingPhoto(false);
+      if (photoInputRef.current) photoInputRef.current.value = '';
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || loading) return;
 
