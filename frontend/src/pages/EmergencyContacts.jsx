@@ -86,7 +86,7 @@ const EmergencyContacts = () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/emergency-contacts/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(formData)
       });
 
