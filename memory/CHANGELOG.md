@@ -1,55 +1,62 @@
 # TokHealth - Changelog
 
-## 2026-02-26 - Session 2: Major Feature Expansion
+## 2026-02-26 - Session 2B: Camera Features & Report
 
-### Data Privacy Dashboard (NEW)
+### Camera on Health Coach
+- Camera button added next to microphone in Health Coach chat
+- Take a photo and AI analyzes it instantly — shows results as a coach message
+- Works for medicine labels, food, symptoms, anything visual
+
+### Camera on Wisdom Vault (Journal)
+- "Capture a Memory" card in the Journal tab
+- Take photos of poems, notes, artwork, handwritten items — anything you want to keep
+- Photos are analyzed by AI and stored in your vault
+
+### Medicine Label Scanner (Prescriptions)
+- "Scan Medicine Label" card in Prescription Tracker
+- Take a photo of your medicine bottle or label
+- AI reads and explains the label information
+
+### Detailed Feature Report
+- Generated comprehensive feature report at /feature-report.txt
+- Covers all 20+ feature areas with descriptions
+
+## 2026-02-26 - Session 2A: Major Feature Expansion
+
+### Data Privacy Dashboard
 - View all stored data categories with record counts
 - Export all personal data as downloadable JSON file
-- Delete account with "type DELETE" confirmation — permanently removes all data
+- Delete account with "type DELETE" confirmation
 
-### AI Coach on All Pages (NEW)
-- Floating "Ask Your Health Coach" button on Dashboard and all feature pages
+### AI Coach on All Pages
+- Floating "Ask Your Health Coach" button on 13+ pages
 - Context-aware: sends current page context to GPT-5.2
-- Chat UI with send/close, appears as a bottom-right floating panel
 
-### Drug & Medication Lookup (NEW)
-- OpenFDA integration for drug details (brand name, generic, purpose, dosage, side effects, warnings)
-- Available in Wisdom Vault "Lab Results" tab
+### Drug & Medication Lookup
+- OpenFDA integration for drug details in Wisdom Vault
 - RxNorm type-ahead search in Prescription Tracker
+- AI-powered drug interaction checker
 
-### Apple HealthKit Sync (NEW)
-- iOS detection for HealthKit availability
-- Backend endpoints: /api/healthkit/status and /api/healthkit/sync
-- Connection status, data type list, sync instructions for non-iOS users
+### Apple HealthKit Sync
+- iOS detection, connection status, sync endpoint
+- Instructions for non-iOS users
 
-### Notifications & Reminders (NEW)
-- Browser push notification permission request
-- Reminder CRUD: create, view, delete reminders
-- Reminder types: medication, hydration, exercise, custom
-- Time and day-of-week scheduling
-- Local notification scheduling when tab is open
+### Notifications & Reminders
+- Browser push notifications, reminder CRUD
+- Medication, hydration, exercise, custom types
 
-### Privacy Enforcement (CRITICAL FIX)
-- Removed ALL TEMP_USER_ID fallbacks from 17 backend modules
-- Every endpoint returns HTTP 401 without a valid auth token
-- Complete user data isolation verified with multi-user testing
-- Auth headers added to ALL frontend fetch calls
+### Privacy Enforcement (CRITICAL)
+- All TEMP_USER_ID fallbacks removed from 17 backend modules
+- Every endpoint returns 401 without auth token
+- Complete user data isolation
 
-### Baseline Enhancements (Profile)
-- Allergies: tag-based input with 20 common presets + custom
-- Food Tolerances: tag-based input with 12 presets + custom
-- Spiritual Preference: dropdown of 14 options + custom text
+### Baseline Enhancements
+- Allergies, Food Tolerances, Spiritual Preference in profile
 
 ### Wisdom Vault - Lab Results
-- Camera/image upload for lab result images
-- AI Vision analysis via GPT-5.2
-- Lab results history with expandable analysis
-
-### RxNorm Drug Search & Interaction Checker
-- Type-ahead medication search in Prescription Tracker
-- AI-powered drug interaction analysis for 2+ medications
+- Lab result image upload + AI Vision analysis
 
 ## Previous Sessions
-- Full auth system, family linking, PWA, Fitbit (backend), CSV import
-- Spiritual Vault, Camera biometric scanner, PayPal donations
-- Medical export, system audit, QuickStats/hydration bug fixes
+- Full auth, family linking, PWA, Fitbit (backend)
+- Spiritual Vault, Camera biometric scanner, PayPal
+- Medical export, system audit, bug fixes
