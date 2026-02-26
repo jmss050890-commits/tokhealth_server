@@ -42,9 +42,8 @@ async function setupAuth(page) {
   // Wait for dashboard
   await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
   
-  // Setup toast dismissal and wait for any toast to disappear
-  await dismissToasts(page);
-  await page.waitForTimeout(500); // Wait for toast animation to complete
+  // Wait for toast to auto-dismiss (4 seconds should be enough)
+  await page.waitForTimeout(4000);
 }
 
 test.describe('P1 - User Profile New Fields', () => {
