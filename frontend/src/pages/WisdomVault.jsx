@@ -143,7 +143,7 @@ const WisdomVault = () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/health-coach/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           message: `Based on this journal entry, provide one brief, compassionate wellness suggestion (2-3 sentences max): "${formData.body.substring(0, 500)}"`,
           session_id: 'wisdom_vault'
