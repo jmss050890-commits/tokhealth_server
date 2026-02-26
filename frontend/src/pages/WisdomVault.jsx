@@ -505,6 +505,40 @@ const WisdomVault = () => {
           </CardContent>
         </Card>
 
+        {/* Camera Capture for Wisdom Vault */}
+        <Card className="bg-gradient-to-r from-indigo-50 to-violet-50 border-indigo-200">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Camera className="w-8 h-8 text-indigo-600" />
+              <div>
+                <p className="text-indigo-800 font-medium text-sm">Capture a Memory</p>
+                <p className="text-slate-500 text-xs">Poem, note, artwork — anything you want to keep</p>
+              </div>
+            </div>
+            <input
+              ref={journalPhotoRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleJournalPhoto}
+              className="hidden"
+              data-testid="journal-photo-input"
+            />
+            <Button
+              onClick={() => journalPhotoRef.current?.click()}
+              disabled={savingPhoto}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              data-testid="journal-camera-btn"
+            >
+              {savingPhoto ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Camera className="w-4 h-4" />
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* New Entry Button */}
         {!showNewEntry && (
           <Button
