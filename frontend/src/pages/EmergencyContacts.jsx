@@ -45,7 +45,9 @@ const EmergencyContacts = () => {
 
   const fetchContacts = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/emergency-contacts/`);
+      const response = await fetch(`${BACKEND_URL}/api/emergency-contacts/`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success) {
         setContacts(data.data || []);
