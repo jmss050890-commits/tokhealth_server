@@ -644,8 +644,25 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Bell className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Reminders</span>
-                <p className="text-slate-500 text-xs">Notifications</p>
+                <span className="text-slate-800 text-sm font-semibold">{t('cards.notifications')}</span>
+                <p className="text-slate-500 text-xs">{t('cards.notifications_desc')}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Barcode Scanner */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('barcode')}
+            data-testid="barcode-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                <ScanLine className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">{t('cards.barcode')}</span>
+                <p className="text-slate-500 text-xs">{t('cards.barcode_desc')}</p>
               </div>
             </CardContent>
           </Card>
