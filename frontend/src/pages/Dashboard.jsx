@@ -358,7 +358,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">
                   <Activity className="w-4 h-4 text-rose-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Biometrics</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.biometrics')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -380,7 +380,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
                   <Heart className="w-4 h-4 text-emerald-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Nutrition</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.nutrition')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -402,7 +402,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
                   <Activity className="w-4 h-4 text-sky-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">AI Coach</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.coach')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -424,7 +424,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
                   <BookOpen className="w-4 h-4 text-violet-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Wisdom</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.wisdom')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -446,7 +446,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center">
                   <Droplets className="w-4 h-4 text-cyan-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Hydration</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.hydration')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -479,7 +479,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
                   <Phone className="w-4 h-4 text-orange-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Emergency</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.emergency')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -501,7 +501,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
                   <Pill className="w-4 h-4 text-pink-600" />
                 </div>
-                <span className="text-slate-800 text-sm font-semibold">Meds</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.prescriptions')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -523,7 +523,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <FileText className="w-4 h-4 text-teal-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Medical Export</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.export')}</span>
                 <p className="text-slate-500 text-xs">Print for doctor</p>
               </div>
             </CardContent>
@@ -540,7 +540,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Users className="w-4 h-4 text-violet-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Family</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.family')}</span>
                 <p className="text-slate-500 text-xs">Multi-user</p>
               </div>
             </CardContent>
@@ -557,7 +557,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <BarChart3 className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Health Trends</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.trends')}</span>
                 <p className="text-slate-500 text-xs">Analytics & insights</p>
               </div>
             </CardContent>
@@ -574,7 +574,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Upload className="w-4 h-4 text-cyan-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Import Data</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.import')}</span>
                 <p className="text-slate-500 text-xs">CSV & devices</p>
               </div>
             </CardContent>
@@ -591,7 +591,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Sparkles className="w-4 h-4 text-purple-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Spiritual Vault</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.spiritual')}</span>
                 <p className="text-slate-500 text-xs">Faith & gratitude</p>
               </div>
             </CardContent>
@@ -608,7 +608,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Shield className="w-4 h-4 text-sky-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Data Privacy</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.privacy')}</span>
                 <p className="text-slate-500 text-xs">Export & manage</p>
               </div>
             </CardContent>
@@ -625,7 +625,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Heart className="w-4 h-4 text-rose-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Apple Health</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.healthkit')}</span>
                 <p className="text-slate-500 text-xs">HealthKit sync</p>
               </div>
             </CardContent>
@@ -642,7 +642,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <Bell className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Reminders</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.notifications')}</span>
                 <p className="text-slate-500 text-xs">Notifications</p>
               </div>
             </CardContent>
@@ -659,7 +659,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 <ScanLine className="w-4 h-4 text-emerald-600" />
               </div>
               <div>
-                <span className="text-slate-800 text-sm font-semibold">Barcode Scanner</span>
+                <span className="text-slate-800 text-sm font-semibold">{i18n.t('cards.barcode')}</span>
                 <p className="text-slate-500 text-xs">Scan food labels</p>
               </div>
             </CardContent>
