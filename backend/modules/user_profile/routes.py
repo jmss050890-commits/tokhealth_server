@@ -154,6 +154,9 @@ async def create_or_update_profile(
             "health_goals": profile_data.health_goals,
             "medical_conditions": profile_data.medical_conditions,
             "blood_type": profile_data.blood_type,
+            "allergies": profile_data.allergies,
+            "food_tolerances": profile_data.food_tolerances,
+            "spiritual_preference": profile_data.spiritual_preference,
             "targets": targets,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat()
