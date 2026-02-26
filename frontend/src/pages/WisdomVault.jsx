@@ -20,6 +20,34 @@ const WisdomVault = () => {
   const [labResults, setLabResults] = useState([]);
   const [analyzingLab, setAnalyzingLab] = useState(false);
   const labFileRef = useRef(null);
+  const [drugSearch, setDrugSearch] = useState('');
+  const [drugResults, setDrugResults] = useState([]);
+  const [searchingDrug, setSearchingDrug] = useState(false);
+  const [expandedDrug, setExpandedDrug] = useState(null);
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  const searchDrugs = async () => {
+    if (!drugSearch.trim() || drugSearch.length < 2) return;
+    setSearchingDrug(true);
+    setDrugResults([]);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/medication/lookup/${encodeURIComponent(drugSearch)}`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      if (data.success) {
+        setDrugResults(data.data || []);
+        if (data.data.length === 0) {
+          toast.info('No results found. Try a different name.');
+        }
+      }
+    } catch {
+      toast.error('Drug lookup unavailable');
+    } finally {
+      setSearchingDrug(false);
+    }
+  };
   
   const [formData, setFormData] = useState({
     entry_type: 'journal',
