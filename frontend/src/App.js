@@ -95,6 +95,9 @@ function App() {
   return (
     <div className="App">
       <Toaster position="top-right" richColors />
+      <div className="fixed top-3 right-3 z-50">
+        <LanguageSelector />
+      </div>
       {!disclaimerAccepted ? (
         <DisclaimerScreen onAccept={handleAcceptDisclaimer} />
       ) : !isAuthenticated ? (
