@@ -145,7 +145,7 @@ const AppleHealthKit = () => {
                 <p className="text-amber-800 font-medium text-sm">How to connect Apple HealthKit:</p>
                 <ol className="text-amber-700 text-xs space-y-1 list-decimal list-inside">
                   <li>Open this app on your iPhone using Safari</li>
-                  <li>Add TokHealth to your home screen (Share > Add to Home Screen)</li>
+                  <li>Add TokHealth to your home screen (Share &gt; Add to Home Screen)</li>
                   <li>Open the app and navigate to this page</li>
                   <li>Tap "Connect HealthKit" and grant permissions</li>
                 </ol>
