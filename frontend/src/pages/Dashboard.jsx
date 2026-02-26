@@ -550,23 +550,23 @@ const Dashboard = ({ currentUser, onLogout }) => {
             <div className="grid grid-cols-4 gap-2">
               <div className="text-center">
                 <div className="text-slate-500 text-xs mb-1">Calories</div>
-                <div className="text-lg font-bold text-slate-800">0</div>
-                <div className="text-xs text-slate-400">/ 2000</div>
+                <div className="text-lg font-bold text-slate-800">{quickStats.calories}</div>
+                <div className="text-xs text-slate-400">/ {quickStats.caloriesTarget}</div>
               </div>
               <div className="text-center">
                 <div className="text-slate-500 text-xs mb-1">Protein</div>
-                <div className="text-lg font-bold text-slate-800">0g</div>
-                <div className="text-xs text-slate-400">/ 120g</div>
+                <div className="text-lg font-bold text-slate-800">{quickStats.protein}g</div>
+                <div className="text-xs text-slate-400">/ {quickStats.proteinTarget}g</div>
               </div>
               <div className="text-center">
                 <div className="text-slate-500 text-xs mb-1">Steps</div>
-                <div className="text-lg font-bold text-slate-800">0</div>
-                <div className="text-xs text-slate-400">/ 10k</div>
+                <div className="text-lg font-bold text-slate-800">{quickStats.steps}</div>
+                <div className="text-xs text-slate-400">/ {(quickStats.stepsTarget/1000).toFixed(0)}k</div>
               </div>
               <div className="text-center">
                 <div className="text-slate-500 text-xs mb-1">Water</div>
-                <div className="text-lg font-bold text-slate-800">0</div>
-                <div className="text-xs text-slate-400">/ 2.5L</div>
+                <div className="text-lg font-bold text-slate-800">{(quickStats.water/1000).toFixed(1)}</div>
+                <div className="text-xs text-slate-400">/ {(quickStats.waterTarget/1000).toFixed(1)}L</div>
               </div>
             </div>
           </CardContent>
