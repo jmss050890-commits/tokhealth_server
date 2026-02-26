@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Activity, Wind, Droplet, Heart, Footprints, Eye, Pause, Utensils, Phone, Droplets, CheckCircle, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const BackToGreen = ({ currentZone = 'yellow', onClose }) => {
   const [interventions, setInterventions] = useState(null);

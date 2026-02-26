@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { TrendingUp, TrendingDown, Minus, Heart, Footprints, Activity, Droplets, Target, Lightbulb, Calendar, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const HealthTrends = () => {
   const [period, setPeriod] = useState(7);

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Droplets, Plus, TrendingUp, Target, Bell, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const HydrationTracker = () => {
   const [todayIntake, setTodayIntake] = useState(0);
