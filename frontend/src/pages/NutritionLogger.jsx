@@ -202,7 +202,7 @@ const NutritionLogger = () => {
 
       const response = await fetch(`${BACKEND_URL}/api/nutrition/log`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(mealData)
       });
 
