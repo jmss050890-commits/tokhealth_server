@@ -120,7 +120,9 @@ const HealthCoach = () => {
 
   const fetchCoachStatus = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/health-coach/status`);
+      const response = await fetch(`${BACKEND_URL}/api/health-coach/status`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success) {
         setCurrentStatus(data.data);
