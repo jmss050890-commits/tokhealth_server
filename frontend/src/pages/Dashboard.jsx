@@ -107,6 +107,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <PrescriptionTracker />
+        <AskCoachButton context="User is managing their prescriptions and medications" pageTitle="Prescriptions" />
       </div>
     );
   }
@@ -125,6 +126,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <WisdomVault />
+        <AskCoachButton context="User is in their Wisdom Vault for health journaling and lab results" pageTitle="Wisdom Vault" />
       </div>
     );
   }
@@ -134,6 +136,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <TheLoop />
+        <AskCoachButton context="User is viewing The Loop health status dashboard with zones" pageTitle="The Loop" />
       </div>
     );
   }
@@ -143,6 +146,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <BiometricsTracker />
+        <AskCoachButton context="User is tracking biometric readings like heart rate and blood pressure" pageTitle="Biometrics" />
       </div>
     );
   }
@@ -152,6 +156,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <NutritionLogger />
+        <AskCoachButton context="User is logging meals and tracking nutrition" pageTitle="Nutrition" />
       </div>
     );
   }
@@ -161,6 +166,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <UserProfile />
+        <AskCoachButton context="User is editing their health profile and baseline information" pageTitle="Profile" />
       </div>
     );
   }
@@ -170,6 +176,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <BackToGreen currentZone="yellow" onClose={() => setCurrentView('dashboard')} />
+        <AskCoachButton context="User needs help getting back to the green health zone" pageTitle="Back to Green" />
       </div>
     );
   }
@@ -179,6 +186,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <MedicalExport />
+        <AskCoachButton context="User is exporting their medical data report" pageTitle="Medical Export" />
       </div>
     );
   }
@@ -188,6 +196,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <HydrationTracker />
+        <AskCoachButton context="User is tracking their water and hydration intake" pageTitle="Hydration" />
       </div>
     );
   }
@@ -206,6 +215,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
         <BackButton />
         <HealthTrends />
+        <AskCoachButton context="User is reviewing their health trends and analytics" pageTitle="Health Trends" />
       </div>
     );
   }
