@@ -69,6 +69,40 @@ const PrescriptionTracker = () => {
     setDrugSearchResults([]);
   };
 
+  const handleMedScan = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image');
+      return;
+    }
+
+    setScanningMed(true);
+    try {
+      const formUpload = new FormData();
+      formUpload.append('file', file);
+      const token = localStorage.getItem('tokhealth_token');
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/analyze-lab`, {
+        method: 'POST',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formUpload
+      });
+      const data = await response.json();
+      if (data.success && data.data.analysis) {
+        toast.success('Medicine label scanned! Check the AI analysis below.');
+        setInteractionResult({
+          analysis: `Medicine Label Scan:\n\n${data.data.analysis}`,
+          disclaimer: 'This is AI-generated. Always verify with your pharmacist.'
+        });
+      }
+    } catch {
+      toast.error('Failed to scan label');
+    } finally {
+      setScanningMed(false);
+      if (medScannerRef.current) medScannerRef.current.value = '';
+    }
+  };
+
   const checkInteractions = async () => {
     if (prescriptions.length < 2) {
       toast.error('Need at least 2 medications to check interactions');
