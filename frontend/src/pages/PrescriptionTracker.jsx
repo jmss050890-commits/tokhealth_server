@@ -217,7 +217,7 @@ const PrescriptionTracker = () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/prescriptions/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(formData)
       });
 
