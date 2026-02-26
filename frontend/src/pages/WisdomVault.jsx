@@ -380,6 +380,68 @@ const WisdomVault = () => {
                 <p className="text-slate-400 text-xs">Upload an image to get AI-powered analysis</p>
               </div>
             )}
+
+            {/* Drug / Medication Lookup */}
+            <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-slate-800 text-sm flex items-center">
+                  <Sparkles className="w-4 h-4 mr-2 text-emerald-600" />
+                  Drug & Medication Lookup
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-slate-500 text-xs">Search the FDA database for drug information, side effects, and warnings</p>
+                <div className="flex gap-2">
+                  <input
+                    value={drugSearch}
+                    onChange={(e) => setDrugSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && searchDrugs()}
+                    placeholder="e.g., Metformin, Lisinopril..."
+                    className="flex-1 text-sm p-2 rounded-lg border border-emerald-200 focus:border-emerald-400 focus:outline-none"
+                    data-testid="drug-lookup-input"
+                  />
+                  <Button
+                    onClick={searchDrugs}
+                    disabled={searchingDrug || drugSearch.length < 2}
+                    size="sm"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4"
+                    data-testid="drug-lookup-btn"
+                  >
+                    {searchingDrug ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
+                  </Button>
+                </div>
+
+                {drugResults.map((drug, i) => (
+                  <div key={i} className="bg-white rounded-lg p-3 border border-emerald-200">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setExpandedDrug(expandedDrug === i ? null : i)}
+                    >
+                      <h4 className="font-medium text-slate-800 text-sm">{drug.brand_name}</h4>
+                      <p className="text-emerald-600 text-xs">{drug.generic_name}</p>
+                      <p className="text-slate-400 text-xs">{drug.drug_class}</p>
+                    </div>
+                    {expandedDrug === i && (
+                      <div className="mt-2 pt-2 border-t border-slate-200 space-y-2 text-xs">
+                        {drug.purpose && drug.purpose !== 'N/A' && (
+                          <div><span className="font-medium text-slate-600">Purpose:</span> <span className="text-slate-500">{drug.purpose}</span></div>
+                        )}
+                        {drug.dosage && drug.dosage !== 'N/A' && (
+                          <div><span className="font-medium text-slate-600">Dosage:</span> <span className="text-slate-500">{drug.dosage}</span></div>
+                        )}
+                        {drug.side_effects && drug.side_effects !== 'N/A' && (
+                          <div><span className="font-medium text-amber-600">Side Effects:</span> <span className="text-slate-500">{drug.side_effects}</span></div>
+                        )}
+                        {drug.warnings && drug.warnings !== 'N/A' && (
+                          <div><span className="font-medium text-red-600">Warnings:</span> <span className="text-slate-500">{drug.warnings}</span></div>
+                        )}
+                        <p className="text-slate-400 italic">Manufacturer: {drug.manufacturer}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
           </>
         )}
 
