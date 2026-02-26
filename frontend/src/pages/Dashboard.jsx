@@ -22,6 +22,58 @@ import SupportTokHealth from '@/pages/SupportTokHealth';
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [showSupport, setShowSupport] = useState(false);
+  const [quickStats, setQuickStats] = useState({
+    calories: 0,
+    caloriesTarget: 2000,
+    protein: 0,
+    proteinTarget: 120,
+    steps: 0,
+    stepsTarget: 10000,
+    water: 0,
+    waterTarget: 2500
+  });
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  // Fetch quick stats on load
+  React.useEffect(() => {
+    const fetchQuickStats = async () => {
+      try {
+        const token = localStorage.getItem('tokhealth_token');
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        };
+
+        const [nutritionRes, biometricsRes, hydrationRes, targetsRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/nutrition/today`, { headers }),
+          fetch(`${BACKEND_URL}/api/biometrics/today`, { headers }),
+          fetch(`${BACKEND_URL}/api/hydration/today`, { headers }),
+          fetch(`${BACKEND_URL}/api/profile/targets`, { headers })
+        ]);
+
+        const nutrition = await nutritionRes.json();
+        const biometrics = await biometricsRes.json();
+        const hydration = await hydrationRes.json();
+        const targets = await targetsRes.json();
+
+        setQuickStats({
+          calories: nutrition.data?.total_calories || 0,
+          caloriesTarget: targets.data?.recommended_calories || 2000,
+          protein: nutrition.data?.total_protein || 0,
+          proteinTarget: targets.data?.recommended_protein_g || 120,
+          steps: biometrics.data?.steps || 0,
+          stepsTarget: targets.data?.recommended_steps || 10000,
+          water: hydration.data?.total_ml || 0,
+          waterTarget: targets.data?.recommended_water_ml || 2500
+        });
+      } catch (error) {
+        console.error('Error fetching quick stats:', error);
+      }
+    };
+
+    fetchQuickStats();
+  }, [BACKEND_URL]);
 
   const BackButton = () => (
     <div className="bg-gradient-to-r from-sky-100 to-cyan-100 p-4 sticky top-0 z-10">
