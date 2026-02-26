@@ -426,14 +426,34 @@ const PrescriptionTracker = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
+                <div className="space-y-1 relative">
                   <Label className="text-slate-600 text-sm">Medication Name *</Label>
-                  <Input
-                    placeholder="e.g., Metformin"
-                    value={formData.medication_name}
-                    onChange={(e) => setFormData({...formData, medication_name: e.target.value})}
-                    className="bg-white border-slate-200 text-slate-800"
-                  />
+                  <div className="relative">
+                    <Input
+                      placeholder="Search medication..."
+                      value={formData.medication_name}
+                      onChange={(e) => handleMedNameChange(e.target.value)}
+                      className="bg-white border-slate-200 text-slate-800"
+                      data-testid="med-name-input"
+                    />
+                    {searchingDrugs && (
+                      <Loader2 className="w-4 h-4 animate-spin absolute right-3 top-3 text-slate-400" />
+                    )}
+                  </div>
+                  {drugSearchResults.length > 0 && (
+                    <div className="absolute z-10 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-40 overflow-y-auto mt-1">
+                      {drugSearchResults.slice(0, 8).map((drug, i) => (
+                        <button
+                          key={i}
+                          onClick={() => selectDrug(drug)}
+                          className="w-full text-left px-3 py-2 text-xs hover:bg-pink-50 text-slate-700 border-b border-slate-100 last:border-0"
+                          data-testid={`drug-result-${i}`}
+                        >
+                          {drug.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <Label className="text-slate-600 text-sm">Dosage *</Label>
