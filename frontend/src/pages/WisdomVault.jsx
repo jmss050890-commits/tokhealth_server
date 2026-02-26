@@ -60,6 +60,39 @@ const WisdomVault = () => {
     }
   };
 
+  const handleJournalPhoto = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    setSavingPhoto(true);
+    try {
+      const formUpload = new FormData();
+      formUpload.append('file', file);
+      const token = localStorage.getItem('tokhealth_token');
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/analyze-lab`, {
+        method: 'POST',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formUpload
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Photo saved to your vault!');
+        fetchLabResults();
+      } else {
+        toast.error('Failed to save photo');
+      }
+    } catch {
+      toast.error('Failed to upload photo');
+    } finally {
+      setSavingPhoto(false);
+      if (journalPhotoRef.current) journalPhotoRef.current.value = '';
+    }
+  };
+
   const moods = [
     { value: 'great', emoji: '😊', label: 'Great' },
     { value: 'good', emoji: '🙂', label: 'Good' },
