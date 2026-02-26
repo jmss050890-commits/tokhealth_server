@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-const BASE_URL = 'https://tokhealth-kpa-1.preview.emergentagent.com';
+const BASE_URL = 'https://tokhealth-dev.preview.emergentagent.com';
 const TEST_USER = { email: 'meka@demo.com', password: 'pass123' };
 
 // Helper to setup authenticated session

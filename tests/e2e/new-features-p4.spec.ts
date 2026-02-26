@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Constants
-const BASE_URL = 'https://tokhealth-kpa-1.preview.emergentagent.com';
+const BASE_URL = 'https://tokhealth-dev.preview.emergentagent.com';
 const TEST_EMAIL = 'meka@demo.com';
 const TEST_PASSWORD = 'pass123';
 

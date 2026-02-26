@@ -5,304 +5,113 @@ The user wants to build a comprehensive health and wellness application named To
 *   **App Name:** TOKHEALTH, a Keep People Alive (KPA) System.
 *   **Primary Goal:** An AI-driven interface for tracking nutrition, fitness, mental wellness, and overall well-being with individual user accounts and optional family linking.
 *   **Core Features Implemented:**
-    *   Full user authentication (Register/Login with email/password).
+    *   Full user authentication (Register/Login with email/password) and data privacy enforcement.
     *   Family multi-user support via an invite-based system.
-    *   User Profile/Baseline (Age, Height, Weight, etc.).
-    *   Nutrition & Wellness Engine (Manual log, AI photo recognition).
-    *   Biometrics Tracking (Manual log, Fitbit Sync, CSV Import).
+    *   User Profile/Baseline (Age, Height, Weight, Allergies, Food Tolerances, Spiritual Preferences).
+    *   Nutrition & Wellness Engine (Manual log, AI photo recognition, Barcode Scanner).
+    *   Biometrics Tracking (Manual log, Fitbit Sync [buggy], CSV Import).
     *   Camera-based biometric scanner (Heart Rate, Stress, Respiratory Rate).
     *   The Loop central dashboard with Green/Yellow/Red health zones.
-    *   AI Health Coach (GPT-5.2) with Text & Voice (In/Out) capabilities.
+    *   AI Health Coach (GPT-5.2) with Text & Voice, context-awareness, and camera integration.
     *   Emergency Contact System.
-    *   Wisdom Vault (Encrypted journal, mood tracker, AI suggestions).
-    *   Spiritual Vault with journal, prayer tracker, AI spiritual guide, and a Declare tab for affirmations.
-    *   Prescription Tracker with reminders.
+    *   Wisdom Vault (Encrypted journal with camera, mood tracker, lab result analysis, drug database lookup).
+    *   Spiritual Vault with journal, prayer tracker, AI spiritual guide, and a Declare tab.
+    *   Prescription Tracker with reminders and a medicine label scanner.
     *   Hydration Tracker with quick-log buttons.
     *   Medical Export for generating a printable health report.
     *   Health Trends Analytics page.
-    *   PWA support for Add to Home Screen functionality with a custom app icon.
-    *   Support Our Mission donation feature linked to PayPal.
+    *   PWA support with a custom app icon.
+    *   Support Our Mission donation feature (PayPal).
+    *   Multi-language support (framework implemented, UI partially translated).
 *   **Pending/In-Progress Features:**
-    *   Addergies and food tolerance tagging to the user baseline.
-    *   Spiritual preference column in the user baseline.
-    *   Camera and Google Scholar/drug database integration for the Wisdom Vault.
-    *   Camera feature on all modals (except donation, disclaimer, login).
-    *   RxNorm integration for a medication interaction service.
-    *   Health coach integration on all modals with a natural human speaking tone.
-    *   Apple HealthKit Sync.
+    *   Complete translation of all pages into 10 languages.
+    *   Fix Fitbit integration 404 error.
+    *   Improve the AI Health Coach's speaking tone to be more natural.
+    *   Implement gamification (streaks and badges).
+    *   Implement Apple HealthKit Sync logic.
+    *   Implement Push Notification logic.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is a full-stack Progressive Web App (PWA) using FastAPI and React. The core architecture was fundamentally refactored to support individual user accounts with JWT-based authentication, replacing a previous shared-family model. Users can now register, log in, and optionally link with family members by sending email invites.
+The application is a robust FastAPI and React Progressive Web App (PWA). A critical privacy and security audit was recently completed, removing a shared demo user ID and enforcing JWT-based authentication across all backend endpoints and frontend API calls, ensuring complete user data isolation.
 
-Numerous features have been added and refined, including a Spiritual Vault with an AI guide, a camera-based biometric scanner for heart rate, a CSV data import tool, and a Support Our Mission feature linked to the user's PayPal.me. Recent work involved a full system audit which fixed bugs in the QuickStats dashboard display and the hydration logger.
+Numerous features were added, including barcode scanning for nutrition logging, a medicine scanner in the prescription tracker, and camera integrations in the Wisdom Vault (for journals) and AI Health Coach. The foundation for multi-language support has been laid with , with a functional language selector in the header and translated dashboard card titles. The agent was in the middle of reorganizing the cluttered dashboard UI at the user's request.
 
 **Last working item**:
-    - Last item agent was working: The agent conducted a full audit of the application's functionality as requested by the user. This audit identified and fixed two bugs: the QuickStats on the dashboard were showing hardcoded zeros, and the hydration logging endpoint was failing. The agent also investigated a 404 error with the Fitbit integration callback but was unable to resolve it as the user confirmed their configuration was correct.
+    - Last item agent was working: Reorganizing the dashboard UI. The user found the 16+ cards on the main screen overwhelming. The agent started refactoring  to create a cleaner layout with 6 primary feature cards and a collapsible More section for the less-frequently used features.
     - Status: IN PROGRESS
-    - Agent Testing Done: Y
-    - Which testing method agent to use? backend testing agent
+    - Agent Testing Done: N
+    - Which testing method agent to use? screenshot tool
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - Issue 1: Fitbit integration results in a 404 error on callback (Priority: P0)
+  - Issue 1: Fitbit integration results in a 404 error on callback (Priority: P1)
+  - Issue 2: Multi-language support is incomplete (Priority: P0)
   
   Issues Detail:
   - **Issue 1: Fitbit integration results in a 404 error on callback**
-     - **Description:** When a user tries to connect their Fitbit account, after authorizing on Fitbit's website, the redirect back to the application fails with a 404 Not Found error. This prevents the integration from completing.
-     - **Attempted fixes:** The agent verified the backend route  exists and is correctly registered in . The agent instructed the user to verify the Redirect URL in their Fitbit developer settings matches  exactly. The user confirmed the URL is correct in their settings, but the issue persists.
+     - **Attempted fixes:** The agent confirmed the backend endpoint  is working correctly and returns a . The issue is confirmed to be on Fitbit's side, likely due to an incorrect Redirect URL in the user's Fitbit developer app settings. The agent provided the correct URL to the user, but the user deferred the fix.
      - **Next debug checklist:**
-        1. Re-examine the  file to ensure the callback function is correctly defined and handles both  and  requests if necessary.
-        2. Check supervisor logs (==> /var/log/supervisor/backend.err.log <==
-[92m07:00:42 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:01:20 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:01:29 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:04:41 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:04:46 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:05:05 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:05:11 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:06:51 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:06:58 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:08:07 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:08:10 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m07:08:12 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m07:08:14 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [46] using WatchFiles
-INFO:     Started server process [83]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-[92m13:44:34 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m13:44:38 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m13:45:23 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m13:45:29 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-[92m13:47:46 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m13:47:48 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [42] using WatchFiles
-INFO:     Started server process [86]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [48] using WatchFiles
-INFO:     Started server process [80]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [47] using WatchFiles
-INFO:     Started server process [90]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [43] using WatchFiles
-INFO:     Started server process [83]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [42] using WatchFiles
-INFO:     Started server process [79]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [79]
-INFO:     Stopping reloader process [42]
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [310] using WatchFiles
-INFO:     Started server process [312]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-[92m04:58:07 - LiteLLM:INFO[0m: utils.py:3427 - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-[92m04:58:09 - LiteLLM:INFO[0m: utils.py:1307 - Wrapper: Completed Call, calling success_handler
-WARNING:  WatchFiles detected changes in 'modules/hydration/routes.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [312]
-INFO:     Started server process [871]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [871]
-INFO:     Stopping reloader process [310]
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [876] using WatchFiles
-INFO:     Started server process [878]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [46] using WatchFiles
-
-==> /var/log/supervisor/backend.out.log <==
-2026-02-26 04:56:47,570 - modules.auth.routes - INFO - User logged in: audit_test@test.com
-INFO:     10.79.167.146:60618 - "POST /api/auth/login HTTP/1.1" 200 OK
-INFO:     10.79.167.146:60618 - "GET /api/nutrition/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:60618 - "GET /api/hydration/today HTTP/1.1" 200 OK
-2026-02-26 04:56:48,003 - modules.hydration.routes - INFO - Hydration logged: 250ml, total: 250ml
-2026-02-26 04:56:48,003 - modules.hydration.routes - ERROR - Error logging hydration: Object of type ObjectId is not JSON serializable
-INFO:     10.79.167.145:58510 - "POST /api/hydration/log HTTP/1.1" 500 Internal Server Error
-INFO:     10.79.167.145:58510 - "GET /api/loop/status HTTP/1.1" 200 OK
-INFO:     10.79.167.145:58510 - "GET /api/prescriptions/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:60618 - "GET /api/emergency-contacts/ HTTP/1.1" 200 OK
-2026-02-26 04:58:06,446 - modules.auth.routes - INFO - User logged in: audit_test@test.com
-INFO:     10.79.167.145:39256 - "POST /api/auth/login HTTP/1.1" 200 OK
-INFO:     10.79.167.146:58254 - "GET /api/family/members HTTP/1.1" 200 OK
-INFO:     10.79.167.145:39256 - "GET /api/family/dashboard HTTP/1.1" 200 OK
-INFO:     10.79.167.146:58254 - "GET /api/spiritual/entries HTTP/1.1" 200 OK
-INFO:     10.79.167.145:39256 - "GET /api/spiritual/prayers HTTP/1.1" 200 OK
-2026-02-26 04:58:07,181 - LiteLLM - INFO - 
-LiteLLM completion() model= gpt-5.2; provider = openai
-2026-02-26 04:58:09,314 - LiteLLM - INFO - Wrapper: Completed Call, calling success_handler
-INFO:     10.79.167.145:39256 - "POST /api/health-coach/chat HTTP/1.1" 200 OK
-INFO:     10.79.167.146:58254 - "GET /api/fitbit/status HTTP/1.1" 200 OK
-INFO:     10.79.167.146:58254 - "GET /api/fitbit/auth/url HTTP/1.1" 200 OK
-2026-02-26 05:01:41,450 - core.logging_config - INFO - Shutting down TokHealth API...
-2026-02-26 05:01:41,450 - core.database - INFO - Closing MongoDB connection...
-2026-02-26 05:01:41,451 - core.database - INFO - MongoDB connection closed
-2026-02-26 05:01:43,966 - core.logging_config - INFO - Logging configured successfully
-2026-02-26 05:01:44,009 - core.logging_config - INFO - 🏥 Starting TokHealth v1.0.0
-2026-02-26 05:01:44,009 - core.database - INFO - Connecting to MongoDB...
-2026-02-26 05:01:44,014 - core.database - INFO - Connected to MongoDB: test_database
-2026-02-26 05:01:44,014 - core.logging_config - INFO - ✅ TokHealth API is ready!
-2026-02-26 05:09:18,596 - core.logging_config - INFO - Shutting down TokHealth API...
-2026-02-26 05:09:18,596 - core.database - INFO - Closing MongoDB connection...
-2026-02-26 05:09:18,597 - core.database - INFO - MongoDB connection closed
-2026-02-26 05:09:21,436 - core.logging_config - INFO - Logging configured successfully
-2026-02-26 05:09:21,472 - core.logging_config - INFO - 🏥 Starting TokHealth v1.0.0
-2026-02-26 05:09:21,472 - core.database - INFO - Connecting to MongoDB...
-2026-02-26 05:09:21,476 - core.database - INFO - Connected to MongoDB: test_database
-2026-02-26 05:09:21,476 - core.logging_config - INFO - ✅ TokHealth API is ready!
-2026-02-26 05:09:24,022 - modules.fitbit.routes - ERROR - Fitbit token exchange failed: {"errors":[{"errorType":"invalid_grant","message":"Authorization code invalid: test Visit https://dev.fitbit.com/docs/oauth2 for more information on the Fitbit Web API authorization process."}],"success":false}
-INFO:     10.79.167.145:47892 - "GET /api/fitbit/callback?code=test&state=test123 HTTP/1.1" 302 Found
-2026-02-26 05:09:24,167 - modules.auth.routes - INFO - User logged in: audit_test@test.com
-INFO:     10.79.167.145:47892 - "POST /api/auth/login HTTP/1.1" 200 OK
-2026-02-26 05:09:24,325 - modules.hydration.routes - INFO - Hydration logged: 250ml, total: 250ml
-INFO:     10.79.167.145:47892 - "POST /api/hydration/log HTTP/1.1" 200 OK
-INFO:     10.79.167.145:37822 - "GET /api/nutrition/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:37822 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:51450 - "GET /api/profile/targets HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:51446 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:51446 - "GET /api/nutrition/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:37822 - "GET /api/profile/targets HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:51446 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:51450 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:51446 - "GET /api/wisdom-vault/entries?days=30 HTTP/1.1" 200 OK
-INFO:     10.79.167.145:37822 - "GET /api/wisdom-vault/entries?days=30 HTTP/1.1" 200 OK
-INFO:     10.79.167.146:42248 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:42264 - "GET /api/profile/targets HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:53048 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:53048 - "GET /api/nutrition/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:42264 - "GET /api/profile/targets HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:53048 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:53064 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:42264 - "GET /api/nutrition/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:59460 - "GET /api/prescriptions/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:59460 - "GET /api/prescriptions/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:40038 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:56074 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:33646 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:33646 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:33650 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:33650 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:33650 - "GET /api/fitbit/auth/url HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:53284 - "GET /api/fitbit/auth/url HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:53294 - "GET /api/emergency-contacts/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:53294 - "GET /api/emergency-contacts/ HTTP/1.1" 200 OK
-INFO:     10.79.167.145:40660 - "GET /api/trends/insights?days=7 HTTP/1.1" 200 OK
-INFO:     10.79.167.145:40644 - "GET /api/trends/summary?days=7 HTTP/1.1" 200 OK
-INFO:     10.79.167.146:54494 - "GET /api/trends/goals HTTP/1.1" 200 OK
-INFO:     10.79.167.146:54494 - "GET /api/trends/summary?days=7 HTTP/1.1" 200 OK
-INFO:     10.79.167.146:54494 - "GET /api/trends/insights?days=7 HTTP/1.1" 200 OK
-INFO:     10.79.167.146:54494 - "GET /api/trends/goals HTTP/1.1" 200 OK
-INFO:     10.79.167.146:54500 - "GET /api/profile/ HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:54500 - "GET /api/profile/ HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:55998 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:60638 - "GET /api/fitbit/status HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:52998 - "GET /api/profile/ HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:52984 - "GET /api/emergency-contacts/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:56960 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:53002 - "GET /api/prescriptions/ HTTP/1.1" 200 OK
-INFO:     10.79.167.145:52984 - "GET /api/profile/ HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:56960 - "GET /api/prescriptions/ HTTP/1.1" 200 OK
-INFO:     10.79.167.145:52998 - "GET /api/emergency-contacts/ HTTP/1.1" 200 OK
-INFO:     10.79.167.146:56970 - "GET /api/biometrics/today HTTP/1.1" 200 OK
-INFO:     10.79.167.145:52222 - "GET /api/family/dashboard HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:49356 - "GET /api/family/invites/pending HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:49352 - "GET /api/family/members HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:52222 - "GET /api/family/members HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:52238 - "GET /api/family/invites/pending HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.145:52222 - "GET /api/family/dashboard HTTP/1.1" 401 Unauthorized
-INFO:     10.79.167.146:38692 - "GET /api/hydration/today HTTP/1.1" 200 OK
-INFO:     10.79.167.146:38692 - "GET /api/hydration/today HTTP/1.1" 200 OK) immediately after reproducing the 404 error to see if the request is reaching the server at all and if any errors are thrown.
-        3. Use  to make a direct request to the  endpoint from within the container to confirm it's routable.
-        4. Ask the user for a screenshot of their Fitbit developer app settings page to visually confirm the Redirect URL and other settings like Application Type (should be Server or Web).
-     - **Why fix this issue and what will be achieved with the fix?** This is a key feature for automating biometric data entry. Fixing it will fulfill a major user request and improve the app's utility.
+        1. Ask the user to confirm they have updated the Redirect URL in their Fitbit Developer App settings to the exact current preview URL's callback endpoint.
+        2. If the issue persists, ask the user for a screenshot of their Fitbit developer app settings page to visually confirm the configuration.
+     - **Why fix this issue and what will be achieved with the fix?** This is a key feature for automating biometric data entry. Fixing it will complete a major user request.
      - **Status:**  BLOCKED
      - **Is recurring issue?** Y
      - **Should Test frontend/backend/both after fix?** both
-     - **Blocked on other issue:** Potentially blocked on user providing a screenshot of their Fitbit developer settings.
+     - **Blocked on other issue:** User action required to update their Fitbit settings.
+  - **Issue 2: Multi-language support is incomplete**
+     - **Description:** The language selector in the header works, and the dashboard card titles change language. However, the content *inside* each page (e.g., The Loop, Health Coach) remains hardcoded in English. The user confirmed this would be confusing and wants full translation.
+     - **Next debug checklist:**
+        1. Systematically go through each React component/page file in  and .
+        2. Replace all hardcoded user-facing strings with the  function from the  hook.
+        3. Add the corresponding keys and translations to the JSON files in .
+     - **Why fix this issue and what will be achieved with the fix?** This will make the app accessible to a global audience and fulfill a key user requirement for a fully localized experience.
+     - **Status:**  NOT STARTED
+     - **Is recurring issue?** N
+     - **Should Test frontend/backend/both after fix?** frontend
+     - **Blocked on other issue:** None.
 
 **In progress Task List**:
-- None. The audit was the last task, and it's complete pending the Fitbit bug fix.
+  - Task 1:  Complete the Dashboard Reorganization (Priority: P0)
+
+ Task Detail:
+  - **Task 1: Complete the Dashboard Reorganization**
+     - **Where to resume:** Continue editing . The goal is to replace the current two-grid layout with a new structure: a primary grid for the top 6-8 core features and a collapsible/expandable section for the remaining secondary features.
+     - **What will be achieved with this?** A cleaner, less cluttered user interface that is easier to navigate on mobile devices, addressing the user's feedback directly.
+     - **Status:**  IN PROGRESS
+     - **Should Test frontend/backend/both after fix?** frontend
+     - **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
-**Upcoming Tasks (User Requested Priority):**
-*   P1: **Fix All Bugs:** Complete the fix for the Fitbit integration.
-*   P2: **Baseline Enhancements:**
-    *   Add Allergies section to the user profile with a dropdown of common allergies and a custom text input.
-    *   Add Food Tolerances section with a dropdown and custom text input.
-    *   Add Spiritual Preferences section with a dropdown of the top 10 main religions and a custom text input.
-*   P3: **Wisdom Vault Enhancements:**
-    *   Integrate a camera feature to upload images of lab results.
-    *   Integrate Google Scholar or a drug database (like RxNorm) to look up lab results and medications.
-*   P4: **RxNorm Integration:** Add RxNorm lookup and a medication interaction checker to the Medical Vault (likely referring to the Prescription Tracker).
-*   P5: **UI/UX Enhancements:**
-    *   Add a camera feature to all modals (except donation, disclaimer, login).
-    *   Integrate the AI Health Coach into all modals with a more natural, human-speaking tone.
+**Upcoming Tasks:**
+*   **P0: Complete Full-App Translation:** Once the dashboard is reorganized, implement translations for all page content as detailed in Pending Issue 2. This is the user's highest priority.
+*   **P1: Refine AI Health Coach Tone:** Update the AI Health Coach's system prompt in the backend to give it a more natural, warm, and human-sounding personality, as requested by the user.
+*   **P2: Gamification:** Implement a system for streaks and badges to encourage user engagement. This would likely involve new DB collections and UI components.
 
 **Future Tasks:**
-*   Implement Apple HealthKit Sync.
+*   Implement Apple HealthKit Sync (backend routes and placeholder UI exist, but core sync logic is needed).
+*   Implement Push Notification logic (backend routes and placeholder UI exist, but logic is needed).
+*   Assist the user with packaging the PWA as an Android App (using Bubblewrap) for submission to the Google Play Store.
 
 **Completed work in this session**
-- **Full Auth System Refactor:** Replaced the hardcoded user model with a complete JWT-based authentication system (register, login, private data).
-- **Family Linking System:** Implemented an invite-by-email system for family members to link accounts.
-- **Progressive Web App (PWA):** Created a  and added a custom app icon, making the app installable on a phone's home screen.
-- **Fitbit Integration:** Implemented the backend and frontend for Fitbit OAuth2 connection (partially working, bug pending).
-- **CSV Data Import:** Created a feature for users to download a template and upload their health data via CSV.
-- **Spiritual Vault Feature:** Built a new section for spiritual journaling, prayer tracking, and AI-powered spiritual guidance. Added a Declare tab with user-requested bible verses.
-- **Camera Biometric Scanner:** Added a feature to use the phone's camera to measure heart rate, stress, and respiratory rate.
-- **Monetization Feature:** Implemented a Support Our Mission button linked to the user's PayPal.me link.
-- **Bug Fix (Medical Export):** Fixed a bug where the Medical Export page was showing hardcoded test user data instead of the logged-in user's data.
-- **System Audit & Bug Fixes:** Performed a full audit, fixing bugs in the QuickStats display and the hydration logger.
+- **Critical Privacy/Security Overhaul:** Found and fixed a major data isolation bug by removing all  fallbacks and enforcing JWT authentication across the entire application (backend and frontend).
+- **Profile Baseline Enhancements:** Added Allergies, Food Tolerances, and Spiritual Preferences to the user profile page and backend models.
+- **Camera Features:**
+    - **Wisdom Vault:** Added camera for uploading lab results and for saving general photos (poems, notes) to the journal.
+    - **Health Coach:** Added a camera button to the chat for image analysis.
+    - **Prescription Tracker:** Implemented a Medicine Scanner using the camera to identify medication.
+- **Drug Database Integration:** Added an OpenFDA drug lookup feature to the Wisdom Vault, replacing the non-viable Google Scholar API plan.
+- **Barcode Scanner:** Implemented a nutrition barcode scanner in the Nutrition Logger using  and the Open Food Facts API.
+- **Multi-language Foundation:** Installed and configured , created translation files for 10 languages, and implemented a working language selector in the header.
+- **Feature Report Generation:** Created a  file detailing all current app functionalities for the user.
+- **Resolved Build Issues:** Fixed a complex Babel build error () caused by the large size of  by refactoring the  implementation.
 
 **Earlier issues found/mentioned but not fixed**
    - **Issue 1:** The Fitbit 404 callback error remains unresolved, as detailed in the All Pending/In progress Issue list.
 
 **Known issue recurrence from previous fork**
-  - None.
+  - **Fitbit 404 Error:** This issue has persisted across forks and is blocked on a user-side configuration change.
 
 **Code Architecture**
 
@@ -310,66 +119,78 @@ INFO:     10.79.167.146:38692 - "GET /api/hydration/today HTTP/1.1" 200 OK) imme
 **Key Technical Concepts**
 - **Backend:** FastAPI, Python, MongoDB
 - **Frontend:** React, JavaScript, CSS, 
-- **Authentication:** JWT (JSON Web Tokens) for stateless user sessions.
-- **Architecture:** Progressive Web App (PWA) for native-like installation.
-- **Integrations:** OpenAI (GPT-5.2), Fitbit API, PayPal.me
+- **Authentication:** JWT (JSON Web Tokens) enforced on all endpoints.
+- **Internationalization (i18n):**  and  for multi-language support.
+- **Integrations:** OpenAI (GPT-5.2), Fitbit API (buggy), PayPal.me, Open Food Facts API, OpenFDA API.
+- **Scanning:**  for barcode scanning.
 
 **key DB schema**
-- **users:** {email, hashed_password, profile: {dob, height, weight, sex, allergies, food_tolerances, spiritual_preference}}
-- **health_metrics:** {user_id (ObjectId), date, steps, heart_rate, ...}
-- **nutrition_logs:** {user_id (ObjectId), date, food_items, ...}
-- **prescriptions:** {user_id (ObjectId), name, dosage, schedule, ...}
-- **family_invites:** {inviter_id, invitee_email, status}
-- **family_links:** {user1_id, user2_id}
-- **spiritual_vault_entries:** {user_id (ObjectId), date, type, content, mood}
+  - **users:**  object now includes 
+
+**changes in tech stack**
+  - None.
 
 **All files of reference**
-- : Contains the Fitbit OAuth endpoints, including the failing .
-- : Contains the QuickStats display that was recently fixed.
-- : The page where the user initiates the Fitbit connection.
-- : The file to be modified for adding allergies and other new baseline fields.
-- : The backend route to update with the new baseline fields.
-- : A major new feature created in this session.
+- : The file currently being refactored for the UI reorganization.
+-  & : The core files for the multi-language feature.
+- : Contains the global app structure, including the .
+- : All files within this directory will need to be updated with  calls for full translation.
+- : The location of the Fitbit callback endpoint that needs to be tested once the user updates their settings.
+- : A detailed summary of app features created for the user.
+
+**Areas that need refactoring**:
+- The  component is currently being refactored due to its large size and complexity, which previously caused build issues. This work should be completed.
+- Once full translation is implemented, many components will be wrapped in i18n hooks, which might be an opportunity to break down larger components.
+
+**key api endpoints**
+- All API endpoints under  now require a  header. Public access has been removed.
+- : New endpoint for drug lookup.
+- : New endpoint for barcode lookup.
 
 **Critical Info for New Agent**
-- **Priority Order:** The user is very clear: **fix all bugs first**, especially the Fitbit connection, before implementing any new features.
-- **Fitbit Bug:** You are likely blocked on the user providing a screenshot of their Fitbit developer settings. Be prepared to ask for this to confirm the Redirect URL and other configuration details. The current URL is .
-- **New Features:** The user has provided a large, well-defined list of new features. Once the Fitbit bug is resolved, tackle these in the priority order listed under Upcoming Tasks.
-- **Single Source of Truth:** The user expects all changes to be live on the single preview URL. Do not mention multiple versions or deployments. The current preview URL is their production app.
+- **Top Priorities:** 1. Finish the dashboard reorganization. 2. Implement full-app translation for all pages. These are the user's explicit next steps.
+- **User Anxiety:** The user is very engaged but becomes anxious about long pauses, context window exhaustion, and the risk of breaking the app. Maintain clear, concise communication and focus on one task at a time to build confidence. Reassure them their project is safe.
+- **Fitbit Blocker:** The Fitbit integration is blocked on the user. Do not spend time debugging the backend for it. The task is to guide the user to update their Fitbit developer settings with the correct preview URL and then test.
+- **Privacy is Paramount:** The previous session's main achievement was a critical privacy fix. Do not introduce any new endpoints or logic that bypasses the  dependency injection for authentication.
 
 **documents and test reports created in this job**
--  (heavily updated)
--  (from the auth system test)
+  - 
+  -  (updated)
+  -  (report from the successful test run after camera features were added)
 
 **Last 10 User Messages and any pending HUMAN messages**
-10.  - User agrees to start a new fork.
-9.   - User experiencing frustration with platform pauses due to long context.
-8.   - User confirms their Fitbit Redirect URL is correct, yet the 404 error persists.
-7.   - User asks for help with the Fitbit settings.
-6.   - User notes platform issue.
-5.   - User checking in during the audit.
-4.   - **CRITICAL INSTRUCTION**: User wants a full audit and bug fix before any new features are added. Confirms the preview link is their single source of truth.
-3.   - User provides design specs for new features and confirms priority: fix bugs, then add features.
-2.   - User reports the Fitbit callback error.
-1.   - User provides a long list of new feature requests and bug reports.
+10.  - User asks if the content inside pages will be translated.
+9.   - User confirms they want all pages fully translated, not just the dashboard.
+8.   - User points out the dashboard is cluttered.
+7.   - User approves the agent's plan to reorganize the dashboard.
+6.  - User asks about the effort for the dashboard reorganization.
+5.  - User checking in on the progress of the dashboard reorganization.
+4.  - User worries the feature requests are making the app unstable.
+3.  - User checking in.
+2.  - User correctly identifies that the multi-language feature is incomplete.
+1.  - User asks about deployment to app stores.
 
 **Project Health Check:**
-- **Broken:** The Fitbit integration is non-functional due to a 404 error on the callback.
+- **Broken:** The Fitbit integration remains non-functional due to a user-side configuration issue.
+- **Mocked:** Apple HealthKit Sync and Push Notifications have UI and backend routes but no functional logic.
 
 **3rd Party Integrations**
-- **OpenAI GPT-5.2** (Text Generation, AI Coach) — uses Emergent LLM Key
-- **OpenAI Vision** (Image Analysis) — uses Emergent LLM Key
-- **** (Frontend library for Speech-to-Text)
-- **Fitbit API** (Wearable Data Sync) — requires User OAuth (Implementation broken)
-- **PayPal.me** (Donations) — implemented via direct URL link
+- **OpenAI GPT-5.2** — uses Emergent LLM Key
+- **Fitbit API** — requires User OAuth (Implementation broken)
+- **PayPal.me** — direct URL link
+- ** / ** — for multi-language support
+- **** — for frontend barcode scanning
+- **Open Food Facts API** — for barcode data lookup (free, no key)
+- **OpenFDA API** — for drug data lookup (free, no key)
 
 **Testing status**
-  - Testing agent used after significant changes: YES (after auth refactor).
+  - Testing agent used after significant changes: YES. Last run after adding camera features showed 58/58 tests passing.
   - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: []
-  - Known regressions: The Fitbit connection is broken.
+  - Test files created: Tests were generated/updated by the testing agent, but no new standalone test files were manually created.
+  - Known regressions: Fitbit integration is broken.
+
+**Credentials to test flow:**
+Standard registration/login flow. No specific credentials needed; create a new user for testing.
 
 **What agent forgot to execute**
-- The original Name your coach bug was never explicitly investigated or fixed, although the user anecdotally said it works now. It should be verified during the next testing phase.
-- The request for Apple Health sync from the initial handoff was superseded by Fitbit/CSV but remains a future task.
-- The new feature requests from the user's large list (allergies, RxNorm, etc.) have not been started, as per the user's priority to fix bugs first.</analysis>
+- The agent correctly identified that fully translating all pages was a larger task for a new session. At the user's immediate request, the agent pivoted to reorganizing the dashboard. The primary forgotten or deferred task is the page-by-page translation, which is now the top priority for the next session.</analysis>

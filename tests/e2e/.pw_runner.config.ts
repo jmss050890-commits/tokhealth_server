@@ -11,7 +11,7 @@ export default defineConfig({
     ['json', { outputFile: '/root/.emergent/automation_output/20260226_092358/results.json' }],
   ],
   use: {
-    baseURL: 'https://tokhealth-kpa-1.preview.emergentagent.com',
+    baseURL: 'https://tokhealth-dev.preview.emergentagent.com',
     screenshot: 'only-on-failure',
     trace: 'off',
     headless: true,

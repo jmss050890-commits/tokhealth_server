@@ -74,7 +74,7 @@ async def fitbit_callback(
         if error:
             logger.error(f"Fitbit auth error: {error}")
             return RedirectResponse(
-                url=f"https://tokhealth-kpa-1.preview.emergentagent.com?fitbit_error={error}",
+                url=f"https://tokhealth-dev.preview.emergentagent.com?fitbit_error={error}",
                 status_code=302
             )
         
@@ -106,7 +106,7 @@ async def fitbit_callback(
             if response.status_code != 200:
                 logger.error(f"Fitbit token exchange failed: {response.text}")
                 return RedirectResponse(
-                    url="https://tokhealth-kpa-1.preview.emergentagent.com?fitbit_error=token_exchange_failed",
+                    url="https://tokhealth-dev.preview.emergentagent.com?fitbit_error=token_exchange_failed",
                     status_code=302
                 )
             
@@ -134,7 +134,7 @@ async def fitbit_callback(
             
             # Redirect back to app with success
             return RedirectResponse(
-                url="https://tokhealth-kpa-1.preview.emergentagent.com?fitbit_connected=true",
+                url="https://tokhealth-dev.preview.emergentagent.com?fitbit_connected=true",
                 status_code=302
             )
             
@@ -145,7 +145,7 @@ async def fitbit_callback(
     except Exception as e:
         logger.error(f"Fitbit callback error: {e}")
         return RedirectResponse(
-            url=f"https://tokhealth-kpa-1.preview.emergentagent.com?fitbit_error={str(e)}",
+            url=f"https://tokhealth-dev.preview.emergentagent.com?fitbit_error={str(e)}",
             status_code=302
         )
 
