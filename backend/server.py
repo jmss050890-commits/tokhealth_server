@@ -87,6 +87,9 @@ api_router.include_router(import_router, prefix="/import", tags=["Data Import"])
 api_router.include_router(fitbit_router, prefix="/fitbit", tags=["Fitbit"])
 api_router.include_router(spiritual_router, prefix="/spiritual", tags=["Spiritual Vault"])
 api_router.include_router(medication_router, prefix="/medication", tags=["Medication"])
+api_router.include_router(privacy_router, prefix="/privacy", tags=["Privacy"])
+api_router.include_router(healthkit_router, prefix="/healthkit", tags=["HealthKit"])
+api_router.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
 
 # Mount the API router
 app.include_router(api_router)
