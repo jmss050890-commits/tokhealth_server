@@ -332,6 +332,101 @@ const UserProfile = ({ onProfileSaved }) => {
                 </SelectContent>
               </Select>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Allergies & Food Tolerances Card */}
+        <Card className="bg-white/90 border-amber-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 text-sm flex items-center">
+              <AlertTriangle className="w-4 h-4 mr-2 text-amber-600" />
+              Allergies & Food Tolerances
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Allergies */}
+            <div className="space-y-1">
+              <Label className="text-slate-600 text-sm flex items-center">
+                <AlertTriangle className="w-3 h-3 mr-1 text-red-500" />
+                Allergies
+              </Label>
+              <p className="text-slate-400 text-xs">Select from common allergies or type your own</p>
+              <TagInput
+                items={formData.allergies}
+                onAdd={(item) => setFormData({...formData, allergies: [...formData.allergies, item]})}
+                onRemove={(item) => setFormData({...formData, allergies: formData.allergies.filter(a => a !== item)})}
+                options={COMMON_ALLERGIES}
+                placeholder="Search or type allergy..."
+                testIdPrefix="allergy"
+              />
+            </div>
+
+            {/* Food Tolerances */}
+            <div className="space-y-1">
+              <Label className="text-slate-600 text-sm flex items-center">
+                <Utensils className="w-3 h-3 mr-1 text-amber-500" />
+                Food Tolerances / Sensitivities
+              </Label>
+              <p className="text-slate-400 text-xs">Select known food sensitivities or type your own</p>
+              <TagInput
+                items={formData.food_tolerances}
+                onAdd={(item) => setFormData({...formData, food_tolerances: [...formData.food_tolerances, item]})}
+                onRemove={(item) => setFormData({...formData, food_tolerances: formData.food_tolerances.filter(a => a !== item)})}
+                options={COMMON_FOOD_TOLERANCES}
+                placeholder="Search or type sensitivity..."
+                testIdPrefix="food-tolerance"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Spiritual Preference Card */}
+        <Card className="bg-white/90 border-violet-200">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-slate-800 text-sm flex items-center">
+              <Cross className="w-4 h-4 mr-2 text-violet-600" />
+              Spiritual Preference
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-1">
+              <Label className="text-slate-600 text-sm">Select your spiritual or faith background</Label>
+              <Select 
+                value={formData.spiritual_preference || ''} 
+                onValueChange={(v) => setFormData({...formData, spiritual_preference: v})}
+              >
+                <SelectTrigger className="bg-white border-slate-200 text-slate-800" data-testid="spiritual-preference-select">
+                  <SelectValue placeholder="Select preference (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SPIRITUAL_PREFERENCES.map(pref => (
+                    <SelectItem key={pref} value={pref}>{pref}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {formData.spiritual_preference && !SPIRITUAL_PREFERENCES.includes(formData.spiritual_preference) && (
+              <p className="text-violet-600 text-xs">Custom: {formData.spiritual_preference}</p>
+            )}
+            <div className="space-y-1">
+              <Label className="text-slate-600 text-xs">Or type your own</Label>
+              <Input
+                placeholder="Type custom preference..."
+                onChange={(e) => {
+                  if (e.target.value.trim()) {
+                    setFormData({...formData, spiritual_preference: e.target.value.trim()});
+                  }
+                }}
+                className="bg-white border-slate-200 text-slate-800"
+                data-testid="spiritual-preference-custom"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Save Profile Card */}
+        <Card className="bg-white/90 border-sky-200">
+          <CardContent className="pt-4">
 
             {/* Save Button */}
             <Button
