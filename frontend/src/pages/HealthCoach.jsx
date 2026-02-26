@@ -177,7 +177,7 @@ const HealthCoach = () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/health-coach/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           message: inputMessage,
           session_id: sessionId
