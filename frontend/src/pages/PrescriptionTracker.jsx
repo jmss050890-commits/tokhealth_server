@@ -195,7 +195,9 @@ const PrescriptionTracker = () => {
 
   const fetchPrescriptions = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/prescriptions/`);
+      const response = await fetch(`${BACKEND_URL}/api/prescriptions/`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success) {
         setPrescriptions(data.data || []);
