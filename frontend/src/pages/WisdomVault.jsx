@@ -236,6 +236,125 @@ const WisdomVault = () => {
           <p className="text-slate-500 text-sm">Your private space for reflection & growth</p>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="flex gap-2 justify-center">
+          <Button
+            onClick={() => setActiveTab('journal')}
+            variant={activeTab === 'journal' ? 'default' : 'outline'}
+            size="sm"
+            className={activeTab === 'journal' ? 'bg-violet-600 text-white' : 'border-violet-300 text-violet-600'}
+            data-testid="wisdom-tab-journal"
+          >
+            <BookOpen className="w-4 h-4 mr-1" />
+            Journal
+          </Button>
+          <Button
+            onClick={() => setActiveTab('lab')}
+            variant={activeTab === 'lab' ? 'default' : 'outline'}
+            size="sm"
+            className={activeTab === 'lab' ? 'bg-violet-600 text-white' : 'border-violet-300 text-violet-600'}
+            data-testid="wisdom-tab-lab"
+          >
+            <FileText className="w-4 h-4 mr-1" />
+            Lab Results
+          </Button>
+        </div>
+
+        {activeTab === 'lab' && (
+          <>
+            {/* Lab Upload Card */}
+            <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+              <CardContent className="p-4 text-center space-y-3">
+                <Camera className="w-10 h-10 text-blue-600 mx-auto" />
+                <p className="text-blue-800 font-medium">Upload Lab Results</p>
+                <p className="text-slate-500 text-xs">Take a photo or upload an image of your lab results for AI analysis</p>
+                <input
+                  ref={labFileRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleLabUpload}
+                  className="hidden"
+                  data-testid="lab-file-input"
+                />
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={() => labFileRef.current?.click()}
+                    disabled={analyzingLab}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    data-testid="lab-upload-btn"
+                  >
+                    {analyzingLab ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing...</>
+                    ) : (
+                      <><Camera className="w-4 h-4 mr-2" />Upload / Take Photo</>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Lab Results List */}
+            {labResults.length > 0 && (
+              <Card className="bg-white/90 border-blue-200">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-slate-800 text-sm flex items-center">
+                    <FileText className="w-4 h-4 mr-2 text-blue-600" />
+                    Your Lab Results ({labResults.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {labResults.map((result, index) => (
+                    <div key={index} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                      <div
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => setExpandedEntry(expandedEntry === `lab-${index}` ? null : `lab-${index}`)}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <FileText className="w-5 h-5 text-blue-500" />
+                          <div>
+                            <h3 className="font-medium text-slate-800 text-sm">{result.filename || 'Lab Result'}</h3>
+                            <p className="text-slate-400 text-xs">{new Date(result.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        {expandedEntry === `lab-${index}` ? (
+                          <ChevronUp className="w-4 h-4 text-slate-400" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-slate-400" />
+                        )}
+                      </div>
+                      {expandedEntry === `lab-${index}` && (
+                        <div className="mt-3 pt-3 border-t border-slate-200">
+                          <div className="bg-blue-50 rounded-lg p-3">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Sparkles className="w-4 h-4 text-blue-600" />
+                              <span className="text-blue-800 font-medium text-sm">AI Analysis</span>
+                            </div>
+                            <p className="text-slate-700 text-sm whitespace-pre-wrap">{result.analysis}</p>
+                          </div>
+                          <p className="text-slate-400 text-xs mt-2 italic">
+                            This is AI-generated. Always discuss results with your healthcare provider.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {labResults.length === 0 && !analyzingLab && (
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+                <p className="text-slate-400 text-sm">No lab results uploaded yet</p>
+                <p className="text-slate-400 text-xs">Upload an image to get AI-powered analysis</p>
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === 'journal' && (
+          <>
         {/* Mood Check-In */}
         <Card className="bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
           <CardContent className="p-4">
