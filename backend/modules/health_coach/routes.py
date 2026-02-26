@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
 import logging
 import os
@@ -7,13 +7,18 @@ from dotenv import load_dotenv
 
 from core.database import get_database
 from utils.response import success_response
+from utils.auth import get_current_user_id
 
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
+
+async def get_user_id(authorization: str, db) -> str:
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 class ChatMessage(BaseModel):
     message: str
