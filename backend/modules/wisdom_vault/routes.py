@@ -53,7 +53,7 @@ async def create_entry(
             },
             "ai_response": None,
             "created_at": datetime.utcnow().isoformat(),
-            "updated_at": datetime.utcnow().isoformat()
+            "updated_at": datetime.now(timezone.utc).isoformat()
         }
         
         await db.wisdom_vault_entries.insert_one(entry)
