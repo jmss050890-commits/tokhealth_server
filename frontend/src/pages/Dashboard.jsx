@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User, Users, BarChart3, LogOut, Upload, Sparkles, Shield, ScanLine } from 'lucide-react';
+import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User, Users, BarChart3, LogOut, Upload, Sparkles, Shield, ScanLine, ChevronDown, ChevronUp } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
@@ -24,11 +24,13 @@ import NotificationSettings from '@/pages/NotificationSettings';
 import BarcodeScanner from '@/pages/BarcodeScanner';
 import AskCoachButton from '@/components/AskCoachButton';
 import { getAuthHeaders } from '@/utils/auth';
-import i18n from '@/i18n';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = ({ currentUser, onLogout }) => {
+  const { t } = useTranslation();
   const [currentView, setCurrentView] = useState('dashboard');
   const [showSupport, setShowSupport] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const [quickStats, setQuickStats] = useState({
     calories: 0,
     caloriesTarget: 2000,
