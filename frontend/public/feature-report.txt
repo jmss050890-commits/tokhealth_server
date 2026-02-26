@@ -1,0 +1,196 @@
+# TokHealth KPA - Complete Feature Report
+## "Keep People Alive" System
+
+---
+
+### AUTHENTICATION & ACCOUNTS
+- **User Registration** — Create account with email and password
+- **User Login** — JWT-based secure login
+- **Per-User Data Isolation** — Every piece of data is private to each user
+- **Family Linking** — Invite family members by email to link accounts
+
+---
+
+### USER PROFILE / BASELINE
+- **Personal Info** — Name, Age, Gender, Height, Weight, Activity Level
+- **Blood Type** — Dropdown selection
+- **Allergies** — Tag-based input with 20 common allergies + custom text (Peanuts, Tree Nuts, Milk/Dairy, Eggs, Wheat/Gluten, Soy, Fish, Shellfish, Sesame, Corn, Sulfites, Latex, Penicillin, Aspirin/NSAIDs, Ibuprofen, Bee Stings, Dust Mites, Pollen, Mold, Pet Dander)
+- **Food Tolerances** — Tag-based input with 12 sensitivities + custom text (Lactose, Gluten, Fructose, Histamine, Caffeine, Alcohol, Spicy, Acidic, MSG, Artificial Sweetener, FODMAP, Nightshade)
+- **Spiritual Preference** — Dropdown of 14 options + custom text (Christianity, Islam, Hinduism, Buddhism, Judaism, Sikhism, Taoism, Shinto, Baha'i Faith, Jainism, Spiritual but not religious, Agnostic, Atheist, Prefer not to say)
+- **Health Goals** — Customizable health objectives
+- **Medical Conditions** — Track existing conditions
+- **Personalized Targets** — Auto-calculated daily targets based on profile
+
+---
+
+### THE LOOP (Central Dashboard)
+- **Health Zone Visualization** — Green/Yellow/Red zone based on daily metrics
+- **Real-Time Health Score** — Aggregated from biometrics, nutrition, hydration
+- **Heart Rate Zone** — Green (60-100), Yellow (50-60 or 100-120), Red (outside)
+- **Step Goal Tracking** — Progress toward daily step target
+- **Hydration Status** — Daily water intake tracking
+- **Nutrition Summary** — Calorie and macro tracking
+- **Back to Green** — AI-powered interventions when in Yellow/Red zone
+
+---
+
+### AI HEALTH COACH (GPT-5.2)
+- **Text Chat** — Natural conversation with AI health coach
+- **Voice Input** — Speak to your coach using microphone
+- **Voice Output** — Coach speaks responses aloud
+- **Camera/Photo Analysis** — Take a photo and get AI analysis (medicine, food, symptoms, anything)
+- **Custom Coach Name** — Name your health coach
+- **Context-Aware** — Coach knows your health data, zone, and current page
+- **Floating "Ask Coach" Button** — Available on EVERY feature page (Dashboard, Nutrition, Biometrics, Prescriptions, Hydration, Wisdom Vault, Spiritual Vault, Health Trends, Back to Green, Medical Export, Profile, HealthKit, Notifications)
+- **Session Memory** — Maintains conversation context within a session
+
+---
+
+### NUTRITION & WELLNESS ENGINE
+- **Manual Meal Logging** — Log meals with food items and portions
+- **AI Photo Recognition** — Take a photo of your food, AI identifies items and estimates nutrition
+- **Daily Nutrition Summary** — Calories, protein, carbs, fat totals
+- **Meal History** — View past logged meals
+
+---
+
+### BIOMETRICS TRACKING
+- **Manual Entry** — Heart rate, blood pressure, blood oxygen, body temperature, steps
+- **Camera Biometric Scanner** — Use phone camera to measure heart rate, stress level, respiratory rate
+- **Fitbit Sync** — Connect Fitbit for automatic data import (user configuring)
+- **CSV Data Import** — Upload health data via CSV file with downloadable template
+- **Daily Biometrics Dashboard** — View today's readings
+
+---
+
+### PRESCRIPTION TRACKER
+- **Medication Management** — Add, view, delete prescriptions
+- **RxNorm Drug Search** — Type-ahead search when adding medications (searches NLM RxNorm database)
+- **Medicine Label Scanner** — Take a photo of a medicine bottle/label for AI analysis
+- **AI Drug Interaction Checker** — Checks potential interactions between all your medications using GPT-5.2
+- **Medication Schedule** — Set frequency, times, with/without food instructions
+- **Prescriber Info** — Track which doctor prescribed what
+
+---
+
+### WISDOM VAULT
+- **Private Journal** — Write encrypted journal entries (thoughts, reflections, gratitude)
+- **Mood Tracker** — Track daily mood with visual mood selector
+- **AI Wellness Suggestions** — Get AI-powered suggestions based on your journal entries
+- **Camera Capture** — Take photos of poems, notes, artwork, anything you want to keep
+- **Lab Result Upload** — Upload photos of lab results for AI analysis
+- **AI Lab Analysis** — GPT-5.2 Vision analyzes lab results and explains findings in plain English
+- **Drug & Medication Lookup** — Search the FDA database for drug info, side effects, warnings, dosage
+- **Lab Results History** — View all past lab analyses with expandable details
+
+---
+
+### SPIRITUAL VAULT
+- **Spiritual Journal** — Write prayers, gratitude, reflections, scripture notes, meditation logs
+- **Prayer Tracker** — Track prayer requests and mark them as answered
+- **AI Spiritual Guide** — Context-aware spiritual guidance using GPT-5.2
+- **"Declare" Tab** — Bible verses and affirmations for daily declaration
+- **Mood Tracking** — Peaceful, grateful, seeking, troubled, joyful
+
+---
+
+### HYDRATION TRACKER
+- **Quick-Log Buttons** — One-tap logging for common amounts (250ml, 500ml, etc.)
+- **Daily Goal Progress** — Visual progress toward hydration target
+- **Beverage Type** — Track water vs. other beverages
+- **Today's Summary** — Running total with visual indicator
+
+---
+
+### EMERGENCY CONTACTS
+- **Contact Management** — Add, view, delete emergency contacts
+- **Quick-Dial** — One-tap call to emergency contacts
+- **Health Snapshot** — Current biometrics and nutrition status displayed for emergencies
+
+---
+
+### MEDICAL EXPORT
+- **Printable Health Report** — Generate a comprehensive report with:
+  - Personal profile and baseline
+  - Current biometrics (heart rate, blood pressure, SpO2)
+  - Medication list
+  - Emergency contacts
+  - Allergies and food sensitivities
+- **Print Button** — One-click print for doctor visits
+
+---
+
+### HEALTH TRENDS & ANALYTICS
+- **Multi-Day Trends** — View 7, 14, 30, or 90-day health trends
+- **AI Health Insights** — GPT-5.2 generated insights from your health data
+- **Goals Progress** — Track progress toward health objectives
+- **Visual Charts** — Trend visualization for key metrics
+
+---
+
+### DATA PRIVACY DASHBOARD
+- **Data Overview** — See all 10 data categories with record counts
+- **Profile Summary** — Quick view of stored personal info, allergies, preferences
+- **Export All Data** — Download complete personal data as JSON file
+- **Delete Account** — Permanently delete account and ALL data with "type DELETE" confirmation
+- **Privacy Commitment** — All data encrypted, private, never shared with third parties
+
+---
+
+### APPLE HEALTHKIT SYNC
+- **iOS Detection** — Automatically detects if you're on an iPhone
+- **Connection Status** — Shows HealthKit connection state
+- **Supported Data** — Steps, Heart Rate, Active Calories, Sleep Hours, Blood Oxygen
+- **Sync Endpoint** — Backend ready to receive HealthKit data
+- **Instructions** — Step-by-step guide for non-iOS users
+
+---
+
+### NOTIFICATIONS & REMINDERS
+- **Browser Push Notifications** — Enable browser notifications for health reminders
+- **Reminder Types** — Medication, Hydration, Exercise, Custom
+- **Time Scheduling** — Set specific times for each reminder
+- **Day Selection** — Choose which days of the week
+- **Reminder Management** — Create, view, delete reminders
+- **Local Notifications** — Browser notifications when app tab is open
+
+---
+
+### PROGRESSIVE WEB APP (PWA)
+- **Add to Home Screen** — Install TokHealth on your phone like a native app
+- **Custom App Icon** — TokHealth branded icon on home screen
+- **Offline Ready** — Manifest and service worker configured
+
+---
+
+### SUPPORT & DONATIONS
+- **"Support Our Mission"** — PayPal.me donation link
+- **Family Linking** — Invite family members to join
+
+---
+
+### PRIVACY & SECURITY
+- **JWT Authentication** — Secure token-based login
+- **401 Enforcement** — Every single API endpoint requires authentication
+- **User Data Isolation** — Zero shared data between users
+- **No TEMP_USER_ID** — All fallback/shared user IDs completely removed
+- **Auth Headers** — Every frontend API call includes authentication
+
+---
+
+### TECH STACK
+- **Backend:** FastAPI (Python) + MongoDB
+- **Frontend:** React + Shadcn UI + Tailwind CSS
+- **AI:** GPT-5.2 (OpenAI via Emergent LLM Key)
+- **Drug Data:** RxNorm API (NLM) + OpenFDA
+- **Architecture:** Progressive Web App
+- **Auth:** JWT Tokens
+
+---
+
+### KNOWN PENDING
+- Fitbit callback configuration (user action needed on Fitbit developer portal)
+
+---
+*TokHealth KPA — Keep People Alive*
+*https://tokhealth-kpa-1.preview.emergentagent.com*
