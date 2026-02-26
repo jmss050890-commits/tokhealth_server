@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Pill, Clock, Calendar, CheckCircle, AlertCircle, Plus, Trash2, Bell, BellRing, X, Search, Shield, Loader2 } from 'lucide-react';
+import { Pill, Clock, Calendar, CheckCircle, AlertCircle, Plus, Trash2, Bell, BellRing, X, Search, Shield, Loader2, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
 
