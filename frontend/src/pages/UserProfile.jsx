@@ -135,7 +135,10 @@ const UserProfile = ({ onProfileSaved }) => {
           activity_level: data.data.activity_level || 'moderate',
           blood_type: data.data.blood_type || '',
           health_goals: data.data.health_goals || [],
-          medical_conditions: data.data.medical_conditions || []
+          medical_conditions: data.data.medical_conditions || [],
+          allergies: data.data.allergies || [],
+          food_tolerances: data.data.food_tolerances || [],
+          spiritual_preference: data.data.spiritual_preference || ''
         });
       }
     } catch (error) {
