@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { BookOpen, Heart, Brain, Lightbulb, Lock, Plus, Calendar, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { BookOpen, Heart, Brain, Lightbulb, Lock, Plus, Calendar, Sparkles, ChevronDown, ChevronUp, Camera, FileText, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const WisdomVault = () => {
   const [showNewEntry, setShowNewEntry] = useState(false);
