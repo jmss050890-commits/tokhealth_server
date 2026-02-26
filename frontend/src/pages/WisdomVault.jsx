@@ -590,6 +590,9 @@ const WisdomVault = () => {
           </Card>
         )}
 
+          </>
+        )}
+
         {/* Footer */}
         <div className="text-center">
           <p className="text-slate-500 text-xs flex items-center justify-center">
