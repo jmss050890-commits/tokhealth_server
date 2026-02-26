@@ -13,15 +13,10 @@ from utils.auth import get_current_user_id
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
-
 async def get_user_id(authorization: str, db) -> str:
-    if authorization:
-        try:
-            return await get_current_user_id(authorization, db)
-        except Exception:
-            pass
-    return TEMP_USER_ID
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 @router.post("/entries", response_model=dict)
 async def create_entry(entry_data: WisdomVaultEntryCreate, db=Depends(get_database)):
