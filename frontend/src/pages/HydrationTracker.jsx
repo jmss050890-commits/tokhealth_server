@@ -38,7 +38,9 @@ const HydrationTracker = () => {
 
   const fetchTodayHydration = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/hydration/today`);
+      const response = await fetch(`${BACKEND_URL}/api/hydration/today`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success && data.data) {
         setTodayIntake(data.data.total_ml || 0);
@@ -63,7 +65,7 @@ const HydrationTracker = () => {
     try {
       await fetch(`${BACKEND_URL}/api/hydration/log`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ amount_ml: amount })
       });
     } catch (error) {
