@@ -18,6 +18,7 @@ import HealthTrends from '@/pages/HealthTrends';
 import ImportData from '@/pages/ImportData';
 import SpiritualVault from '@/pages/SpiritualVault';
 import SupportTokHealth from '@/pages/SupportTokHealth';
+import { getAuthHeaders } from '@/utils/auth';
 
 const Dashboard = ({ currentUser, onLogout }) => {
   const [currentView, setCurrentView] = useState('dashboard');
