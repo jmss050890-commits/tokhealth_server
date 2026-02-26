@@ -4,9 +4,94 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { User, Activity, Heart, Scale, Ruler, Calendar, Target, CheckCircle } from 'lucide-react';
+import { User, Activity, Heart, Scale, Ruler, Calendar, Target, CheckCircle, AlertTriangle, Utensils, Cross, X, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+
+const COMMON_ALLERGIES = [
+  'Peanuts', 'Tree Nuts', 'Milk/Dairy', 'Eggs', 'Wheat/Gluten', 'Soy',
+  'Fish', 'Shellfish', 'Sesame', 'Corn', 'Sulfites', 'Latex',
+  'Penicillin', 'Aspirin/NSAIDs', 'Ibuprofen', 'Bee Stings', 'Dust Mites', 'Pollen', 'Mold', 'Pet Dander'
+];
+
+const COMMON_FOOD_TOLERANCES = [
+  'Lactose Intolerant', 'Gluten Sensitive', 'Fructose Intolerant', 'Histamine Intolerant',
+  'Caffeine Sensitive', 'Alcohol Intolerant', 'Spicy Food Sensitive', 'Acidic Food Sensitive',
+  'MSG Sensitive', 'Artificial Sweetener Sensitive', 'High FODMAP Intolerant', 'Nightshade Sensitive'
+];
+
+const SPIRITUAL_PREFERENCES = [
+  'Christianity', 'Islam', 'Hinduism', 'Buddhism', 'Judaism',
+  'Sikhism', 'Taoism', 'Shinto', 'Bahá\'í Faith', 'Jainism',
+  'Spiritual but not religious', 'Agnostic', 'Atheist', 'Prefer not to say'
+];
+
+const TagInput = ({ items, onAdd, onRemove, options, placeholder, testIdPrefix }) => {
+  const [inputVal, setInputVal] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const filtered = options.filter(o => 
+    o.toLowerCase().includes(inputVal.toLowerCase()) && !items.includes(o)
+  );
+
+  const addItem = (item) => {
+    if (item && !items.includes(item)) {
+      onAdd(item);
+    }
+    setInputVal('');
+    setShowDropdown(false);
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-1.5 min-h-[28px]">
+        {items.map((item, i) => (
+          <span key={i} className="inline-flex items-center bg-sky-100 text-sky-800 text-xs px-2 py-1 rounded-full">
+            {item}
+            <button onClick={() => onRemove(item)} className="ml-1 hover:text-red-500" data-testid={`${testIdPrefix}-remove-${i}`}>
+              <X className="w-3 h-3" />
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className="relative">
+        <div className="flex gap-2">
+          <Input
+            placeholder={placeholder}
+            value={inputVal}
+            onChange={(e) => { setInputVal(e.target.value); setShowDropdown(true); }}
+            onFocus={() => setShowDropdown(true)}
+            className="bg-white border-slate-200 text-slate-800 flex-1"
+            data-testid={`${testIdPrefix}-input`}
+          />
+          <Button
+            type="button"
+            onClick={() => addItem(inputVal.trim())}
+            disabled={!inputVal.trim()}
+            size="sm"
+            className="bg-sky-600 hover:bg-sky-700 text-white px-3"
+            data-testid={`${testIdPrefix}-add-btn`}
+          >
+            <Plus className="w-4 h-4" />
+          </Button>
+        </div>
+        {showDropdown && inputVal && filtered.length > 0 && (
+          <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+            {filtered.slice(0, 8).map((opt, i) => (
+              <button
+                key={i}
+                onClick={() => addItem(opt)}
+                className="w-full text-left px-3 py-2 text-sm hover:bg-sky-50 text-slate-700"
+                data-testid={`${testIdPrefix}-option-${i}`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const UserProfile = ({ onProfileSaved }) => {
   const [profile, setProfile] = useState(null);
@@ -21,7 +106,10 @@ const UserProfile = ({ onProfileSaved }) => {
     activity_level: 'moderate',
     blood_type: '',
     health_goals: [],
-    medical_conditions: []
+    medical_conditions: [],
+    allergies: [],
+    food_tolerances: [],
+    spiritual_preference: ''
   });
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
