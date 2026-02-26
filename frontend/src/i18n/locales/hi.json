@@ -1,13 +1,193 @@
 {
   "app_name": "TokHealth",
-  "tagline": "लोगों को जीवित रखें",
+  "tagline": "लोगों को जिंदा रखो",
+  "language": "भाषा",
   "nav": { "dashboard": "डैशबोर्ड", "profile": "प्रोफ़ाइल", "logout": "लॉग आउट" },
-  "dashboard": { "welcome": "वापसी पर स्वागत है", "quick_stats": "त्वरित आँकड़े", "calories": "कैलोरी", "water": "पानी", "steps": "कदम", "heart_rate": "हृदय गति", "features": "सुविधाएँ", "support": "हमारे मिशन का समर्थन करें" },
-  "cards": { "loop": "द लूप", "loop_desc": "आपका स्वास्थ्य क्षेत्र", "coach": "स्वास्थ्य कोच", "coach_desc": "AI मार्गदर्शन", "nutrition": "पोषण", "nutrition_desc": "अपना भोजन ट्रैक करें", "biometrics": "बायोमेट्रिक्स", "biometrics_desc": "महत्वपूर्ण संकेत", "hydration": "जलयोजन", "hydration_desc": "पानी का सेवन", "prescriptions": "नुस्खे", "prescriptions_desc": "आपकी दवाइयाँ", "wisdom": "ज्ञान तिजोरी", "wisdom_desc": "डायरी और लैब", "spiritual": "आध्यात्मिक तिजोरी", "spiritual_desc": "आस्था और कृतज्ञता", "emergency": "आपातकालीन", "emergency_desc": "त्वरित संपर्क", "export": "चिकित्सा निर्यात", "export_desc": "रिपोर्ट प्रिंट करें", "trends": "स्वास्थ्य रुझान", "trends_desc": "आपके विश्लेषण", "family": "परिवार", "family_desc": "जुड़े हुए खाते", "import": "डेटा आयात", "import_desc": "CSV और उपकरण", "privacy": "डेटा गोपनीयता", "privacy_desc": "निर्यात और प्रबंधन", "healthkit": "Apple Health", "healthkit_desc": "HealthKit सिंक", "notifications": "अनुस्मारक", "notifications_desc": "सूचनाएँ", "barcode": "बारकोड स्कैनर", "barcode_desc": "खाद्य लेबल स्कैन करें" },
-  "auth": { "sign_in": "साइन इन", "sign_up": "साइन अप", "email": "ईमेल", "password": "पासवर्ड", "name": "पूरा नाम", "login_success": "वापसी पर स्वागत!", "register_success": "खाता बनाया गया!", "no_account": "खाता नहीं है?", "have_account": "पहले से खाता है?" },
-  "profile": { "title": "आपकी बेसलाइन", "personal_info": "व्यक्तिगत जानकारी", "allergies": "एलर्जी", "food_tolerances": "खाद्य असहिष्णुता", "spiritual_pref": "आध्यात्मिक प्राथमिकता", "save": "प्रोफ़ाइल सहेजें", "update": "प्रोफ़ाइल अपडेट करें" },
-  "coach": { "title": "आपका स्वास्थ्य कोच", "ask": "अपने कोच से पूछें", "placeholder": "अपना प्रश्न लिखें...", "thinking": "सोच रहा है...", "send_photo": "विश्लेषण के लिए फोटो भेजें" },
-  "common": { "loading": "लोड हो रहा है...", "save": "सहेजें", "cancel": "रद्द करें", "delete": "हटाएँ", "back": "वापस", "search": "खोजें", "add": "जोड़ें", "edit": "संपादित करें", "close": "बंद करें", "confirm": "पुष्टि करें", "today": "आज", "no_data": "अभी तक कोई डेटा नहीं", "error": "कुछ गलत हो गया", "success": "सफलता" },
-  "privacy": { "title": "डेटा गोपनीयता डैशबोर्ड", "subtitle": "आपका डेटा, आपका नियंत्रण", "export_data": "अपना डेटा निर्यात करें", "delete_account": "खाता हटाएँ", "records": "रिकॉर्ड", "total_records": "कुल रिकॉर्ड" },
-  "language": "भाषा"
+  "dashboard": {
+    "subtitle": "आपका AI-संचालित स्वास्थ्य साथी",
+    "loop_subtitle": "एक नज़र में अपनी पूरी स्वास्थ्य स्थिति देखें",
+    "show_loop": "लूप दिखाएं",
+    "today_stats": "आज की त्वरित स्थिति",
+    "calories": "कैलोरी", "protein": "प्रोटीन", "water": "पानी", "steps": "कदम",
+    "more_features": "और सुविधाएं", "show_less": "कम दिखाएं", "support": "हमारे मिशन का समर्थन करें"
+  },
+  "cards": {
+    "loop": "द लूप", "loop_desc": "आपका स्वास्थ्य क्षेत्र",
+    "coach": "स्वास्थ्य कोच", "coach_desc": "AI-संचालित मार्गदर्शन",
+    "nutrition": "पोषण", "nutrition_desc": "भोजन ट्रैक करें",
+    "biometrics": "बायोमेट्रिक्स", "biometrics_desc": "जीवन संकेत ट्रैक करें",
+    "hydration": "जलयोजन", "hydration_desc": "पानी का सेवन",
+    "prescriptions": "नुस्खे", "prescriptions_desc": "आपकी दवाइयां",
+    "wisdom": "ज्ञान तिजोरी", "wisdom_desc": "डायरी और लैब",
+    "spiritual": "आध्यात्मिक तिजोरी", "spiritual_desc": "आस्था और कृतज्ञता",
+    "emergency": "आपातकाल", "emergency_desc": "त्वरित संपर्क",
+    "export": "मेडिकल एक्सपोर्ट", "export_desc": "रिपोर्ट प्रिंट करें",
+    "trends": "स्वास्थ्य रुझान", "trends_desc": "आपके विश्लेषण",
+    "family": "परिवार", "family_desc": "लिंक्ड अकाउंट",
+    "import": "डेटा आयात", "import_desc": "CSV और उपकरण",
+    "privacy": "डेटा गोपनीयता", "privacy_desc": "निर्यात और प्रबंधन",
+    "healthkit": "Apple Health", "healthkit_desc": "HealthKit सिंक",
+    "notifications": "रिमाइंडर", "notifications_desc": "सूचनाएं",
+    "barcode": "बारकोड स्कैनर", "barcode_desc": "फूड लेबल स्कैन करें"
+  },
+  "auth": {
+    "sign_in": "साइन इन", "sign_up": "साइन अप", "email": "ईमेल", "password": "पासवर्ड", "name": "पूरा नाम",
+    "login_success": "वापस स्वागत है!", "register_success": "अकाउंट बनाया गया!",
+    "no_account": "अकाउंट नहीं है?", "have_account": "पहले से अकाउंट है?",
+    "email_required": "ईमेल और पासवर्ड आवश्यक हैं", "name_required": "पंजीकरण के लिए नाम आवश्यक है",
+    "welcome": "में आपका स्वागत है", "subtitle": "आपका AI-संचालित स्वास्थ्य साथी", "disclaimer": "पेशेवर चिकित्सा सलाह का विकल्प नहीं"
+  },
+  "profile": {
+    "title": "आपकी बेसलाइन", "personal_info": "व्यक्तिगत जानकारी",
+    "age": "उम्र", "height": "ऊंचाई (सेमी)", "weight": "वजन (किग्रा)",
+    "gender": "लिंग", "male": "पुरुष", "female": "महिला", "other": "अन्य",
+    "allergies": "एलर्जी", "allergies_placeholder": "जैसे मूंगफली, शेलफिश",
+    "food_tolerances": "खाद्य संवेदनशीलता", "food_tolerances_placeholder": "जैसे लैक्टोज, ग्लूटेन",
+    "spiritual_pref": "आध्यात्मिक वरीयता", "save": "प्रोफ़ाइल सहेजें", "update": "प्रोफ़ाइल अपडेट करें", "saved_success": "प्रोफ़ाइल सफलतापूर्वक सहेजी गई!"
+  },
+  "loop": {
+    "title_the": "द", "title_loop": "लूप",
+    "subtitle": "एक नज़र में आपकी पूरी स्वास्थ्य स्थिति",
+    "dedication": "Jerome Jr. और Wade के लिए - पूरा चक्र",
+    "no_data": "कोई डेटा नहीं", "start_tracking": "ट्रैकिंग शुरू करें",
+    "keep_going": "जारी रखो!", "stay_focused": "केंद्रित रहो", "take_action": "कार्रवाई करो",
+    "green_msg": "शानदार! आप हरे क्षेत्र में हैं!", "green_desc": "आपके स्वास्थ्य मेट्रिक्स लक्ष्य पर हैं। जारी रखें!",
+    "yellow_msg": "केंद्रित रहें - पीला क्षेत्र", "yellow_desc": "कुछ मेट्रिक्स पर ध्यान देने की जरूरत है। आज समायोजन करें।",
+    "red_msg": "कार्रवाई आवश्यक - लाल क्षेत्र", "red_desc": "महत्वपूर्ण मेट्रिक्स को तत्काल ध्यान की आवश्यकता है। अपने डॉक्टर से परामर्श करें।",
+    "nutrition": "पोषण", "calories": "कैलोरी", "protein": "प्रोटीन",
+    "meals_logged": "आज दर्ज किए गए भोजन", "no_meals": "आज कोई भोजन दर्ज नहीं",
+    "heart_vitals": "हृदय और जीवन संकेत", "heart_rate": "हृदय गति", "blood_pressure": "रक्तचाप", "blood_oxygen": "रक्त ऑक्सीजन",
+    "no_vitals": "आज कोई जीवन संकेत दर्ज नहीं",
+    "activity": "गतिविधि", "steps": "कदम", "no_activity": "आज कोई गतिविधि दर्ज नहीं",
+    "refresh": "रिफ्रेश", "trends": "रुझान", "coach": "कोच",
+    "back_to_green": "हरे में वापस", "back_to_green_help": "हरे में वापस आने में मदद चाहिए?",
+    "back_to_green_desc": "अपने क्षेत्र को सुधारने के लिए त्वरित हस्तक्षेप",
+    "motto": "ठीक करो, चलाओ, फिर से - जब तक स्वास्थ्य न जीते",
+    "legacy": "हर जगह के परिवारों के लिए - Jerome Jr. और Wade, यह आपकी विरासत है",
+    "loading": "लूप लोड हो रहा है..."
+  },
+  "coach": {
+    "title": "आपका स्वास्थ्य कोच", "rename": "कोच का नाम बदलें", "name_coach": "अपने कोच का नाम रखें",
+    "name_placeholder": "जैसे आशा, डॉ. सारा, कोच राज...",
+    "voice_on": "चालू", "voice_off": "बंद", "voice": "आवाज़", "enable": "सक्षम", "disable": "अक्षम", "stop": "रोकें",
+    "chat_with": "से चैट करें", "start_conversation": "बातचीत शुरू करें", "ask_anything": "स्वास्थ्य के बारे में कुछ भी पूछें!",
+    "ask_placeholder": "{{name}} से कुछ भी पूछें...", "listening": "सुन रहे हैं...", "thinking": "सोच रहे हैं...", "speak": "बोलें",
+    "send_photo": "विश्लेषण के लिए फोटो भेजें", "quick_topics": "त्वरित विषय",
+    "nutrition_q": "मैं अपना पोषण कैसे सुधार सकता हूं?", "exercise_q": "मुझे कौन सा व्यायाम करना चाहिए?",
+    "stress_q": "तनाव प्रबंधन में मदद करें", "sleep_q": "बेहतर नींद के टिप्स",
+    "nutrition": "पोषण", "exercise": "व्यायाम", "stress": "तनाव", "sleep": "नींद",
+    "ai_powered": "AI-संचालित", "voice_text": "आवाज़ + टेक्स्ट", "footer": "लोगों को जिंदा रखो - AI स्वास्थ्य मार्गदर्शन"
+  },
+  "nutrition": {
+    "title": "पोषण ट्रैकर", "subtitle": "मैन्युअल या फोटो से भोजन दर्ज करें",
+    "today": "आज का पोषण", "calories": "कैलोरी", "protein": "प्रोटीन", "carbs": "कार्ब्स", "fat": "वसा", "fiber": "फाइबर",
+    "ai_recognition": "AI भोजन पहचान", "take_photo": "फोटो लें", "upload": "अपलोड", "photo_prompt": "अपने भोजन की फोटो लें",
+    "analyzing": "AI विश्लेषण हो रहा है...", "analyze_meal": "भोजन विश्लेषण", "analysis_complete": "AI विश्लेषण पूरा",
+    "auto_filled": "खाद्य पदार्थ स्वतः भरे गए। जरूरत हो तो समायोजित करें!", "log_meal": "भोजन दर्ज करें",
+    "meal_type": "भोजन प्रकार", "breakfast": "नाश्ता", "lunch": "दोपहर का भोजन", "dinner": "रात का भोजन", "snack": "स्नैक",
+    "food_items": "खाद्य पदार्थ", "food_name": "खाने का नाम", "food_placeholder": "जैसे चिकन",
+    "qty": "मात्रा", "unit": "इकाई", "cal": "कैल", "prot": "प्रोट", "carb": "कार्ब", "fib": "फाइ",
+    "notes": "नोट्स (वैकल्पिक)", "notes_placeholder": "इस भोजन के बाद कैसा लगा?",
+    "today_meals": "आज के भोजन", "logging": "दर्ज हो रहा है...", "logged_success": "सफलतापूर्वक दर्ज!",
+    "footer": "लोगों को जिंदा रखो - जो आपको पोषित करता है उसे ट्रैक करें"
+  },
+  "biometrics": {
+    "title": "बायोमेट्रिक्स ट्रैकर", "subtitle": "अपने जीवन संकेत ट्रैक करें",
+    "heart_rate": "हृदय गति (BPM)", "bp_systolic": "BP सिस्टोलिक", "bp_diastolic": "BP डायस्टोलिक",
+    "blood_oxygen": "रक्त ऑक्सीजन (SpO2%)", "body_temp": "शरीर का तापमान (C)", "steps": "कदम",
+    "submit": "बायोमेट्रिक्स दर्ज करें", "logging": "दर्ज हो रहा है...",
+    "camera_scan": "कैमरा स्कैन", "manual_entry": "मैन्युअल प्रविष्टि",
+    "zones": "स्वास्थ्य क्षेत्र", "normal": "सामान्य", "caution": "सावधानी", "alert": "अलर्ट",
+    "logged_success": "बायोमेट्रिक्स सफलतापूर्वक दर्ज!", "footer": "लोगों को जिंदा रखो - अपने नंबर जानें"
+  },
+  "hydration": {
+    "title": "जलयोजन", "subtitle": "हाइड्रेटेड रहें, स्वस्थ रहें",
+    "of_goal": "{{goal}}L लक्ष्य का", "complete": "पूरा", "remaining": "शेष",
+    "quick_log": "त्वरित लॉग", "glass": "1 गिलास", "bottle": "बोतल", "mug": "मग", "small": "छोटा",
+    "today_log": "आज का लॉग", "entries": "प्रविष्टियां",
+    "tips_title": "जलयोजन टिप्स", "tip1": "उठते ही एक गिलास पानी पिएं", "tip2": "हमेशा पास में पानी की बोतल रखें",
+    "tip3": "प्यास लगने से पहले पिएं", "tip4": "दिन भर नियमित रिमाइंडर सेट करें",
+    "goal_reached": "लक्ष्य पूरा! आज शानदार जलयोजन!", "logged_msg": "दर्ज! {{remaining}}ml शेष",
+    "msg_start": "अपनी जलयोजन यात्रा शुरू करें!", "msg_25": "पीते रहें! आप कर सकते हैं।", "msg_50": "अच्छी प्रगति! लगातार रहें।",
+    "msg_75": "आधे से ज़्यादा! जारी रखें!", "msg_90": "लक्ष्य के करीब! मजबूती से खत्म करें!", "msg_100": "लक्ष्य पूरा! अद्भुत!",
+    "footer": "लोगों को जिंदा रखो - जलयोजन ही जीवन है"
+  },
+  "prescriptions": {
+    "title": "नुस्खा ट्रैकर", "subtitle": "अपनी दवाइयां प्रबंधित करें",
+    "add_med": "दवाई जोड़ें", "scan_label": "लेबल स्कैन करें", "med_name": "दवाई का नाम",
+    "dosage": "खुराक", "frequency": "आवृत्ति", "times": "समय", "with_food": "खाने के साथ लें",
+    "instructions": "निर्देश", "prescriber": "डॉक्टर", "save": "नुस्खा सहेजें",
+    "mark_taken": "लिया हुआ", "taken": "लिया", "check_interactions": "इंटरैक्शन जांचें",
+    "no_meds": "अभी तक कोई दवाई नहीं जोड़ी", "reminders": "रिमाइंडर",
+    "interaction_safe": "कोई ज्ञात इंटरैक्शन नहीं मिला", "interaction_warning": "संभावित इंटरैक्शन पाया गया",
+    "footer": "लोगों को जिंदा रखो - ट्रैक पर रहें"
+  },
+  "wisdom": {
+    "title": "ज्ञान तिजोरी", "subtitle": "आपकी एन्क्रिप्टेड स्वास्थ्य डायरी",
+    "journal": "डायरी", "lab_results": "लैब रिजल्ट", "drug_lookup": "दवा खोज",
+    "new_entry": "नई प्रविष्टि", "entry_type": "प्रविष्टि प्रकार", "journal_type": "डायरी", "reflection": "चिंतन", "gratitude": "कृतज्ञता",
+    "title_label": "शीर्षक", "body_label": "अपने विचार लिखें...",
+    "mood_before": "पहले का मूड", "mood_after": "बाद का मूड", "tags": "टैग",
+    "save_entry": "प्रविष्टि सहेजें", "upload_lab": "लैब रिजल्ट अपलोड", "analyze_lab": "AI से विश्लेषण",
+    "search_drug": "दवा खोजें...", "search_btn": "खोजें",
+    "no_entries": "अभी तक कोई डायरी प्रविष्टि नहीं", "no_labs": "अभी तक कोई लैब रिजल्ट नहीं",
+    "camera_save": "डायरी में फोटो सहेजें", "footer": "लोगों को जिंदा रखो - ज्ञान शक्ति है"
+  },
+  "spiritual": {
+    "title": "आध्यात्मिक तिजोरी", "subtitle": "आस्था, कृतज्ञता और आंतरिक शांति",
+    "journal": "डायरी", "prayers": "प्रार्थनाएं", "declare": "घोषणा", "guide": "AI मार्गदर्शक",
+    "new_entry": "नई प्रविष्टि", "entry_type": "प्रकार",
+    "gratitude": "कृतज्ञता", "reflection": "चिंतन", "meditation": "ध्यान", "scripture": "धर्मग्रंथ",
+    "title_label": "शीर्षक", "content": "सामग्री", "mood": "मूड",
+    "peaceful": "शांतिपूर्ण", "grateful": "कृतज्ञ", "hopeful": "आशावान", "reflective": "चिंतनशील", "joyful": "आनंदित",
+    "save_entry": "प्रविष्टि सहेजें", "new_prayer": "नई प्रार्थना अनुरोध", "prayer_request": "प्रार्थना अनुरोध",
+    "for_whom": "किसके लिए", "self": "स्वयं", "family": "परिवार", "community": "समुदाय", "world": "दुनिया",
+    "save_prayer": "प्रार्थना सहेजें", "mark_answered": "उत्तर मिला",
+    "no_entries": "अभी तक कोई आध्यात्मिक प्रविष्टि नहीं", "no_prayers": "अभी तक कोई प्रार्थना अनुरोध नहीं",
+    "ask_guide": "अपने आध्यात्मिक मार्गदर्शक से पूछें...", "guide_context": "संदर्भ", "send": "भेजें",
+    "footer": "लोगों को जिंदा रखो - अपनी आत्मा का पोषण करें"
+  },
+  "emergency": {
+    "title": "आपातकालीन संपर्क", "subtitle": "जब सबसे ज़रूरी हो तब त्वरित पहुंच",
+    "call_911": "911 पर कॉल करें", "quick_dial": "त्वरित डायल", "add_contact": "संपर्क जोड़ें",
+    "name": "नाम", "relationship": "संबंध", "phone_primary": "प्राथमिक फोन", "phone_secondary": "द्वितीयक फोन",
+    "email": "ईमेल", "medical_info": "चिकित्सा जानकारी", "primary_contact": "प्राथमिक संपर्क", "save": "संपर्क सहेजें",
+    "no_contacts": "अभी तक कोई आपातकालीन संपर्क नहीं", "family": "परिवार", "friend": "मित्र", "doctor": "डॉक्टर", "other": "अन्य",
+    "call": "कॉल करें", "confirm_911": "क्या आप 911 पर कॉल करना चाहते हैं?",
+    "footer": "लोगों को जिंदा रखो - तैयार रहें"
+  },
+  "export": {
+    "title": "मेडिकल एक्सपोर्ट", "subtitle": "प्रिंट योग्य स्वास्थ्य रिपोर्ट बनाएं",
+    "generate": "रिपोर्ट बनाएं", "print": "रिपोर्ट प्रिंट करें", "includes": "रिपोर्ट में शामिल",
+    "profile_section": "प्रोफ़ाइल और बेसलाइन", "biometrics_section": "हालिया बायोमेट्रिक्स",
+    "nutrition_section": "पोषण सारांश", "prescriptions_section": "सक्रिय नुस्खे",
+    "footer": "लोगों को जिंदा रखो - अपना डेटा शेयर करें"
+  },
+  "trends": {
+    "title": "स्वास्थ्य रुझान", "subtitle": "समय के साथ आपके स्वास्थ्य विश्लेषण",
+    "period": "समय अवधि", "week": "7 दिन", "month": "30 दिन", "quarter": "90 दिन",
+    "no_data": "रुझान दिखाने के लिए पर्याप्त डेटा नहीं", "footer": "लोगों को जिंदा रखो - अपनी प्रगति ट्रैक करें"
+  },
+  "family": {
+    "title": "परिवार प्रबंधक", "subtitle": "पारिवारिक खाते लिंक और प्रबंधित करें",
+    "invite": "परिवार के सदस्य को आमंत्रित करें", "invite_email": "ईमेल", "send_invite": "आमंत्रण भेजें",
+    "pending": "लंबित आमंत्रण", "members": "परिवार के सदस्य", "no_members": "अभी कोई सदस्य लिंक नहीं",
+    "footer": "लोगों को जिंदा रखो - एक साथ"
+  },
+  "import_data": {
+    "title": "डेटा आयात", "subtitle": "CSV या उपकरणों से आयात",
+    "csv_upload": "CSV अपलोड", "fitbit": "Fitbit कनेक्ट करें", "select_file": "फ़ाइल चुनें",
+    "importing": "आयात हो रहा है...", "success": "डेटा सफलतापूर्वक आयात!", "footer": "लोगों को जिंदा रखो - सारा डेटा"
+  },
+  "privacy": {
+    "title": "डेटा गोपनीयता डैशबोर्ड", "subtitle": "आपका डेटा, आपका नियंत्रण",
+    "export_data": "अपना डेटा निर्यात करें", "delete_account": "खाता हटाएं",
+    "records": "रिकॉर्ड", "total_records": "कुल रिकॉर्ड", "confirm_delete": "क्या आप निश्चित हैं? यह पूर्ववत नहीं किया जा सकता।",
+    "footer": "लोगों को जिंदा रखो - आपकी गोपनीयता मायने रखती है"
+  },
+  "healthkit": { "title": "Apple HealthKit", "subtitle": "Apple Health के साथ सिंक करें", "connect": "HealthKit कनेक्ट करें", "sync_now": "अभी सिंक करें", "last_sync": "अंतिम सिंक", "footer": "लोगों को जिंदा रखो - जुड़े रहें" },
+  "notifications": { "title": "रिमाइंडर और सूचनाएं", "subtitle": "समय पर रिमाइंडर से ट्रैक पर रहें", "enable": "सूचनाएं सक्षम करें", "medication_reminders": "दवा रिमाइंडर", "hydration_reminders": "जलयोजन रिमाइंडर", "meal_reminders": "भोजन रिमाइंडर", "exercise_reminders": "व्यायाम रिमाइंडर", "footer": "लोगों को जिंदा रखो - कुछ भी मिस न करें" },
+  "barcode": { "title": "बारकोड स्कैनर", "subtitle": "पोषण जानकारी के लिए फूड लेबल स्कैन करें", "scan": "बारकोड स्कैन", "scanning": "स्कैन हो रहा है...", "product_found": "उत्पाद मिला", "not_found": "उत्पाद नहीं मिला", "add_to_log": "पोषण लॉग में जोड़ें", "footer": "लोगों को जिंदा रखो - स्कैन और ट्रैक" },
+  "disclaimer": { "title": "महत्वपूर्ण स्वास्थ्य अस्वीकरण", "text1": "TokHealth आपकी स्वास्थ्य यात्रा को ट्रैक और प्रबंधित करने में मदद के लिए डिज़ाइन किया गया है।", "text2": "यह ऐप पेशेवर चिकित्सा सलाह, निदान या उपचार का विकल्प नहीं है।", "text3": "चिकित्सा निर्णयों के लिए हमेशा योग्य स्वास्थ्य सेवा प्रदाता से परामर्श करें।", "accept": "मैं समझता/समझती हूं और स्वीकार करता/करती हूं", "emergency_note": "चिकित्सा आपातकाल में तुरंत 911 पर कॉल करें" },
+  "common": { "loading": "लोड हो रहा है...", "save": "सहेजें", "cancel": "रद्द करें", "delete": "हटाएं", "back": "वापस", "search": "खोजें", "add": "जोड़ें", "edit": "संपादित करें", "close": "बंद करें", "confirm": "पुष्टि करें", "today": "आज", "no_data": "अभी तक कोई डेटा नहीं", "error": "कुछ गलत हो गया", "success": "सफलता", "submit": "जमा करें", "or": "या" }
 }

@@ -1,13 +1,216 @@
 {
   "app_name": "TokHealth",
   "tagline": "让人们活着",
+  "language": "语言",
   "nav": { "dashboard": "仪表板", "profile": "个人资料", "logout": "退出" },
-  "dashboard": { "welcome": "欢迎回来", "quick_stats": "快速统计", "calories": "卡路里", "water": "水", "steps": "步数", "heart_rate": "心率", "features": "功能", "support": "支持我们的使命" },
-  "cards": { "loop": "健康循环", "loop_desc": "您的健康区域", "coach": "健康教练", "coach_desc": "AI指导", "nutrition": "营养", "nutrition_desc": "记录您的膳食", "biometrics": "生物指标", "biometrics_desc": "跟踪生命体征", "hydration": "水分", "hydration_desc": "水分摄入", "prescriptions": "处方", "prescriptions_desc": "您的药物", "wisdom": "智慧宝库", "wisdom_desc": "日记和化验", "spiritual": "灵性宝库", "spiritual_desc": "信仰与感恩", "emergency": "紧急联系", "emergency_desc": "快速联系人", "export": "医疗导出", "export_desc": "打印报告", "trends": "健康趋势", "trends_desc": "您的分析", "family": "家庭", "family_desc": "关联账户", "import": "导入数据", "import_desc": "CSV和设备", "privacy": "数据隐私", "privacy_desc": "导出和管理", "healthkit": "苹果健康", "healthkit_desc": "同步HealthKit", "notifications": "提醒", "notifications_desc": "通知", "barcode": "条码扫描", "barcode_desc": "扫描食品标签" },
-  "auth": { "sign_in": "登录", "sign_up": "注册", "email": "电子邮件", "password": "密码", "name": "全名", "login_success": "欢迎回来！", "register_success": "账户已创建！", "no_account": "没有账户？", "have_account": "已有账户？" },
-  "profile": { "title": "您的基线", "personal_info": "个人信息", "allergies": "过敏", "food_tolerances": "食物不耐受", "spiritual_pref": "灵性偏好", "save": "保存资料", "update": "更新资料" },
-  "coach": { "title": "您的健康教练", "ask": "询问您的健康教练", "placeholder": "输入您的问题...", "thinking": "思考中...", "send_photo": "发送照片进行分析" },
-  "common": { "loading": "加载中...", "save": "保存", "cancel": "取消", "delete": "删除", "back": "返回", "search": "搜索", "add": "添加", "edit": "编辑", "close": "关闭", "confirm": "确认", "today": "今天", "no_data": "暂无数据", "error": "出了点问题", "success": "成功" },
-  "privacy": { "title": "数据隐私面板", "subtitle": "您的数据，您做主", "export_data": "导出您的数据", "delete_account": "删除账户", "records": "条记录", "total_records": "总记录" },
-  "language": "语言"
+  "dashboard": {
+    "subtitle": "您的AI健康伙伴",
+    "loop_subtitle": "一目了然地查看您的完整健康状态",
+    "show_loop": "查看健康环",
+    "today_stats": "今日快速统计",
+    "calories": "卡路里", "protein": "蛋白质", "water": "水", "steps": "步数",
+    "more_features": "更多功能", "show_less": "收起", "support": "支持我们的使命"
+  },
+  "cards": {
+    "loop": "健康环", "loop_desc": "您的健康区域",
+    "coach": "健康教练", "coach_desc": "AI驱动指导",
+    "nutrition": "营养", "nutrition_desc": "追踪饮食",
+    "biometrics": "生物指标", "biometrics_desc": "追踪生命体征",
+    "hydration": "水分", "hydration_desc": "饮水量",
+    "prescriptions": "处方", "prescriptions_desc": "您的药物",
+    "wisdom": "智慧库", "wisdom_desc": "日记和化验",
+    "spiritual": "灵性库", "spiritual_desc": "信仰与感恩",
+    "emergency": "紧急联系", "emergency_desc": "快速联系人",
+    "export": "医疗导出", "export_desc": "打印报告",
+    "trends": "健康趋势", "trends_desc": "您的分析",
+    "family": "家庭", "family_desc": "关联账户",
+    "import": "导入数据", "import_desc": "CSV和设备",
+    "privacy": "数据隐私", "privacy_desc": "导出和管理",
+    "healthkit": "Apple Health", "healthkit_desc": "HealthKit同步",
+    "notifications": "提醒", "notifications_desc": "通知",
+    "barcode": "条形码扫描", "barcode_desc": "扫描食品标签"
+  },
+  "auth": {
+    "sign_in": "登录", "sign_up": "注册", "email": "电子邮件", "password": "密码", "name": "全名",
+    "login_success": "欢迎回来!", "register_success": "账户已创建!",
+    "no_account": "没有账户?", "have_account": "已有账户?",
+    "email_required": "需要电子邮件和密码", "name_required": "注册需要姓名",
+    "welcome": "欢迎来到", "subtitle": "您的AI健康伙伴", "disclaimer": "不能替代专业医疗建议"
+  },
+  "profile": {
+    "title": "您的基准", "personal_info": "个人信息",
+    "age": "年龄", "height": "身高(厘米)", "weight": "体重(公斤)",
+    "gender": "性别", "male": "男", "female": "女", "other": "其他",
+    "allergies": "过敏", "allergies_placeholder": "如花生、贝类",
+    "food_tolerances": "食物不耐受", "food_tolerances_placeholder": "如乳糖、麸质",
+    "spiritual_pref": "灵性偏好", "save": "保存资料", "update": "更新资料", "saved_success": "资料保存成功!"
+  },
+  "loop": {
+    "title_the": "健康", "title_loop": "环",
+    "subtitle": "一目了然地查看您的完整健康状态",
+    "dedication": "献给Jerome Jr.和Wade - 完整的循环",
+    "no_data": "无数据", "start_tracking": "开始追踪",
+    "keep_going": "继续加油!", "stay_focused": "保持专注", "take_action": "采取行动",
+    "green_msg": "做得好!您在绿色区域!", "green_desc": "您的健康指标达标。继续保持!",
+    "yellow_msg": "保持专注 - 黄色区域", "yellow_desc": "部分指标需要关注。今天做出调整。",
+    "red_msg": "需要行动 - 红色区域", "red_desc": "重要健康指标需要立即关注。请咨询医疗服务提供者。",
+    "nutrition": "营养", "calories": "卡路里", "protein": "蛋白质",
+    "meals_logged": "今日记录的餐次", "no_meals": "今日未记录餐食",
+    "heart_vitals": "心脏和生命体征", "heart_rate": "心率", "blood_pressure": "血压", "blood_oxygen": "血氧",
+    "no_vitals": "今日未记录生命体征",
+    "activity": "活动", "steps": "步数", "no_activity": "今日未记录活动",
+    "refresh": "刷新", "trends": "趋势", "coach": "教练",
+    "back_to_green": "回到绿色", "back_to_green_help": "需要帮助回到绿色?",
+    "back_to_green_desc": "快速干预以改善您的区域",
+    "motto": "修复它，运行它，再来一次 - 直到健康获胜",
+    "legacy": "献给全世界的家庭 - Jerome Jr.和Wade，这是你们的遗产",
+    "loading": "正在加载健康环..."
+  },
+  "coach": {
+    "title": "您的健康教练", "rename": "重命名教练", "name_coach": "给您的教练起个名字",
+    "name_placeholder": "如希望、陈医生、李教练...",
+    "voice_on": "开", "voice_off": "关", "voice": "语音", "enable": "启用", "disable": "禁用", "stop": "停止",
+    "chat_with": "与...聊天", "start_conversation": "开始对话", "ask_anything": "问任何关于健康的问题!",
+    "ask_placeholder": "向{{name}}提问...", "listening": "正在听...", "thinking": "思考中...", "speak": "朗读",
+    "send_photo": "发送照片进行分析", "quick_topics": "快速话题",
+    "nutrition_q": "如何改善我的营养?", "exercise_q": "我应该做什么运动?",
+    "stress_q": "帮我管理压力", "sleep_q": "更好睡眠的建议",
+    "nutrition": "营养", "exercise": "运动", "stress": "压力", "sleep": "睡眠",
+    "ai_powered": "AI驱动", "voice_text": "语音+文字", "footer": "让人们活着 - AI健康指导"
+  },
+  "nutrition": {
+    "title": "营养追踪", "subtitle": "手动记录或拍照记录饮食",
+    "today": "今日营养", "calories": "卡路里", "protein": "蛋白质", "carbs": "碳水", "fat": "脂肪", "fiber": "纤维",
+    "ai_recognition": "AI餐食识别", "take_photo": "拍照", "upload": "上传", "photo_prompt": "拍一张您的餐食照片",
+    "analyzing": "AI分析中...", "analyze_meal": "分析餐食", "analysis_complete": "AI分析完成",
+    "auto_filled": "食物已自动填充。如需调整!", "log_meal": "记录餐食",
+    "meal_type": "餐食类型", "breakfast": "早餐", "lunch": "午餐", "dinner": "晚餐", "snack": "零食",
+    "food_items": "食物", "food_name": "食物名称", "food_placeholder": "如鸡肉",
+    "qty": "量", "unit": "单位", "cal": "卡", "prot": "蛋白", "carb": "碳水", "fib": "纤维",
+    "notes": "备注(可选)", "notes_placeholder": "这顿饭后感觉如何?",
+    "today_meals": "今日餐食", "logging": "记录中...", "logged_success": "记录成功!",
+    "footer": "让人们活着 - 追踪您的饮食"
+  },
+  "biometrics": {
+    "title": "生物指标追踪", "subtitle": "追踪您的生命体征",
+    "heart_rate": "心率(BPM)", "bp_systolic": "收缩压", "bp_diastolic": "舒张压",
+    "blood_oxygen": "血氧(SpO2%)", "body_temp": "体温(°C)", "steps": "步数",
+    "submit": "记录生物指标", "logging": "记录中...",
+    "camera_scan": "摄像头扫描", "manual_entry": "手动输入",
+    "zones": "健康区域", "normal": "正常", "caution": "注意", "alert": "警报",
+    "logged_success": "生物指标记录成功!", "footer": "让人们活着 - 了解您的数据"
+  },
+  "hydration": {
+    "title": "水分追踪", "subtitle": "保持水分，保持健康",
+    "of_goal": "目标{{goal}}升", "complete": "完成", "remaining": "剩余",
+    "quick_log": "快速记录", "glass": "1杯", "bottle": "水瓶", "mug": "马克杯", "small": "小杯",
+    "today_log": "今日记录", "entries": "条记录",
+    "tips_title": "水分提示", "tip1": "起床时喝一杯水", "tip2": "随时保持水瓶在身边",
+    "tip3": "在感到口渴前喝水", "tip4": "设置全天定时提醒",
+    "goal_reached": "目标达成!今天水分摄入很棒!", "logged_msg": "已记录!还剩{{remaining}}毫升",
+    "msg_start": "开始您的水分之旅!", "msg_25": "继续喝!你可以的。", "msg_50": "进展不错!保持。",
+    "msg_75": "已过半!继续!", "msg_90": "快到目标了!加油!", "msg_100": "目标达成!太棒了!",
+    "footer": "让人们活着 - 水分就是生命"
+  },
+  "prescriptions": {
+    "title": "处方追踪", "subtitle": "管理您的药物",
+    "add_med": "添加药物", "scan_label": "扫描标签", "med_name": "药物名称",
+    "dosage": "剂量", "frequency": "频率", "times": "时间", "with_food": "随餐服用",
+    "instructions": "说明", "prescriber": "处方医生", "save": "保存处方",
+    "mark_taken": "标记已服用", "taken": "已服用", "check_interactions": "检查相互作用",
+    "no_meds": "尚未添加药物", "reminders": "提醒",
+    "interaction_safe": "未发现已知相互作用", "interaction_warning": "检测到潜在相互作用",
+    "footer": "让人们活着 - 按时服药"
+  },
+  "wisdom": {
+    "title": "智慧库", "subtitle": "您的加密健康日记",
+    "journal": "日记", "lab_results": "化验结果", "drug_lookup": "药物查询",
+    "new_entry": "新条目", "entry_type": "条目类型", "journal_type": "日记", "reflection": "反思", "gratitude": "感恩",
+    "title_label": "标题", "body_label": "写下您的想法...",
+    "mood_before": "之前心情", "mood_after": "之后心情", "tags": "标签",
+    "save_entry": "保存条目", "upload_lab": "上传化验结果", "analyze_lab": "AI分析",
+    "search_drug": "搜索药物...", "search_btn": "搜索",
+    "no_entries": "还没有日记", "no_labs": "还没有化验结果", "camera_save": "保存照片到日记",
+    "footer": "让人们活着 - 智慧就是力量"
+  },
+  "spiritual": {
+    "title": "灵性库", "subtitle": "信仰、感恩和内心平静",
+    "journal": "日记", "prayers": "祈祷", "declare": "宣告", "guide": "AI指南",
+    "new_entry": "新条目", "entry_type": "类型",
+    "gratitude": "感恩", "reflection": "反思", "meditation": "冥想", "scripture": "经文",
+    "title_label": "标题", "content": "内容", "mood": "心情",
+    "peaceful": "平和", "grateful": "感恩", "hopeful": "充满希望", "reflective": "沉思", "joyful": "喜悦",
+    "save_entry": "保存条目", "new_prayer": "新祈祷请求", "prayer_request": "祈祷请求",
+    "for_whom": "为谁", "self": "自己", "family": "家人", "community": "社区", "world": "世界",
+    "save_prayer": "保存祈祷", "mark_answered": "标记已应答",
+    "no_entries": "还没有灵性条目", "no_prayers": "还没有祈祷请求",
+    "ask_guide": "问您的灵性导师...", "guide_context": "上下文", "send": "发送",
+    "footer": "让人们活着 - 滋养您的灵魂"
+  },
+  "emergency": {
+    "title": "紧急联系人", "subtitle": "关键时刻的快速访问",
+    "call_911": "拨打911", "quick_dial": "快速拨号", "add_contact": "添加联系人",
+    "name": "姓名", "relationship": "关系", "phone_primary": "主要电话", "phone_secondary": "备用电话",
+    "email": "电子邮件", "medical_info": "医疗信息", "primary_contact": "主要联系人", "save": "保存联系人",
+    "no_contacts": "还没有紧急联系人", "family": "家人", "friend": "朋友", "doctor": "医生", "other": "其他",
+    "call": "拨打", "confirm_911": "确定要拨打911吗?", "footer": "让人们活着 - 做好准备"
+  },
+  "export": {
+    "title": "医疗导出", "subtitle": "生成可打印的健康报告",
+    "generate": "生成报告", "print": "打印报告", "includes": "报告包含",
+    "profile_section": "个人资料和基准", "biometrics_section": "近期生物指标",
+    "nutrition_section": "营养摘要", "prescriptions_section": "活跃处方",
+    "footer": "让人们活着 - 分享您的数据"
+  },
+  "trends": {
+    "title": "健康趋势", "subtitle": "您的健康分析",
+    "period": "时间段", "week": "7天", "month": "30天", "quarter": "90天",
+    "no_data": "数据不足无法显示趋势", "footer": "让人们活着 - 追踪进度"
+  },
+  "family": {
+    "title": "家庭管理", "subtitle": "链接和管理家庭账户",
+    "invite": "邀请家庭成员", "invite_email": "电子邮件", "send_invite": "发送邀请",
+    "pending": "待处理邀请", "members": "家庭成员", "no_members": "还没有链接家庭成员",
+    "footer": "让人们活着 - 一起"
+  },
+  "import_data": {
+    "title": "导入数据", "subtitle": "从CSV或设备导入",
+    "csv_upload": "上传CSV", "fitbit": "连接Fitbit", "select_file": "选择文件",
+    "importing": "导入中...", "success": "数据导入成功!", "footer": "让人们活着 - 所有数据"
+  },
+  "privacy": {
+    "title": "数据隐私面板", "subtitle": "您的数据，您做主",
+    "export_data": "导出数据", "delete_account": "删除账户",
+    "records": "记录", "total_records": "总记录", "confirm_delete": "确定吗?此操作不可撤销。",
+    "footer": "让人们活着 - 您的隐私很重要"
+  },
+  "healthkit": {
+    "title": "Apple HealthKit", "subtitle": "与Apple Health同步",
+    "connect": "连接HealthKit", "sync_now": "立即同步", "last_sync": "上次同步",
+    "footer": "让人们活着 - 保持连接"
+  },
+  "notifications": {
+    "title": "提醒和通知", "subtitle": "通过及时提醒保持正轨",
+    "enable": "启用通知", "medication_reminders": "药物提醒", "hydration_reminders": "水分提醒",
+    "meal_reminders": "餐食提醒", "exercise_reminders": "运动提醒",
+    "footer": "让人们活着 - 不错过任何事"
+  },
+  "barcode": {
+    "title": "条形码扫描", "subtitle": "扫描食品标签获取营养信息",
+    "scan": "扫描条形码", "scanning": "扫描中...", "product_found": "找到产品",
+    "not_found": "未找到产品", "add_to_log": "添加到营养记录",
+    "footer": "让人们活着 - 扫描追踪"
+  },
+  "disclaimer": {
+    "title": "重要健康免责声明",
+    "text1": "TokHealth旨在帮助您追踪和管理您的健康之旅。",
+    "text2": "此应用不能替代专业医疗建议、诊断或治疗。",
+    "text3": "请始终咨询合格的医疗保健提供者。",
+    "accept": "我理解并接受", "emergency_note": "如遇医疗紧急情况请立即拨打急救电话"
+  },
+  "common": {
+    "loading": "加载中...", "save": "保存", "cancel": "取消", "delete": "删除", "back": "返回",
+    "search": "搜索", "add": "添加", "edit": "编辑", "close": "关闭", "confirm": "确认",
+    "today": "今天", "no_data": "暂无数据", "error": "出了点问题", "success": "成功", "submit": "提交", "or": "或"
+  }
 }
