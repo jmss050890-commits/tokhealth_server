@@ -22,9 +22,9 @@ const HealthTrends = () => {
     setLoading(true);
     try {
       const [trendsRes, insightsRes, goalsRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/trends/summary?days=${period}`),
-        fetch(`${BACKEND_URL}/api/trends/insights?days=${period}`),
-        fetch(`${BACKEND_URL}/api/trends/goals`)
+        fetch(`${BACKEND_URL}/api/trends/summary?days=${period}`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/trends/insights?days=${period}`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/trends/goals`, { headers: getAuthHeaders() })
       ]);
 
       const trendsData = await trendsRes.json();
