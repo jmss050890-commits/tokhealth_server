@@ -52,7 +52,7 @@ async def create_entry(
                 "ai_analysis_enabled": entry_data.ai_analysis_enabled
             },
             "ai_response": None,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
         
