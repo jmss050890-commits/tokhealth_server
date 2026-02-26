@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, Header
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
@@ -6,21 +6,28 @@ import logging
 
 from core.database import get_database
 from utils.response import success_response
+from utils.auth import get_current_user_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TEMP_USER_ID = "demo-user-001"
+
+async def get_user_id(authorization: str, db) -> str:
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return await get_current_user_id(authorization, db)
 
 @router.get("/summary", response_model=dict)
 async def get_trends_summary(
     days: int = Query(default=7, ge=1, le=90),
     member_id: Optional[str] = None,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get health trends summary for a time period"""
     try:
-        user_id = member_id or TEMP_USER_ID
+        current_user_id = await get_user_id(authorization, db)
+        user_id = member_id or current_user_id
         start_date = datetime.now(timezone.utc) - timedelta(days=days)
         
         # Get biometrics history
