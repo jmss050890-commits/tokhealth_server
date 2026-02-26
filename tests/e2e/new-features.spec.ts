@@ -5,6 +5,19 @@ const BASE_URL = 'https://tokhealth-kpa-1.preview.emergentagent.com';
 const TEST_EMAIL = 'meka@demo.com';
 const TEST_PASSWORD = 'pass123';
 
+// Helper to dismiss toasts
+async function dismissToasts(page) {
+  // Setup toast handler to auto-dismiss sonner toasts
+  await page.addLocatorHandler(
+    page.locator('[data-sonner-toast]'),
+    async (toast) => {
+      // Wait a bit then click to dismiss
+      await toast.click({ timeout: 2000 }).catch(() => {});
+    },
+    { times: 10, noWaitAfter: true }
+  );
+}
+
 // Helper to setup logged in state
 async function setupAuth(page) {
   // First navigate to the page
@@ -28,6 +41,10 @@ async function setupAuth(page) {
   
   // Wait for dashboard
   await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
+  
+  // Setup toast dismissal and wait for any toast to disappear
+  await dismissToasts(page);
+  await page.waitForTimeout(500); // Wait for toast animation to complete
 }
 
 test.describe('P1 - User Profile New Fields', () => {
