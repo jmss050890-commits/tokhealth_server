@@ -169,12 +169,14 @@ async def log_meal(
 @router.get("/logs", response_model=dict)
 async def get_nutrition_logs(
     days: int = 7,
+    authorization: str = Header(None),
     db=Depends(get_database)
 ):
     """Get nutrition logs for the last N days"""
     try:
+        user_id = await get_user_id(authorization, db)
         logs = await db.nutrition_logs.find(
-            {"user_id": TEMP_USER_ID},
+            {"user_id": user_id},
             {"_id": 0}
         ).sort("meal_time", -1).limit(days * 4).to_list(100)  # Assume max 4 meals/day
         
