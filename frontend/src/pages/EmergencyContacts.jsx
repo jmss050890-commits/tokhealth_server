@@ -10,6 +10,7 @@ import {
   Trash2, FileText, Ambulance, Car, Flame
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const EmergencyContacts = () => {
   const [contacts, setContacts] = useState([]);

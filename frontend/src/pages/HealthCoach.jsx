@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2, Mic, MicOff } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const HealthCoach = () => {
   const [messages, setMessages] = useState([]);

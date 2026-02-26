@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Utensils, TrendingUp, Heart, Camera, Upload, Sparkles, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getAuthHeaders } from '@/utils/auth';
 
 const NutritionLogger = () => {
   const [mealType, setMealType] = useState('breakfast');
