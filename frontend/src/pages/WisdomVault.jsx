@@ -16,6 +16,10 @@ const WisdomVault = () => {
   const [expandedEntry, setExpandedEntry] = useState(null);
   const [aiSuggestion, setAiSuggestion] = useState(null);
   const [loadingSuggestion, setLoadingSuggestion] = useState(false);
+  const [activeTab, setActiveTab] = useState('journal');
+  const [labResults, setLabResults] = useState([]);
+  const [analyzingLab, setAnalyzingLab] = useState(false);
+  const labFileRef = useRef(null);
   
   const [formData, setFormData] = useState({
     entry_type: 'journal',
