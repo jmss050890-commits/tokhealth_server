@@ -1,0 +1,79 @@
+{
+  "summary": "PRIVACY AUDIT: User data isolation VERIFIED working. However, CRITICAL BUG found: Backend endpoints return HTTP 500 instead of 401 for unauthenticated requests (detail message shows '401: Authentication required' but status code is 500). This is an exception handling bug - HTTPException is caught by generic 'except Exception' blocks.",
+  "mode": "generate",
+  "baseline_commit": "79a2d3036842c0c1d894125ce91cbb1c19a26f6a",
+  "head_commit": "72765dcc3975b9cb23deba47e7609805eef2a2ea",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "Multiple endpoints (nutrition, hydration, prescriptions, emergency-contacts, health-coach, trends, wisdom-vault, biometrics)",
+        "issue": "Endpoints return HTTP 500 instead of 401 when called without auth. The detail message shows '401: Authentication required' but status code is 500. Root cause: HTTPException(401) is caught by generic 'except Exception as e' handler and re-raised as HTTPException(500, detail=str(e)). Fix needed: Add 'except HTTPException: raise' BEFORE 'except Exception' in all affected routes.",
+        "priority": "CRITICAL",
+        "affected_files": [
+          "/app/backend/modules/nutrition/routes.py",
+          "/app/backend/modules/hydration/routes.py",
+          "/app/backend/modules/prescriptions/routes.py",
+          "/app/backend/modules/emergency_contacts/routes.py",
+          "/app/backend/modules/health_coach/routes.py",
+          "/app/backend/modules/trends/routes.py",
+          "/app/backend/modules/wisdom_vault/routes.py",
+          "/app/backend/modules/biometrics/routes.py",
+          "/app/backend/modules/user_profile/routes.py (POST only)"
+        ]
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "regression_results": {
+    "total_specs": 3,
+    "passed": 42,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pytest_results": {
+    "total_tests": 40,
+    "passed": 25,
+    "failed": 15,
+    "skipped": 0,
+    "note": "15 failures are due to 500 vs 401 status code bug - not actual auth bypass"
+  },
+  "specs_created": [
+    "/app/tests/e2e/auth-dashboard.spec.ts",
+    "/app/tests/e2e/features.spec.ts",
+    "/app/backend/tests/test_privacy_auth.py"
+  ],
+  "specs_updated": [],
+  "quarantined_tests": [],
+  "test_report_links": [
+    "/app/backend/tests/test_privacy_auth.py",
+    "/app/test_reports/pytest/privacy_auth_results.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Fix exception handling in all backend modules - add 'except HTTPException: raise' BEFORE 'except Exception as e' blocks. This ensures auth failures return proper 401 status codes instead of 500.",
+    "Pattern to fix (in each affected route): try: user_id = await get_user_id(...) ... except HTTPException: raise except Exception as e: raise HTTPException(500, str(e))"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_privacy_auth.py",
+    "/app/tests/e2e/auth-dashboard.spec.ts",
+    "/app/tests/e2e/features.spec.ts"
+  ],
+  "success_rate": {
+    "backend": "62.5% (25/40 tests passed - 15 failures due to 500 vs 401 bug)",
+    "frontend": "100% (42/42 tests passed)"
+  },
+  "privacy_audit_results": {
+    "data_isolation": "VERIFIED - Different users cannot see each other's data",
+    "auth_required": "PARTIALLY BROKEN - Endpoints DO require auth, but return wrong status code (500 instead of 401)",
+    "temp_user_id_fallback": "REMOVED - No TEMP_USER_ID fallback exists"
+  },
+  "seed_data_creation": "Created test user for privacy isolation tests: privacy_test_*@test.com",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend privacy tests reveal 500 vs 401 bug. Once main agent fixes exception handling in backend routes, re-run test_privacy_auth.py to verify all 401 tests pass. Frontend tests all pass - auth and navigation working correctly.",
+  "rca_of_issue": "Root cause: HTTPException is a subclass of Exception. When get_user_id() raises HTTPException(401), it's caught by 'except Exception as e' handlers and converted to HTTPException(500, detail=str(e)). The str() of HTTPException includes the status code, hence detail shows '401: Authentication required' but status is 500. Fix: Add 'except HTTPException: raise' before generic exception handlers."
+}
