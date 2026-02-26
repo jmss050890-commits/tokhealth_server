@@ -584,6 +584,57 @@ const Dashboard = ({ currentUser, onLogout }) => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Data Privacy */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-sky-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('privacy')}
+            data-testid="privacy-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-sky-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Data Privacy</span>
+                <p className="text-slate-500 text-xs">Export & manage</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Apple HealthKit */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-rose-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('healthkit')}
+            data-testid="healthkit-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">
+                <Heart className="w-4 h-4 text-rose-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Apple Health</span>
+                <p className="text-slate-500 text-xs">HealthKit sync</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Notifications */}
+          <Card 
+            className="bg-white/80 backdrop-blur border-sky-200 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer"
+            onClick={() => setCurrentView('notifications')}
+            data-testid="notifications-card"
+          >
+            <CardContent className="p-3 flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                <Bell className="w-4 h-4 text-amber-600" />
+              </div>
+              <div>
+                <span className="text-slate-800 text-sm font-semibold">Reminders</span>
+                <p className="text-slate-500 text-xs">Notifications</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Quick Stats */}
