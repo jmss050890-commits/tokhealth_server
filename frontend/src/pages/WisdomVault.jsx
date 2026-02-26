@@ -115,7 +115,9 @@ const WisdomVault = () => {
 
   const fetchEntries = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/entries?days=30`);
+      const response = await fetch(`${BACKEND_URL}/api/wisdom-vault/entries?days=30`, {
+        headers: getAuthHeaders()
+      });
       const data = await response.json();
       if (data.success) {
         setEntries(data.data || []);
