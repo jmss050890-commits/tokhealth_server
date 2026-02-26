@@ -157,8 +157,8 @@ const EmergencyContacts = () => {
   const generateMedicalReport = async () => {
     try {
       const [biometricsRes, nutritionRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/biometrics/today`),
-        fetch(`${BACKEND_URL}/api/nutrition/today`)
+        fetch(`${BACKEND_URL}/api/biometrics/today`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_URL}/api/nutrition/today`, { headers: getAuthHeaders() })
       ]);
 
       const biometrics = await biometricsRes.json();
