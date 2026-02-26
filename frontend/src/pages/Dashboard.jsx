@@ -92,7 +92,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
         className="border-sky-400 text-sky-700 hover:bg-sky-100"
         data-testid="back-to-dashboard"
       >
-        &larr; Back
+        &larr; {t('common.back')}
       </Button>
     </div>
   );
