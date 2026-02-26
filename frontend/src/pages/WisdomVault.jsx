@@ -20,6 +20,8 @@ const WisdomVault = () => {
   const [labResults, setLabResults] = useState([]);
   const [analyzingLab, setAnalyzingLab] = useState(false);
   const labFileRef = useRef(null);
+  const journalPhotoRef = useRef(null);
+  const [savingPhoto, setSavingPhoto] = useState(false);
   const [drugSearch, setDrugSearch] = useState('');
   const [drugResults, setDrugResults] = useState([]);
   const [searchingDrug, setSearchingDrug] = useState(false);
