@@ -90,6 +90,8 @@ test.describe('Emergency Contacts', () => {
     await setupAuthenticatedSession(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
+    // Emergency is in More Features collapsible section
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('emergency-card').click();
     await expect(page.getByTestId('emergency-contacts')).toBeVisible({ timeout: 10000 });
   });
@@ -106,6 +108,8 @@ test.describe('Family Manager', () => {
     await setupAuthenticatedSession(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
+    // Family is in More Features collapsible section
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('family-card').click();
     await expect(page.getByTestId('family-manager')).toBeVisible({ timeout: 10000 });
   });
@@ -128,6 +132,8 @@ test.describe('Health Trends', () => {
     await setupAuthenticatedSession(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
+    // Trends is in More Features collapsible section
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('trends-card').click();
     await expect(page.getByTestId('health-trends')).toBeVisible({ timeout: 10000 });
   });
@@ -160,6 +166,8 @@ test.describe('Import Data', () => {
     await setupAuthenticatedSession(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
+    // Import is in More Features collapsible section
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('import-card').click();
     await expect(page.getByTestId('import-data')).toBeVisible({ timeout: 10000 });
   });

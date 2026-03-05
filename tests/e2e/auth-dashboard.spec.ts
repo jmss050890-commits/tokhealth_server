@@ -96,18 +96,31 @@ test.describe('Dashboard Navigation', () => {
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 15000 });
   });
   
-  test('dashboard shows all feature cards', async ({ page }) => {
-    // Check all main feature cards are visible
+  test('dashboard shows 6 primary feature cards', async ({ page }) => {
+    // Check the 6 primary feature cards are visible
     await expect(page.getByTestId('loop-card')).toBeVisible();
     await expect(page.getByTestId('biometrics-card')).toBeVisible();
     await expect(page.getByTestId('nutrition-card')).toBeVisible();
     await expect(page.getByTestId('coach-card')).toBeVisible();
     await expect(page.getByTestId('wisdom-card')).toBeVisible();
     await expect(page.getByTestId('hydration-card')).toBeVisible();
-    await expect(page.getByTestId('emergency-card')).toBeVisible();
     await expect(page.getByTestId('prescriptions-card')).toBeVisible();
+    // Secondary cards are in collapsible "More Features" section
+    await expect(page.getByTestId('emergency-card')).not.toBeVisible();
+    await expect(page.getByTestId('family-card')).not.toBeVisible();
+    await expect(page.getByTestId('trends-card')).not.toBeVisible();
+  });
+  
+  test('More Features section shows secondary cards', async ({ page }) => {
+    // Click "More Features" button to expand
+    await page.getByTestId('show-more-btn').click();
+    // Now secondary cards should be visible
+    await expect(page.getByTestId('emergency-card')).toBeVisible();
     await expect(page.getByTestId('family-card')).toBeVisible();
     await expect(page.getByTestId('trends-card')).toBeVisible();
+    await expect(page.getByTestId('export-card')).toBeVisible();
+    await expect(page.getByTestId('spiritual-card')).toBeVisible();
+    await expect(page.getByTestId('privacy-card')).toBeVisible();
   });
   
   test('can navigate to biometrics tracker', async ({ page }) => {
@@ -129,7 +142,9 @@ test.describe('Dashboard Navigation', () => {
     await expect(page.getByTestId('hydration-tracker')).toBeVisible({ timeout: 10000 });
   });
   
-  test('can navigate to emergency contacts', async ({ page }) => {
+  test('can navigate to emergency contacts from More Features', async ({ page }) => {
+    // Expand More Features section first
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('emergency-card').click();
     await expect(page.getByTestId('emergency-contacts')).toBeVisible({ timeout: 10000 });
   });
@@ -143,12 +158,16 @@ test.describe('Dashboard Navigation', () => {
     await expect(page.getByTestId('dashboard')).toBeVisible();
   });
   
-  test('can navigate to family manager', async ({ page }) => {
+  test('can navigate to family manager from More Features', async ({ page }) => {
+    // Expand More Features section first
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('family-card').click();
     await expect(page.getByTestId('family-manager')).toBeVisible({ timeout: 10000 });
   });
   
-  test('can navigate to health trends', async ({ page }) => {
+  test('can navigate to health trends from More Features', async ({ page }) => {
+    // Expand More Features section first
+    await page.getByTestId('show-more-btn').click();
     await page.getByTestId('trends-card').click();
     await expect(page.getByTestId('health-trends')).toBeVisible({ timeout: 10000 });
   });
@@ -156,17 +175,17 @@ test.describe('Dashboard Navigation', () => {
 
 test.describe('Profile & User Info', () => {
   
-  test('profile button shows user name', async ({ page }) => {
+  test('profile button shows Your Baseline (not user name)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await setupAuthenticatedSession(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     
     await expect(page.getByTestId('dashboard')).toBeVisible({ timeout: 10000 });
     
-    // Profile button should show user name
+    // Profile button now shows "Your Baseline" from i18n profile.title
     const profileButton = page.getByTestId('profile-button');
     await expect(profileButton).toBeVisible();
-    await expect(profileButton).toContainText('Meka');
+    await expect(profileButton).toContainText('Baseline');
   });
   
   test('can navigate to profile page', async ({ page }) => {

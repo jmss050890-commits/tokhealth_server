@@ -67,9 +67,9 @@ const Dashboard = ({ currentUser, onLogout }) => {
         const targets = await targetsRes.json();
 
         setQuickStats({
-          calories: nutrition.data?.total_calories || 0,
+          calories: nutrition.data?.totals?.calories || 0,
           caloriesTarget: targets.data?.recommended_calories || 2000,
-          protein: nutrition.data?.total_protein || 0,
+          protein: nutrition.data?.totals?.protein_g || 0,
           proteinTarget: targets.data?.recommended_protein_g || 120,
           steps: biometrics.data?.steps || 0,
           stepsTarget: targets.data?.recommended_steps || 10000,
@@ -303,7 +303,7 @@ const Dashboard = ({ currentUser, onLogout }) => {
               data-testid="profile-button"
             >
               <User className="w-4 h-4 mr-1" />
-              {currentUser?.name || t('nav.profile')}
+              {t('profile.title')}
             </Button>
             <Button
               onClick={onLogout}

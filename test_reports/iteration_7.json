@@ -1,0 +1,135 @@
+{
+  "summary": "Update mode testing complete for Dashboard Quick Stats fix and UI reorganization. All tested features working correctly: Profile button shows 'Your Baseline' instead of user name, Quick Stats correctly displays calories/protein from nutrition API (data.totals.calories), hydration from hydration API (data.total_ml), and steps from biometrics API (data.steps). Dashboard reorganized with 6 primary cards and collapsible 'More Features' section with secondary cards.",
+  "mode": "update",
+  "baseline_commit": "e9a7909a6c320311ec6266b49bec2a3c4dceda3b",
+  "head_commit": "da519cd926661ae06a5435db678e1a0229078bf6",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "regression_results": {
+    "total_specs": 36,
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0
+  },
+  "features_tested": [
+    {
+      "feature": "Profile Button - Your Baseline",
+      "tests": [
+        "Profile button shows 'Your Baseline' text (not user name)",
+        "Profile button navigates to profile page"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Quick Stats - Nutrition API Integration",
+      "tests": [
+        "nutrition/today API returns data.totals.calories",
+        "nutrition/today API returns data.totals.protein_g",
+        "Dashboard displays calories from API correctly",
+        "Dashboard displays protein from API correctly"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Quick Stats - Hydration API Integration",
+      "tests": [
+        "hydration/today API returns data.total_ml",
+        "Dashboard displays water intake in liters"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Quick Stats - Biometrics API Integration",
+      "tests": [
+        "biometrics/today API returns data.steps",
+        "Dashboard displays steps correctly"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Dashboard - 6 Primary Cards",
+      "tests": [
+        "Biometrics card visible",
+        "Nutrition card visible",
+        "Health Coach card visible",
+        "Prescriptions card visible",
+        "Hydration card visible",
+        "Wisdom Vault card visible"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Dashboard - Collapsible More Features",
+      "tests": [
+        "Secondary cards hidden by default",
+        "Show More button expands section",
+        "Emergency, Family, Trends, Export, Spiritual, Privacy cards visible after expand"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Auth Flow",
+      "tests": [
+        "Register new user and access dashboard",
+        "Login with existing user",
+        "Disclaimer acceptance flow"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Nutrition Logging",
+      "tests": [
+        "POST /api/nutrition/log creates meal with correct totals",
+        "GET /api/nutrition/today returns accumulated totals"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Hydration Logging",
+      "tests": [
+        "POST /api/hydration/log logs water intake",
+        "GET /api/hydration/today returns total_ml"
+      ],
+      "status": "PASS"
+    },
+    {
+      "feature": "Profile Targets API",
+      "tests": [
+        "GET /api/profile/targets returns default values when no profile",
+        "Returns recommended_calories, recommended_protein_g, recommended_water_ml, recommended_steps"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "specs_created": [],
+  "specs_updated": [
+    "/app/tests/e2e/auth-dashboard.spec.ts",
+    "/app/tests/e2e/features.spec.ts"
+  ],
+  "quarantined_tests": [],
+  "test_report_links": [
+    "/app/tests/e2e/auth-dashboard.spec.ts",
+    "/app/tests/e2e/features.spec.ts",
+    "/app/backend/tests/test_p1_p2_p3_features.py"
+  ],
+  "action_items": [],
+  "updated_files": [
+    "/app/tests/e2e/auth-dashboard.spec.ts",
+    "/app/tests/e2e/features.spec.ts"
+  ],
+  "success_rate": {
+    "backend": "100% (21/21 tests passed)",
+    "frontend": "100% (36/36 tests passed)"
+  },
+  "seed_data_creation": "Logged test meal (565 cal, 40g protein) and 500ml water for Quick Stats verification",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Dashboard now has 6 primary cards (Biometrics, Nutrition, Health Coach, Prescriptions, Hydration, Wisdom Vault) visible by default. Secondary cards (Emergency, Family, Trends, Export, Spiritual, Privacy, etc.) are in a collapsible 'More Features' section (data-testid: show-more-btn). Profile button shows 'Your Baseline' from i18n profile.title. Quick Stats section displays calories/protein from nutrition/today API (data.totals.calories, data.totals.protein_g), hydration from hydration/today API (data.total_ml), and steps from biometrics/today API (data.steps)."
+}
