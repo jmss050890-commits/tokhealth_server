@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Users, Plus, UserCircle, Heart, Activity, CheckCircle, X, ChevronRight, Mail, UserPlus, Clock, Check, XCircle, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const FamilyManager = () => {
+  const { t } = useTranslation();
   const [members, setMembers] = useState([]);
   const [pendingInvites, setPendingInvites] = useState({ received: [], sent: [] });
   const [showInviteForm, setShowInviteForm] = useState(false);

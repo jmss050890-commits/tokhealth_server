@@ -8,8 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BookOpen, Heart, Brain, Lightbulb, Lock, Plus, Calendar, Sparkles, ChevronDown, ChevronUp, Camera, FileText, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const WisdomVault = () => {
+  const { t } = useTranslation();
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -293,7 +295,7 @@ const WisdomVault = () => {
             <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
               <BookOpen className="w-5 h-5 text-violet-600" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Wisdom Vault</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{t('wisdom.title')}</h1>
             <Lock className="w-4 h-4 text-violet-500" />
           </div>
           <p className="text-slate-500 text-sm">Your private space for reflection & growth</p>

@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Upload, FileText, Download, CheckCircle, AlertCircle, Activity, Watch, RefreshCw, Unlink } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const ImportData = () => {
+  const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [importResult, setImportResult] = useState(null);
   const [fitbitStatus, setFitbitStatus] = useState({ connected: false, loading: true });

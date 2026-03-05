@@ -8,8 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sparkles, Heart, BookOpen, Sun, Plus, Check, Trash2, Activity, MessageCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const SpiritualVault = () => {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState([]);
   const [prayers, setPrayers] = useState([]);
   const [stats, setStats] = useState(null);
@@ -245,7 +247,7 @@ const SpiritualVault = () => {
             <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-purple-600" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Spiritual Vault</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{t('spiritual.title')}</h1>
           </div>
           <p className="text-slate-500 text-sm">Nurture your soul, track your spiritual journey</p>
         </div>

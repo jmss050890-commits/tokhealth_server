@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Heart, Activity, Droplet, Thermometer, TrendingUp, Camera } from 'lucide-react';
 import { getAuthHeaders } from '@/utils/auth';
 import BiometricScanner from '@/pages/BiometricScanner';
+import { useTranslation } from 'react-i18next';
 
 const BiometricsTracker = () => {
+  const { t } = useTranslation();
   const [biometrics, setBiometrics] = useState({
     heart_rate_bpm: '',
     blood_pressure_systolic: '',

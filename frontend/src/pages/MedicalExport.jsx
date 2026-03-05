@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { FileText, Download, Activity, Heart, Pill, AlertTriangle, User, Calendar, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const MedicalExport = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [biometrics, setBiometrics] = useState(null);
   const [prescriptions, setPrescriptions] = useState([]);

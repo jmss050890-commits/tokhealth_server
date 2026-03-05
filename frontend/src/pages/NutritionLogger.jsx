@@ -8,8 +8,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Utensils, TrendingUp, Heart, Camera, Upload, Sparkles, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const NutritionLogger = () => {
+  const { t } = useTranslation();
   const [mealType, setMealType] = useState('breakfast');
   const [foodItems, setFoodItems] = useState([{
     name: '',
@@ -260,8 +262,8 @@ const NutritionLogger = () => {
             <Utensils className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Nutrition Tracker</h1>
-            <p className="text-slate-500 text-sm">Log meals manually or snap a photo</p>
+            <h1 className="text-2xl font-bold text-slate-800">{t('nutrition.title')}</h1>
+            <p className="text-slate-500 text-sm">{t('nutrition.subtitle')}</p>
           </div>
         </div>
 
@@ -270,7 +272,7 @@ const NutritionLogger = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-slate-800 text-sm flex items-center">
               <TrendingUp className="w-4 h-4 mr-2 text-sky-600" />
-              Today's Nutrition
+              {t('nutrition.today')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -328,7 +330,7 @@ const NutritionLogger = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-slate-800 text-sm flex items-center">
               <Camera className="w-4 h-4 mr-2 text-violet-600" />
-              AI Meal Recognition
+              {t('nutrition.ai_recognition')}
               <Sparkles className="w-4 h-4 ml-2 text-amber-500" />
             </CardTitle>
           </CardHeader>
@@ -436,7 +438,7 @@ const NutritionLogger = () => {
         {/* Log Meal Form */}
         <Card className="bg-white/90 border-sky-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-slate-800 text-sm">Log Meal</CardTitle>
+            <CardTitle className="text-slate-800 text-sm">{t('nutrition.log_meal')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {/* Meal Type */}
@@ -447,10 +449,10 @@ const NutritionLogger = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="breakfast">Breakfast</SelectItem>
-                  <SelectItem value="lunch">Lunch</SelectItem>
-                  <SelectItem value="dinner">Dinner</SelectItem>
-                  <SelectItem value="snack">Snack</SelectItem>
+                  <SelectItem value="breakfast">{t('nutrition.breakfast')}</SelectItem>
+                  <SelectItem value="lunch">{t('nutrition.lunch')}</SelectItem>
+                  <SelectItem value="dinner">{t('nutrition.dinner')}</SelectItem>
+                  <SelectItem value="snack">{t('nutrition.snack')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -613,7 +615,7 @@ const NutritionLogger = () => {
         {todaysMeals.length > 0 && (
           <Card className="bg-white/90 border-sky-200">
             <CardHeader className="pb-2">
-              <CardTitle className="text-slate-800 text-sm">Today's Meals ({todaysMeals.length})</CardTitle>
+              <CardTitle className="text-slate-800 text-sm">{t('nutrition.today_meals')} ({todaysMeals.length})</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">

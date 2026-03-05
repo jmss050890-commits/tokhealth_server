@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User, Users, BarChart3, LogOut, Upload, Sparkles, Shield, ScanLine, ChevronDown, ChevronUp } from 'lucide-react';
+import { Activity, Heart, BookOpen, Bell, Pill, Droplets, Phone, FileText, User, Users, BarChart3, LogOut, Upload, Sparkles, Shield, ScanLine, ChevronDown, ChevronUp, Share2, Flame, Trophy } from 'lucide-react';
 import BiometricsTracker from '@/pages/BiometricsTracker';
 import NutritionLogger from '@/pages/NutritionLogger';
 import TheLoop from '@/pages/TheLoop';
@@ -22,6 +22,8 @@ import DataPrivacy from '@/pages/DataPrivacy';
 import AppleHealthKit from '@/pages/AppleHealthKit';
 import NotificationSettings from '@/pages/NotificationSettings';
 import BarcodeScanner from '@/pages/BarcodeScanner';
+import ShareProgress from '@/pages/ShareProgress';
+import Gamification from '@/pages/Gamification';
 import AskCoachButton from '@/components/AskCoachButton';
 import { getAuthHeaders } from '@/utils/auth';
 import { useTranslation } from 'react-i18next';
@@ -82,6 +84,11 @@ const Dashboard = ({ currentUser, onLogout }) => {
     };
 
     fetchQuickStats();
+    // Auto daily check-in for streaks
+    fetch(`${BACKEND_URL}/api/gamification/check-in`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    }).catch(() => {});
   }, [BACKEND_URL]);
 
   const BackButton = () => (
@@ -282,6 +289,24 @@ const Dashboard = ({ currentUser, onLogout }) => {
     );
   }
 
+  if (currentView === 'share') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <ShareProgress />
+      </div>
+    );
+  }
+
+  if (currentView === 'gamification') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100">
+        <BackButton />
+        <Gamification />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 p-4" data-testid="dashboard">
       {/* Header */}
@@ -407,6 +432,8 @@ const Dashboard = ({ currentUser, onLogout }) => {
                 { key: 'privacy', view: 'privacy', icon: Shield, color: 'sky', testId: 'privacy-card' },
                 { key: 'healthkit', view: 'healthkit', icon: Heart, color: 'rose', testId: 'healthkit-card' },
                 { key: 'notifications', view: 'notifications', icon: Bell, color: 'amber', testId: 'notifications-card' },
+                { key: 'share', view: 'share', icon: Share2, color: 'sky', testId: 'share-card' },
+                { key: 'gamification', view: 'gamification', icon: Trophy, color: 'amber', testId: 'gamification-card' },
               ].map(item => (
                 <Card
                   key={item.key}

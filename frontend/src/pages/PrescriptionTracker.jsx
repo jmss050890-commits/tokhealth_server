@@ -9,8 +9,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Pill, Clock, Calendar, CheckCircle, AlertCircle, Plus, Trash2, Bell, BellRing, X, Search, Shield, Loader2, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const PrescriptionTracker = () => {
+  const { t } = useTranslation();
   const [prescriptions, setPrescriptions] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -309,7 +311,7 @@ const PrescriptionTracker = () => {
             <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
               <Pill className="w-5 h-5 text-pink-600" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Prescription Tracker</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{t('prescriptions.title')}</h1>
           </div>
           <p className="text-slate-500 text-sm">Never miss a dose - 3x daily reminders</p>
         </div>

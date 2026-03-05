@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Droplets, Plus, TrendingUp, Target, Bell, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const HydrationTracker = () => {
+  const { t } = useTranslation();
   const [todayIntake, setTodayIntake] = useState(0);
   const [logs, setLogs] = useState([]);
   const [target] = useState(2500); // 2.5L in ml
@@ -102,10 +104,10 @@ const HydrationTracker = () => {
   };
 
   const quickAmounts = [
-    { ml: 250, label: '1 Glass', icon: '🥛' },
-    { ml: 500, label: 'Bottle', icon: '🍶' },
-    { ml: 350, label: 'Mug', icon: '☕' },
-    { ml: 150, label: 'Small', icon: '🥤' }
+    { ml: 250, label: t('hydration.glass'), icon: '🥛' },
+    { ml: 500, label: t('hydration.bottle'), icon: '🍶' },
+    { ml: 350, label: t('hydration.mug'), icon: '☕' },
+    { ml: 150, label: t('hydration.small'), icon: '🥤' }
   ];
 
   return (
@@ -117,9 +119,9 @@ const HydrationTracker = () => {
             <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center">
               <Droplets className="w-5 h-5 text-cyan-600" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Hydration</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{t('hydration.title')}</h1>
           </div>
-          <p className="text-slate-500 text-sm">Stay hydrated, stay healthy</p>
+          <p className="text-slate-500 text-sm">{t('hydration.subtitle')}</p>
         </div>
 
         {/* Progress Card */}
@@ -129,7 +131,7 @@ const HydrationTracker = () => {
               <div className="text-5xl font-bold text-cyan-600">
                 {(todayIntake / 1000).toFixed(1)}L
               </div>
-              <div className="text-slate-500 text-sm">of {(target / 1000).toFixed(1)}L goal</div>
+              <div className="text-slate-500 text-sm">{t('hydration.of_goal', { goal: (target / 1000).toFixed(1) })}</div>
             </div>
 
             {/* Progress Bar */}
@@ -141,7 +143,7 @@ const HydrationTracker = () => {
             </div>
 
             <div className="flex justify-between text-sm">
-              <span className="text-slate-500">{Math.round(getProgressPercentage())}% complete</span>
+              <span className="text-slate-500">{Math.round(getProgressPercentage())}% {t('hydration.complete')}</span>
               <span className="text-cyan-600 font-medium">
                 {Math.max(0, Math.round((target - todayIntake) / 1000 * 10) / 10)}L remaining
               </span>
@@ -158,7 +160,7 @@ const HydrationTracker = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-slate-800 text-sm flex items-center">
               <Plus className="w-4 h-4 mr-2 text-cyan-600" />
-              Quick Log
+              {t('hydration.quick_log')}
             </CardTitle>
           </CardHeader>
           <CardContent>

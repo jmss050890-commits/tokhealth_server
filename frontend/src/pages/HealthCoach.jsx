@@ -7,8 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Brain, MessageCircle, Send, Volume2, VolumeX, Loader2, Mic, MicOff, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const HealthCoach = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [currentStatus, setCurrentStatus] = useState(null);
@@ -296,7 +298,7 @@ const HealthCoach = () => {
           >
             Rename Coach
           </Button>
-          <p className="text-slate-500 text-sm">AI-Powered • Voice + Text</p>
+          <p className="text-slate-500 text-sm">{t('coach.ai_powered')} • {t('coach.voice_text')}</p>
         </div>
 
         {/* Name Your Coach Dialog */}
@@ -378,7 +380,7 @@ const HealthCoach = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-slate-800 flex items-center text-sm">
               <MessageCircle className="w-4 h-4 mr-2 text-sky-600" />
-              Chat with {coachName}
+              {t('coach.chat_with')} {coachName}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -497,41 +499,41 @@ const HealthCoach = () => {
         {/* Quick Topics */}
         <Card className="bg-white/90 border-sky-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-slate-800 text-sm">Quick Topics</CardTitle>
+            <CardTitle className="text-slate-800 text-sm">{t('coach.quick_topics')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-2">
               <Button
-                onClick={() => setInputMessage('How can I improve my nutrition?')}
+                onClick={() => setInputMessage(t('coach.nutrition_q'))}
                 variant="outline"
                 className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-xs py-2"
                 disabled={loading}
               >
-                Nutrition
+                {t('coach.nutrition')}
               </Button>
               <Button
-                onClick={() => setInputMessage('What exercise should I do?')}
+                onClick={() => setInputMessage(t('coach.exercise_q'))}
                 variant="outline"
                 className="border-sky-300 text-sky-700 hover:bg-sky-50 text-xs py-2"
                 disabled={loading}
               >
-                Exercise
+                {t('coach.exercise')}
               </Button>
               <Button
-                onClick={() => setInputMessage('Help me manage stress')}
+                onClick={() => setInputMessage(t('coach.stress_q'))}
                 variant="outline"
                 className="border-violet-300 text-violet-700 hover:bg-violet-50 text-xs py-2"
                 disabled={loading}
               >
-                Stress
+                {t('coach.stress')}
               </Button>
               <Button
-                onClick={() => setInputMessage('Tips for better sleep')}
+                onClick={() => setInputMessage(t('coach.sleep_q'))}
                 variant="outline"
                 className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 text-xs py-2"
                 disabled={loading}
               >
-                Sleep
+                {t('coach.sleep')}
               </Button>
             </div>
           </CardContent>
@@ -540,7 +542,7 @@ const HealthCoach = () => {
         {/* Footer */}
         <div className="text-center">
           <p className="text-slate-500 text-xs">
-            Keep People Alive - AI Health Guidance
+            {t('coach.footer')}
           </p>
         </div>
       </div>

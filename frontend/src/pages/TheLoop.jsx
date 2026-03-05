@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Activity, Heart, Droplets, Moon, TrendingUp, Brain, Utensils, Footprints, ThermometerSun, Sparkles } from 'lucide-react';
 import BackToGreen from '@/pages/BackToGreen';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const TheLoop = () => {
+  const { t } = useTranslation();
   const [loopData, setLoopData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showBackToGreen, setShowBackToGreen] = useState(false);
@@ -136,7 +138,7 @@ const TheLoop = () => {
           variant="outline"
           className="mb-4 border-sky-400 text-sky-700"
         >
-          &larr; Back to Loop
+          &larr; {t('common.back')}
         </Button>
         <BackToGreen currentZone={overallZone} onClose={() => setShowBackToGreen(false)} />
       </div>
@@ -148,7 +150,7 @@ const TheLoop = () => {
       <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 flex items-center justify-center">
         <div className="text-center">
           <Activity className="w-16 h-16 text-sky-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-700 text-xl">Loading The Loop...</p>
+          <p className="text-slate-700 text-xl">{t('loop.loading')}</p>
         </div>
       </div>
     );
@@ -160,11 +162,11 @@ const TheLoop = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            <span className="text-sky-600">THE</span>{' '}
-            <span className="text-slate-800">LOOP</span>
+            <span className="text-sky-600">{t('loop.title_the')}</span>{' '}
+            <span className="text-slate-800">{t('loop.title_loop')}</span>
           </h1>
-          <p className="text-slate-600">Your complete health status at a glance</p>
-          <p className="text-slate-500 text-sm italic mt-1">For Jerome Jr. & Wade - The Full Circle</p>
+          <p className="text-slate-600">{t('loop.subtitle')}</p>
+          <p className="text-slate-500 text-sm italic mt-1">{t('loop.dedication')}</p>
         </div>
 
         {/* Central Loop Status */}
@@ -185,13 +187,13 @@ const TheLoop = () => {
                 {overallZone === 'gray' && '⚪'}
               </div>
               <div className={`text-2xl font-bold uppercase tracking-wider ${getZoneText(overallZone)}`}>
-                {overallZone === 'gray' ? 'No Data' : overallZone}
+                {overallZone === 'gray' ? t('loop.no_data') : overallZone}
               </div>
               <div className="text-slate-500 text-sm mt-2">
-                {overallZone === 'green' && 'Keep Going!'}
-                {overallZone === 'yellow' && 'Stay Focused'}
-                {overallZone === 'red' && 'Take Action'}
-                {overallZone === 'gray' && 'Start Tracking'}
+                {overallZone === 'green' && t('loop.keep_going')}
+                {overallZone === 'yellow' && t('loop.stay_focused')}
+                {overallZone === 'red' && t('loop.take_action')}
+                {overallZone === 'gray' && t('loop.start_tracking')}
               </div>
             </div>
           </div>
@@ -203,20 +205,20 @@ const TheLoop = () => {
             <CardContent className="p-6 text-center">
               {overallZone === 'green' && (
                 <div>
-                  <p className="text-green-600 text-xl font-semibold mb-2">Excellent Work! You're In The Green Zone!</p>
-                  <p className="text-slate-600">Your health metrics are on target. Keep up the great work and maintain this momentum!</p>
+                  <p className="text-green-600 text-xl font-semibold mb-2">{t('loop.green_msg')}</p>
+                  <p className="text-slate-600">{t('loop.green_desc')}</p>
                 </div>
               )}
               {overallZone === 'yellow' && (
                 <div>
-                  <p className="text-yellow-600 text-xl font-semibold mb-2">Stay Focused - Yellow Zone</p>
-                  <p className="text-slate-600">Some metrics need attention. Review the details below and make adjustments today.</p>
+                  <p className="text-yellow-600 text-xl font-semibold mb-2">{t('loop.yellow_msg')}</p>
+                  <p className="text-slate-600">{t('loop.yellow_desc')}</p>
                 </div>
               )}
               {overallZone === 'red' && (
                 <div>
-                  <p className="text-red-600 text-xl font-semibold mb-2">Action Required - Red Zone</p>
-                  <p className="text-slate-600">Important health metrics need immediate attention. Review your plan and consider consulting your healthcare provider.</p>
+                  <p className="text-red-600 text-xl font-semibold mb-2">{t('loop.red_msg')}</p>
+                  <p className="text-slate-600">{t('loop.red_desc')}</p>
                 </div>
               )}
             </CardContent>
@@ -239,7 +241,7 @@ const TheLoop = () => {
               {loopData?.nutrition?.totals ? (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500 text-sm">Calories</span>
+                    <span className="text-slate-500 text-sm">{t('loop.calories')}</span>
                     <div className="flex items-center space-x-2">
                       <span className="text-slate-800 font-semibold text-sm">{Math.round(loopData.nutrition.totals.calories)}/2000</span>
                       <span className="text-lg">

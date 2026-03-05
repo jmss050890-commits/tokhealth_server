@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Activity, Mail, Lock, User, ArrowRight, UserPlus, LogIn } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const AuthScreen = ({ onLogin }) => {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,12 +23,12 @@ const AuthScreen = ({ onLogin }) => {
     e.preventDefault();
     
     if (!formData.email || !formData.password) {
-      toast.error('Email and password are required');
+      toast.error(t('auth.email_required'));
       return;
     }
     
     if (!isLogin && !formData.name) {
-      toast.error('Name is required for registration');
+      toast.error(t('auth.name_required'));
       return;
     }
 
@@ -46,17 +48,16 @@ const AuthScreen = ({ onLogin }) => {
       const data = await response.json();
 
       if (data.success) {
-        // Store user data and token
         localStorage.setItem('tokhealth_token', data.data.token);
         localStorage.setItem('tokhealth_user', JSON.stringify(data.data));
-        toast.success(isLogin ? 'Welcome back!' : 'Account created successfully!');
+        toast.success(isLogin ? t('auth.login_success') : t('auth.register_success'));
         onLogin(data.data);
       } else {
         toast.error(data.detail || data.message || 'Authentication failed');
       }
     } catch (error) {
       console.error('Auth error:', error);
-      toast.error('Connection error. Please try again.');
+      toast.error(t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -65,7 +66,6 @@ const AuthScreen = ({ onLogin }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 flex items-center justify-center p-4" data-testid="auth-screen">
       <div className="w-full max-w-md space-y-6">
-        {/* Logo */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-2">
             <Activity className="w-10 h-10 text-sky-600" />
@@ -74,29 +74,26 @@ const AuthScreen = ({ onLogin }) => {
               <span className="text-slate-800">HEALTH</span>
             </h1>
           </div>
-          <p className="text-slate-600 text-sm">Keep People Alive</p>
+          <p className="text-slate-600 text-sm">{t('tagline')}</p>
         </div>
 
-        {/* Auth Card */}
         <Card className="bg-white/90 backdrop-blur border-sky-200 shadow-xl">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-slate-800 text-xl">
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+              {isLogin ? t('auth.welcome') : t('auth.sign_up')}
             </CardTitle>
-            <p className="text-slate-500 text-sm">
-              {isLogin ? 'Sign in to your health profile' : 'Start your health journey'}
-            </p>
+            <p className="text-slate-500 text-sm">{t('auth.subtitle')}</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label className="text-slate-700">Your Name</Label>
+                  <Label className="text-slate-700">{t('auth.name')}</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                     <Input
                       type="text"
-                      placeholder="Enter your name"
+                      placeholder={t('auth.name')}
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                       className="pl-10 bg-white border-slate-200 focus:border-sky-400"
@@ -107,12 +104,12 @@ const AuthScreen = ({ onLogin }) => {
               )}
 
               <div className="space-y-2">
-                <Label className="text-slate-700">Email</Label>
+                <Label className="text-slate-700">{t('auth.email')}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                   <Input
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t('auth.email')}
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     className="pl-10 bg-white border-slate-200 focus:border-sky-400"
@@ -122,7 +119,7 @@ const AuthScreen = ({ onLogin }) => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-700">Password</Label>
+                <Label className="text-slate-700">{t('auth.password')}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                   <Input
@@ -147,7 +144,7 @@ const AuthScreen = ({ onLogin }) => {
                 ) : (
                   <>
                     {isLogin ? <LogIn className="w-5 h-5 mr-2" /> : <UserPlus className="w-5 h-5 mr-2" />}
-                    {isLogin ? 'Sign In' : 'Create Account'}
+                    {isLogin ? t('auth.sign_in') : t('auth.sign_up')}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </>
                 )}
@@ -160,15 +157,14 @@ const AuthScreen = ({ onLogin }) => {
                 className="text-sky-600 hover:text-sky-700 text-sm font-medium"
                 data-testid="auth-toggle-button"
               >
-                {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                {isLogin ? t('auth.no_account') : t('auth.have_account')}
               </button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Footer */}
         <p className="text-center text-xs text-sky-600/70">
-          Your health data is private and secure
+          {t('auth.disclaimer')}
         </p>
       </div>
     </div>

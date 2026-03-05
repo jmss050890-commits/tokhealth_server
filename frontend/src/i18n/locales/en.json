@@ -54,7 +54,11 @@
     "notifications": "Reminders",
     "notifications_desc": "Notifications",
     "barcode": "Barcode Scanner",
-    "barcode_desc": "Scan food labels"
+    "barcode_desc": "Scan food labels",
+    "share": "Share Progress",
+    "share_desc": "Share your journey",
+    "gamification": "Streaks & Badges",
+    "gamification_desc": "Track achievements"
   },
   "auth": {
     "sign_in": "Sign In",

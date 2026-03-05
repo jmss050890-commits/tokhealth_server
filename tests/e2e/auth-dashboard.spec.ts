@@ -121,6 +121,9 @@ test.describe('Dashboard Navigation', () => {
     await expect(page.getByTestId('export-card')).toBeVisible();
     await expect(page.getByTestId('spiritual-card')).toBeVisible();
     await expect(page.getByTestId('privacy-card')).toBeVisible();
+    // New cards for Share Progress and Gamification
+    await expect(page.getByTestId('share-card')).toBeVisible();
+    await expect(page.getByTestId('gamification-card')).toBeVisible();
   });
   
   test('can navigate to biometrics tracker', async ({ page }) => {

@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { TrendingUp, TrendingDown, Minus, Heart, Footprints, Activity, Droplets, Target, Lightbulb, Calendar, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const HealthTrends = () => {
+  const { t } = useTranslation();
   const [period, setPeriod] = useState(7);
   const [trends, setTrends] = useState(null);
   const [insights, setInsights] = useState([]);

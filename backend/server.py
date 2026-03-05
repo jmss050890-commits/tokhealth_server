@@ -29,6 +29,8 @@ from modules.medication.routes import router as medication_router
 from modules.privacy.routes import router as privacy_router
 from modules.healthkit.routes import router as healthkit_router
 from modules.notifications.routes import router as notifications_router
+from modules.share.routes import router as share_router
+from modules.gamification.routes import router as gamification_router
 
 # Setup logging
 logger = setup_logging()
@@ -90,6 +92,8 @@ api_router.include_router(medication_router, prefix="/medication", tags=["Medica
 api_router.include_router(privacy_router, prefix="/privacy", tags=["Privacy"])
 api_router.include_router(healthkit_router, prefix="/healthkit", tags=["HealthKit"])
 api_router.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
+api_router.include_router(share_router, prefix="/share", tags=["Share"])
+api_router.include_router(gamification_router, prefix="/gamification", tags=["Gamification"])
 
 # Mount the API router
 app.include_router(api_router)

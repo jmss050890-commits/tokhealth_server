@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Shield, Download, Trash2, Database, Eye, AlertTriangle, CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const DataPrivacy = () => {
+  const { t } = useTranslation();
   const [dataInfo, setDataInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);

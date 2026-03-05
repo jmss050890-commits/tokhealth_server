@@ -11,8 +11,10 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const EmergencyContacts = () => {
+  const { t } = useTranslation();
   const [contacts, setContacts] = useState([]);
   const [quickDialSlots, setQuickDialSlots] = useState([
     { name: '', phone: '' },

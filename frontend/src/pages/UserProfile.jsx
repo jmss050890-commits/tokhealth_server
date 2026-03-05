@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { User, Activity, Heart, Scale, Ruler, Calendar, Target, CheckCircle, AlertTriangle, Utensils, Cross, X, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { getAuthHeaders } from '@/utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const COMMON_ALLERGIES = [
   'Peanuts', 'Tree Nuts', 'Milk/Dairy', 'Eggs', 'Wheat/Gluten', 'Soy',
@@ -94,6 +95,7 @@ const TagInput = ({ items, onAdd, onRemove, options, placeholder, testIdPrefix }
 };
 
 const UserProfile = ({ onProfileSaved }) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -200,7 +202,7 @@ const UserProfile = ({ onProfileSaved }) => {
             <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center">
               <User className="w-5 h-5 text-sky-600" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Your Baseline</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{t('profile.title')}</h1>
           </div>
           <p className="text-slate-500 text-sm">This data personalizes your health targets</p>
         </div>
@@ -210,7 +212,7 @@ const UserProfile = ({ onProfileSaved }) => {
           <CardHeader className="pb-2">
             <CardTitle className="text-slate-800 text-sm flex items-center">
               <User className="w-4 h-4 mr-2 text-sky-600" />
-              Personal Information
+              {t('profile.personal_info')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -435,7 +437,7 @@ const UserProfile = ({ onProfileSaved }) => {
               className="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-5"
               data-testid="save-profile-button"
             >
-              {saving ? 'Saving...' : (profile ? 'Update Profile' : 'Save Profile')}
+              {saving ? t('common.loading') : (profile ? t('profile.update') : t('profile.save'))}
             </Button>
           </CardContent>
         </Card>
